@@ -1,10 +1,19 @@
-# Chat (with Node.js) 
-Implement a chat application (both client and server)
+## About the project
 
-- You type a username and send it to the server
-- It is now username (save it in localStorage)
-- All the messages should have an author, time and text
-- Implement an ability to create rooms (create / rename / join / delete)
-- New user should see all prev messages in the room
+Test full stack web app written on [TypeScript](https://www.typescriptlang.org/)
 
-**Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
+Front-End hosted on [Netlify](https://www.netlify.com)
+
+Back-End server hostet on [Heroku](https://www.heroku.com)
+
+## Technologies used in current project
+
+- Front-End developed with [Next JS](https://nextjs.org/docs)
+- Back-End developed with [Express](https://expressjs.com/)
+- Database with [MongoDB](https://www.mongodb.com) and [Mongoose](https://mongoosejs.com/)
+- Styling with [Chakra](https://chakra-ui.com/)
+- Live chat performed with [Socket io](https://socket.io/)
+
+## Visit Page
+
+https://extraordinary-fenglisu-3921a8.netlify.app/
