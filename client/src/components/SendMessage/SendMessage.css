@@ -1,0 +1,12 @@
+.sendMessageContainer {
+  padding: 16px 20px 20px 16px;
+}
+
+.messageInput {
+  padding: 14px;
+  margin-right: 16px;
+  width: 60%;
+  border-radius: 6px;
+  border: 1px solid rgb(153, 217, 234);
+  font-size: 0.9rem;
+}
