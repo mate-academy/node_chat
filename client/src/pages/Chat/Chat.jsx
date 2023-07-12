@@ -9,7 +9,7 @@ export const Chat = ({ socket, room, username }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (room === '' && username === '') {
+    if (!room && !username) {
       navigate('/', { replace: true });
     }
   }, [socket])

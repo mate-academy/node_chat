@@ -44,3 +44,7 @@ body {
   background: #00186f;
   color: #fff;
 }
+
+.btn-disabled {
+  background: #4a5683;
+}

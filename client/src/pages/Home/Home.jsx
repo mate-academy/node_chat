@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
@@ -6,7 +7,7 @@ export const Home = ({ username, setUsername, room, setRoom, socket, rooms, setR
   const navigate = useNavigate();
 
   const joinRoom = () => {
-    if (room !== '' && username !== '') {
+    if (room && username) {
       socket.emit('join_room', { username, room });
 
       const isRoom = rooms.find(val => val.title === room);
@@ -28,6 +29,8 @@ export const Home = ({ username, setUsername, room, setRoom, socket, rooms, setR
       navigate('/chat', { replace: true });
     }
   };
+
+  const isDisabled = !username || !room;
 
   return (
     <div className="container">
@@ -65,8 +68,12 @@ export const Home = ({ username, setUsername, room, setRoom, socket, rooms, setR
         </select>
 
         <button
-          className='btn btn-secondary btn-home'
+          className={classNames(
+            'btn btn-secondary btn-home',
+             {'btn-disabled': isDisabled },
+            )}
           onClick={joinRoom}
+          disabled={isDisabled}
         >
           Join Room
         </button>
