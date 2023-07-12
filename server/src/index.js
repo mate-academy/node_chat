@@ -10,7 +10,7 @@ const leaveRoom = require('./utils/leaveRoom');
 const { Room } = require('./models/Room');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.SERVER_PORT || 5000;
 
 app.use(cors());
 

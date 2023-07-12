@@ -2,12 +2,28 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
-export const Home = ({ username, setUsername, room, setRoom, socket, rooms }) => {
+export const Home = ({ username, setUsername, room, setRoom, socket, rooms, setRooms }) => {
   const navigate = useNavigate();
-  console.log(room, username, socket)
+
   const joinRoom = () => {
     if (room !== '' && username !== '') {
       socket.emit('join_room', { username, room });
+
+      const isRoom = rooms.find(val => val.title === room);
+      const id = [...rooms].sort((a, b) => b.id - a.id)[0].id + 1;
+
+      if (!isRoom) {
+        setRooms(prev => {
+          return [
+            ...prev,
+            {
+              createdAt: Date.now(),
+              id,
+              title: room,
+              updatedAt: Date.now(),
+            }]
+        });
+      }
 
       navigate('/chat', { replace: true });
     }
