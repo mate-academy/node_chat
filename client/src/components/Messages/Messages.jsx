@@ -11,7 +11,7 @@ export const Messages = ({ socket }) => {
         ...state,
         {
           message: data.message,
-          username: data.username,
+          userName: data.userName,
           createdtime: data.createdtime,
         },
       ]);
@@ -21,13 +21,13 @@ export const Messages = ({ socket }) => {
   }, [socket]);
 
   useEffect(() => {
-    socket.on('last_100_messages', (lastMessages) => {
+    socket.on('last_messages', (lastMessages) => {
 
       lastMessages = sortMessagesByDate(lastMessages);
       setMessagesReceived((state) => [...lastMessages, ...state]);
     });
 
-    return () => socket.off('last_100_messages');
+    return () => socket.off('last_messages');
   }, [socket]);
 
   useEffect(() => {
@@ -48,16 +48,16 @@ export const Messages = ({ socket }) => {
   }
 
   return (
-    <div className="messagesColumn" ref={messagesColumnRef}>
-      {messagesRecieved.map((msg, i) => (
+    <div className="messages-column" ref={messagesColumnRef}>
+      {messagesRecieved.map((message, i) => (
         <div className="message" key={i}>
-          <div className="messageContainer">
-            <span className="msgMeta">{msg.username}</span>
-            <span className="msgMeta">
-              {formatDateFromTimestamp(msg.createdtime)}
+          <div className="message-container">
+            <span className="message-meta">{message.userName}</span>
+            <span className="message-meta">
+              {formatDateFromTimestamp(message.createdtime)}
             </span>
           </div>
-          <p className="msgText">{msg.message}</p>
+          <p className="message-text">{message.message}</p>
           <br />
         </div>
       ))}

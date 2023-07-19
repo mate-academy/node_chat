@@ -9,16 +9,10 @@ import { useEffect } from 'react';
 const socket = io.connect(process.env.REACT_APP_SERVER_URL);
 
 export const App = () => {
-  const [username, setUsername] = useState(localStorage.getItem('user') || '');
+  const [userName, setUserName] = useState(localStorage.getItem('user') || '');
   const [room, setRoom] = useState(localStorage.getItem('room') || '');
   const [rooms, setRooms] = useState([]);
-  const socketId = socket.id
-
-  useEffect(() => {
-    if (room !== '' && username !== '') {
-      socket.emit('join_room', { username, room });
-    }
-  }, [socketId]);
+  const socketId = socket.id;
 
   useEffect(() => {
     socket.on('rooms', (data) => {
@@ -26,7 +20,19 @@ export const App = () => {
     });
 
     return () => socket.off('rooms');
-  }, [socket]);
+  }, []);
+
+  useEffect(() => {
+    socket.on('rooms', (data) => {
+      setRooms(data.rooms);
+    });
+
+    if (room && userName) {
+      socket.emit('join_room', { userName, room });
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socketId]);
 
   return (
     <Router>
@@ -36,8 +42,8 @@ export const App = () => {
             path='/'
             element={
               <Home
-                username={username}
-                setUsername={setUsername}
+                userName={userName}
+                setUserName={setUserName}
                 room={room}
                 setRoom={setRoom}
                 socket={socket}
@@ -51,9 +57,10 @@ export const App = () => {
             path='/chat'
             element={
               <Chat
-                username={username}
+                userName={userName}
                 room={room}
                 socket={socket}
+                setRooms={setRooms}
               />
             }
           />

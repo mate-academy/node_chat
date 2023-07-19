@@ -5,21 +5,21 @@ import { SendMessage } from "../../components/SendMessage/SendMessage";
 import './Chat.css';
 import { useEffect } from "react";
 
-export const Chat = ({ socket, room, username }) => {
+export const Chat = ({ socket, room, userName, setRooms }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!room && !username) {
+    if (!room && !userName) {
       navigate('/', { replace: true });
     }
-  }, [socket])
+  }, [socket, navigate, userName, room])
 
   return (
-    <div className="chatContainer">
-       <RoomAndUsers socket={socket} username={username} room={room} />
+    <div className="chat-container">
+       <RoomAndUsers socket={socket} userName={userName} room={room} setRooms={setRooms} />
       <div>
         <Messages socket={socket} />
-        <SendMessage socket={socket} username={username} room={room} />
+        <SendMessage socket={socket} userName={userName} room={room} />
       </div>
     </div>
   );

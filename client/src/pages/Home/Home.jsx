@@ -3,15 +3,29 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
-export const Home = ({ username, setUsername, room, setRoom, socket, rooms, setRooms }) => {
+export const Home = ({ userName, setUserName, room, setRoom, socket, rooms, setRooms }) => {
   const navigate = useNavigate();
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (!value.trim()) {
+      return;
+    }
+
+    if (name === 'user') {
+      setUserName(value);
+    } else {
+      setRoom(value);
+    }
+  }
+
   const joinRoom = () => {
-    if (room && username) {
-      socket.emit('join_room', { username, room });
+    if (room && userName) {
+      socket.emit('join_room', { userName, room });
 
       const isRoom = rooms.find(val => val.title === room);
-      const id = [...rooms].sort((a, b) => b.id - a.id)[0].id + 1;
+      const id = rooms[rooms.length - 1].id + 1;
 
       if (!isRoom) {
         setRooms(prev => {
@@ -26,40 +40,37 @@ export const Home = ({ username, setUsername, room, setRoom, socket, rooms, setR
         });
       }
 
+      localStorage.setItem('room', room);
+      localStorage.setItem('user', userName);
+
       navigate('/chat', { replace: true });
     }
   };
 
-  const isDisabled = !username || !room;
+  const isDisabled = !userName || !room;
 
   return (
     <div className="container">
-      <div className="formContainer">
+      <div className="form-container">
         <h1>{`ChatRooms`}</h1>
         <input
+          name="user"
           className="input"
-          placeholder='Username...'
-          onChange={(e) => {
-            setUsername(e.target.value)
-            localStorage.setItem('user', e.target.value);
-          }}
+          placeholder='UserName...'
+          onChange={handleChange}
         />
 
         <input
+          name="room"
           className="input"
           placeholder='Create new room'
-          onChange={(e) => {
-            setRoom(e.target.value)
-            localStorage.setItem('room', e.target.value.toLowerCase());
-          }}
+          onChange={handleChange}
         />
 
         <select
+          name="room"
           className="input"
-          onChange={(e) => {
-            setRoom(e.target.value.toLowerCase());
-            localStorage.setItem('room', e.target.value.toLowerCase());
-          }}
+          onChange={handleChange}
         >
           <option>-- Select Room --</option>
           {rooms.map(room => (
@@ -69,7 +80,7 @@ export const Home = ({ username, setUsername, room, setRoom, socket, rooms, setR
 
         <button
           className={classNames(
-            'btn btn-secondary btn-home',
+            'button button-secondary button-home',
              {'btn-disabled': isDisabled },
             )}
           onClick={joinRoom}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RoomAndUsers.css';
 
-export const RoomAndUsers = ({ socket, username, room }) => {
+export const RoomAndUsers = ({ socket, userName, room, setRooms }) => {
   const [roomUsers, setRoomUsers] = useState([]);
 
   const navigate = useNavigate();
@@ -12,12 +12,16 @@ export const RoomAndUsers = ({ socket, username, room }) => {
       setRoomUsers(data);
     });
 
+    socket.on('rooms', (data) => {
+      setRooms(data.rooms);
+    });
+
     return () => socket.off('chatroom_users');
-  }, [socket]);
+  }, [socket, roomUsers, setRooms]);
 
   const leaveRoom = () => {
     const createdtime = Date.now();
-    socket.emit('leave_room', { username, room, createdtime });
+    socket.emit('leave_room', { userName, room, createdtime });
 
     localStorage.removeItem('room');
     localStorage.removeItem('user');
@@ -26,24 +30,24 @@ export const RoomAndUsers = ({ socket, username, room }) => {
   };
 
   return (
-    <div className="roomAndUsersColumn">
-      <h2 className="roomTitle">{room}</h2>
+    <div className="room-users-column">
+      <h2 className="room-title">{room}</h2>
 
       <div>
-        {roomUsers.length > 0 && <h5 className="usersTitle">Users:</h5>}
-        <ul className="usersList">
+        {roomUsers.length > 0 && <h5 className="users-title">Users:</h5>}
+        <ul className="users-list">
           {roomUsers.map((user) => (
             <li
-              className="userItem"
+              className="user-item"
               key={user.id}
             >
-              {user.username}
+              {user.userName}
             </li>
           ))}
         </ul>
       </div>
 
-      <button className='btn btn-outline' onClick={leaveRoom}>
+      <button className='button button-outline' onClick={leaveRoom}>
         Leave
       </button>
     </div>

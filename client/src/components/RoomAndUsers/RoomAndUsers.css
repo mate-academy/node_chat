@@ -1,11 +1,11 @@
-.usersList {
+.users-list {
   margin: 0 5px;
   padding: 5px;
   background-color: #00186f;
   border-radius: 5px;
 }
 
-.userItem {
+.user-item {
   display: flex;
   justify-content: center;
   font-weight: bold;

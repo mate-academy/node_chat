@@ -6,7 +6,7 @@
   align-items: center;
   background: rgb(63, 73, 204);
 }
-.formContainer {
+.form-container {
   width: 400px;
   margin: 0 auto 0 auto;
   padding: 32px;
@@ -28,6 +28,6 @@
   margin-top: 20px;
 }
 
-.btn-home {
+.button-home {
   width: 100%;
 }

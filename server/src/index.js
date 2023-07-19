@@ -32,14 +32,14 @@ let chatRoom = '';
 let allUsers = [];
 
 io.on('connection', async(socket) => {
-  const rooms = await Room.findAll();
+  let rooms = await Room.findAll();
 
   socket.emit('rooms', {
     rooms,
   });
 
   socket.on('join_room', async(data) => {
-    const { username, room } = data;
+    const { userName, room } = data;
 
     const isRoom = await Room.findOne({
       where: { title: room },
@@ -56,14 +56,14 @@ io.on('connection', async(socket) => {
     const createdtime = Date.now();
 
     socket.to(room).emit('receive_message', {
-      message: `${username} has joined the chat room`,
-      username: CHAT_BOT,
+      message: `${userName} has joined the chat room`,
+      userName: CHAT_BOT,
       createdtime,
     });
 
     socket.emit('receive_message', {
-      message: `Welcome ${username}`,
-      username: CHAT_BOT,
+      message: `Welcome ${userName}`,
+      userName: CHAT_BOT,
       createdtime,
     });
 
@@ -71,7 +71,7 @@ io.on('connection', async(socket) => {
 
     allUsers.push({
       id: socket.id,
-      username,
+      userName,
       room,
     });
 
@@ -84,24 +84,24 @@ io.on('connection', async(socket) => {
       where: { room },
     });
 
-    socket.emit('last_100_messages', messages);
+    socket.emit('last_messages', messages);
   });
 
   socket.on('send_message', (data) => {
-    const { message, username, room, createdtime } = data;
+    const { message, userName, room, createdtime } = data;
 
     io.in(room).emit('receive_message', data);
 
     Message.create({
       message,
-      username,
+      userName,
       room,
       createdtime,
     });
   });
 
-  socket.on('leave_room', (data) => {
-    const { username, room } = data;
+  socket.on('leave_room', async(data) => {
+    const { userName, room } = data;
 
     socket.leave(room);
 
@@ -110,10 +110,15 @@ io.on('connection', async(socket) => {
     allUsers = leaveRoom(socket.id, allUsers);
 
     socket.to(room).emit('chatroom_users', allUsers);
+    rooms = await Room.findAll();
+
+    socket.emit('rooms', {
+      rooms,
+    });
 
     socket.to(room).emit('receive_message', {
-      username: CHAT_BOT,
-      message: `${username} has left the chat`,
+      userName: CHAT_BOT,
+      message: `${userName} has left the chat`,
       createdtime,
     });
   });
@@ -125,12 +130,12 @@ io.on('connection', async(socket) => {
       return;
     }
 
-    if (user.username) {
+    if (user.userName) {
       allUsers = leaveRoom(socket.id, allUsers);
       socket.to(chatRoom).emit('chatroom_users', allUsers);
 
       socket.to(chatRoom).emit('receive_message', {
-        message: `${user.username} has disconnected from the chat.`,
+        message: `${user.userName} has disconnected from the chat.`,
       });
     }
   });

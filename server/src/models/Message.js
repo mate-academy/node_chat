@@ -8,7 +8,7 @@ const Message = sequelize.define('Message', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  username: {
+  userName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
