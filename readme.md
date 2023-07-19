@@ -7,4 +7,4 @@ Implement a chat application (both client and server)
 - Implement an ability to create rooms (create / rename / join / delete)
 - New user should see all prev messages in the room
 
-**Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
+In order to run the server locally, you need to go to the server cd server folder in the terminal and type npx nodemon src/index.js. Also, to run the client locally, go to cd client and npm start. Or just npm start to start both directories.

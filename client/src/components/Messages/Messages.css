@@ -1,0 +1,39 @@
+.messages-column {
+  height: 85vh;
+  overflow: auto;
+  padding: 10px 10px 10px 40px;
+}
+.message {
+  background: #00186f;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  max-width: 600px;
+  padding: 12px;
+}
+
+.message-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.message-meta {
+  color: rgb(153, 217, 234);
+  font-size: 0.75rem;
+}
+.message-text {
+  color: #fff;
+}
+
+.send-message {
+  padding: 16px 20px 20px 16px;
+}
+
+.message-input {
+  padding: 14px;
+  margin-right: 16px;
+  width: 60%;
+  border-radius: 6px;
+  border: 1px solid rgb(153, 217, 234);
+  font-size: 0.9rem;
+}

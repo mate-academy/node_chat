@@ -1,0 +1,15 @@
+.users-list {
+  margin: 0 5px;
+  padding: 5px;
+  background-color: #00186f;
+  border-radius: 5px;
+}
+
+.user-item {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  margin: 5px;
+  background-color: #3f49cc;
+  border-radius: 5px;
+}
