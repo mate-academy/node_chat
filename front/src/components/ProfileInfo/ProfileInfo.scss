@@ -1,0 +1,177 @@
+@import "../../utils/mixins";
+@import "../../utils/vars";
+
+.profile-info {
+  @include onDesktop {
+    padding-top: 10px;
+  }
+
+  @media (min-width: 1280px) {
+    padding-top: 44px;
+  }
+
+  &__avatar-with-text {
+    display: none;
+
+    @include onDesktop {
+      display: flex;
+      padding-left: 20px;
+      height: 156px;
+      margin-bottom: 10px;
+    }
+
+    @media (min-width: 1280px) {
+      padding-left: 67px;
+      margin-bottom: 38px;
+    }
+  }
+
+  &__avatar-outside-container {
+    box-sizing: border-box;
+    width: 156px !important;
+    height: 156px !important;
+    padding: 5px !important;
+  }
+
+  &__avatar {
+    box-sizing: border-box;
+    border-radius: 50%;
+    width: 146px;
+    height: 146px;
+  }
+
+  &__avatar-anonym {
+    box-sizing: border-box;
+    width: 146px;
+    height: 146px;
+    border-radius: 50%;
+    background: url("../../../public/assets/images/blank-person-icon.webp");
+    background-size: contain;
+    background-position: center;
+  }
+
+  &__text-container {
+    padding-left: 56px;
+  }
+
+  &__name {
+    font-size: 40px;
+  }
+
+  &__id {
+    font-size: 18px;
+  }
+
+  &__data {
+    display: flex;
+    flex-direction: column;
+
+    @include onDesktop {
+      width: 740px;
+    }
+
+    @media (min-width: 1280px) {
+      margin-left: 279px;
+    }
+  }
+}
+
+.profile-data {
+  &__item {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+
+    @include onDesktop {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__input-title {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    color: #000;
+    font-size: 16px;
+    text-align: left;
+
+    @include onDesktop {
+      margin-bottom: 0;
+      width: 140px;
+      font-size: 20px;
+    }
+  }
+
+  &__input {
+    height: 40px;
+    font-size: 16px;
+
+    @include onDesktop {
+      width: 542px;
+      height: 50px;
+      padding-left: 25px;
+      font-weight: 400;
+      font-size: 20px;
+      color: #000;
+    }
+  }
+
+  &__edit-on-mobile {
+    @include onDesktop {
+      display: none;
+    }
+  }
+
+  &__edit-on-desktop {
+    display: none;
+
+    @include onDesktop {
+      display: initial;
+    }
+  }
+
+  &__button {
+    border: none;
+    background: none;
+    width: 18px;
+    height: 18px;
+  }
+
+  &__link-container {
+    padding-top: 20px;
+    display: flex;
+    justify-content: right;
+  }
+
+  &__change-password-link {
+    align-text: right;
+    font-size: 11px;
+    font-weight: 400;
+    color: #000;
+
+    &:hover {
+      color: $c-red;
+    }
+  }
+
+  &__delete {
+    text-decoration: underline;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__optional-field {
+    font-size: 0.8em;
+    text-align: left;
+    margin: 0;
+
+    @include onDesktop {
+      margin-left: 170px;
+    }
+  }
+}

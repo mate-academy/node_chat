@@ -1,0 +1,34 @@
+@import "./vars";
+
+@mixin onDesktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin font {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@mixin font-heading($desktop-size) {
+  font-family: $font-main;
+  font-style: normal;
+  font-weight: 700;
+  color: $c-black;
+  font-size: 20px;
+  margin: 0;
+
+  @include onDesktop {
+    font-size: $desktop-size;
+  }
+}
+
+@mixin before-logo($width, $height) {
+  content: " ";
+  position: absolute;
+  background: url("../../../public/assets/images/logo.svg") center/contain no-repeat;
+  width: $width;
+  height: $height;
+}

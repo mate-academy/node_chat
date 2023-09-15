@@ -1,0 +1,183 @@
+@import "../../utils/mixins";
+@import "../../utils/vars";
+
+.chat-conversation {
+  max-height: calc(100vh - 400px);
+
+  @include onDesktop {
+    max-height: 100%;
+  }
+
+  &__main-text {
+    font-size: 14px;
+    //max-width: 95%;
+    overflow-wrap: break-word;
+    max-width: 50vw;
+
+    @include onDesktop {
+      max-width: 60vw;
+    }
+  }
+
+  &__message {
+    margin: 0;
+  }
+}
+
+.conversation-list {
+  display: flex;
+  gap: 20px;
+
+  &__chat-avatar {
+    position: relative;
+  }
+}
+
+.chat-avatar {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  @include onDesktop {
+    width: 56px;
+    height: 56px;
+  }
+
+  &--unauth {
+    width: 32px;
+    height: 32px;
+
+    @include onDesktop {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  &__text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: $c-red;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+
+    &--unauth {
+      font-size: 18px;
+      line-height: 18px;
+      width: 32px;
+      height: 32px;
+
+      @include onDesktop {
+        width: 56px;
+        height: 56px;
+      }
+    }
+  }
+
+  &__online-sign {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: #27ec16;
+    border-radius: 50%;
+
+    &--unauth {
+      width: 6px;
+      height: 6px;
+    }
+  }
+}
+
+.right .chat-avatar {
+  order: 3;
+}
+
+.conversation-list {
+  width: 100%;
+}
+
+.right .conversation-list {
+  justify-content: end;
+}
+
+.chat-conversation .conversation-list {
+  align-items: flex-end;
+  display: inline-flex;
+  margin-bottom: 24px;
+}
+
+.ctext-wrap {
+  display: flex;
+  padding: 10px 20px;
+  border-radius: $main-border-radius / 2;
+  background-color: #000;
+  color: #fff;
+  text-align: left;
+
+  &--unauth {
+    padding: 4px 8px;
+  }
+}
+
+.right .ctext-wrap {
+  background-color: #f1f1f1;
+  color: #393737;
+}
+
+.ctext-wrap-content {
+  max-width: 95%;
+  overflow-wrap: break-word;
+
+  @media (max-width: 360px) {
+    max-width: 40vw;
+  }
+
+  @include onDesktop {
+    max-width: 50vw;
+  }
+
+  &--unauth {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.4em;
+  }
+}
+
+.chat-time {
+  margin-bottom: 0;
+  margin-top: 0;
+  color: #878787;
+  font-size: 10px;
+  text-align: right;
+  max-width: 50vw;
+  width: 100%;
+
+  @include onDesktop {
+    max-width: 60vw;
+  }
+}
+
+.right .chat-time {
+  text-align: left;
+}
+
+.conversation-name {
+  text-align: left;
+  font-size: 12px;
+  color: #393737;
+}
+
+.right .conversation-name {
+  text-align: right;
+}
+
+.user-chat-content {
+  max-width: 80%;
+}

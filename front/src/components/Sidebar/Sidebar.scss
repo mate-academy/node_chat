@@ -1,0 +1,46 @@
+@import "../../utils/mixins";
+@import "../../utils/vars";
+
+.sidebar {
+  width: 100%;
+  padding-top: 10px;
+  background: #f1f1f1;
+  padding-bottom: 10px;
+
+  @include onDesktop {
+    min-width: 200px;
+    max-width: 235px;
+    width: 30%;
+    background: #f1f1f1;
+    padding: 20px;
+  }
+
+  &__tab-item {
+    @include onDesktop {
+      margin-bottom: 20px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__avatar-with-text {
+    margin-bottom: 10px;
+
+    @include onDesktop {
+      margin-bottom: 20px;
+      height: 45px;
+    }
+  }
+
+  &__tabs-switches {
+    display: flex;
+    justify-content: center;
+
+    @include onDesktop {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
