@@ -1,13 +1,6 @@
 /* eslint-disable quotes */
 import { messageService } from "../services/messageService.js";
 
-async function createMessage(req, res, next) {
-  const { name } = req.body;
-  const room = await roomService.createRoom(name);
-
-  res.send(room);
-}
-
 async function getAll(req, res, next) {
   const messages = await messageService.getAll();
 
@@ -24,4 +17,5 @@ async function getAllForRoom(req, res, next) {
 
 export const messageController = {
   getAllForRoom,
+  getAll,
 };
