@@ -1,0 +1,74 @@
+@import "../../utils/mixins";
+@import "../../utils/vars";
+
+.profile {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  @include onDesktop {
+    flex-direction: row;
+  }
+
+  width: 100%;
+
+  align-items: stretch;
+
+  @include onDesktop {
+    height: 100%;
+    max-height: calc(100vh - #{$header-height});
+  }
+
+  &__main {
+    padding: 10px;
+    flex-grow: 1;
+
+    @include onDesktop {
+      padding: 0;
+    }
+  }
+
+  &__chat {
+    height: 100%;
+  }
+}
+
+.avatar-outside-container {
+  box-sizing: border-box;
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(rgba(233, 36, 59, 1), rgba(233, 36, 59, 0.15));
+}
+
+.avatar {
+  box-sizing: border-box;
+  position: absolute;
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+}
+
+.avatar-anonym {
+  box-sizing: border-box;
+  background: url("../../../public/assets/images/blank-person-icon.webp");
+  background-size: contain;
+  background-position: center;
+}
+
+.text-container {
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 15px;
+  color: #000;
+  font-weight: 500;
+  text-align: left;
+
+  &__id {
+    font-weight: 700;
+  }
+}

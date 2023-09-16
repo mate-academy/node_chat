@@ -1,0 +1,8 @@
+@import "../../utils/mixins";
+@import "../../utils/vars";
+
+.add-room {
+  &__item {
+    margin: 0 0 5px 0;
+  }
+}

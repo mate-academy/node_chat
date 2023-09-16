@@ -1,0 +1,74 @@
+@import "../../utils/mixins";
+@import "../../utils/vars";
+
+.chat-input {
+  box-sizing: border-box;
+  background: #dfdfdf;
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  border-radius: 28px;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+
+  @include onDesktop {
+    padding: 6px 12px 6px 18px;
+  }
+
+  &__field-wrap {
+    flex-grow: 1;
+  }
+
+  &__field {
+    padding: 0;
+    resize: none;
+    border: none;
+    outline: none;
+    @include font;
+    font-size: 14px;
+    color: #000;
+    background: #dfdfdf;
+    width: 100%;
+  }
+
+  &__button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: red;
+    background: url(../../../public/assets/images/control.svg) center/contain
+      no-repeat;
+    background-size: contain;
+    background-position: center;
+    border: none;
+
+    &--unauth {
+      width: 46px !important;
+      height: 46px !important;
+      align-self: flex-end;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  @include onDesktop {
+    gap: 20px;
+
+    &__field {
+      font-size: 16px;
+    }
+
+    &__button {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  &--unauth {
+    height: auto;
+  }
+}

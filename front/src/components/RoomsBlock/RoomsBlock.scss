@@ -1,0 +1,15 @@
+@import "../../utils/mixins";
+@import "../../utils/vars";
+
+.rooms-block {
+  &__item {
+    margin: 0 0 15px 0;
+  }
+
+  &__select {
+    &--active {
+      border: 1px solid $c-red !important;
+      box-shadow: none !important;
+    }
+  }
+}
