@@ -1,9 +1,2 @@
-# IDE
-.idea
-.vscode
-
-# Node
-node_modules
-
-# MacOS
-.DS_Store
+/node_modules
+.prettierrc
