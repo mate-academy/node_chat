@@ -6,17 +6,19 @@ import UserLayout from "../layouts/UserLayout";
 export default function Contact({ chatRoom, onlineUsersId, currentUser }) {
   const [contact, setContact] = useState();
 
+  const fetchData = async (contactId) => {
+    const res = await getUser(contactId);
+    setContact(res);
+  };
+
   useEffect(() => {
     const contactId = chatRoom.members?.find(
       (member) => member !== currentUser.uid
     );
 
-    const fetchData = async () => {
-      const res = await getUser(contactId);
-      setContact(res);
-    };
-
-    fetchData();
+    if (contactId) {
+      fetchData(contactId);
+    }
   }, [chatRoom, currentUser]);
 
   return <UserLayout user={contact} onlineUsersId={onlineUsersId} />;

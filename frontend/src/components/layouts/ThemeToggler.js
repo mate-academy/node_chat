@@ -5,12 +5,15 @@ export default function ThemeToggler() {
   const themeToggleLightIcon = useRef();
   const themeToggleDarkIcon = useRef();
 
+  const isDarkModePreferred =
+    !("color-theme" in localStorage) &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  const isDarkModeEnabled =
+    localStorage.getItem("color-theme") === "dark" || isDarkModePreferred;
+
   useEffect(() => {
-    if (
-      localStorage.getItem("color-theme") === "dark" ||
-      (!("color-theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
+    if (isDarkModeEnabled) {
       document.documentElement.classList.add("dark");
       themeToggleLightIcon.current.classList.remove("hidden");
     } else {

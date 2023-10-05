@@ -6,13 +6,13 @@ import Picker from "emoji-picker-react";
 
 export default function ChatForm(props) {
   const [message, setMessage] = useState("");
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isShowEmojiPicker, setIsShowEmojiPicker] = useState(false);
 
   const scrollRef = useRef();
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
-  }, [showEmojiPicker]);
+  }, [isShowEmojiPicker]);
 
   const handleEmojiClick = (event, emojiObject) => {
     let newMessage = message + emojiObject.emoji;
@@ -28,7 +28,7 @@ export default function ChatForm(props) {
 
   return (
     <div ref={scrollRef}>
-      {showEmojiPicker && (
+      {isShowEmojiPicker && (
         <Picker className="dark:bg-gray-900" onEmojiClick={handleEmojiClick} />
       )}
       <form onSubmit={handleFormSubmit}>
@@ -36,7 +36,7 @@ export default function ChatForm(props) {
           <button
             onClick={(e) => {
               e.preventDefault();
-              setShowEmojiPicker(!showEmojiPicker);
+              setIsShowEmojiPicker(!isShowEmojiPicker);
             }}
           >
             <EmojiHappyIcon
