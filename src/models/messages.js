@@ -7,7 +7,6 @@ const Messages = client.define('message', {
   author: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   text: {
     type: DataTypes.STRING,
