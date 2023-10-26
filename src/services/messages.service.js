@@ -3,7 +3,7 @@
 const { ApiError } = require('../exceptions/api.error');
 const { Messages } = require('../models/messages');
 
-async function getMessages(chatId, limit = 10, offset = 0) {
+async function getMessages(chatId, limit = 11, offset = 0) {
   const messages = await Messages.findAll({
     where: { chatId },
     order: [['createdAt', 'DESC']],

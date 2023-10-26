@@ -19,6 +19,13 @@ const createChat = async(ws, name, authorChat) => {
   }
 };
 
+const getChats = async() => {
+  const chats = await Chats.findAll();
+
+  return chats;
+};
+
 module.exports = {
   createChat,
+  getChats,
 };

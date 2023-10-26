@@ -17,7 +17,6 @@ const Chats = client.define('chat', {
 });
 
 Messages.belongsTo(Chats);
-
 Chats.hasMany(Messages);
 
 module.exports = {

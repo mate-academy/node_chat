@@ -3,8 +3,9 @@
 const { ApiError } = require('../exceptions/api.error');
 const { Chats } = require('../models/chats');
 const { getMessages } = require('../services/messages.service');
+const { getChats } = require('../services/chat.service');
 
-const get = async(req, res) => {
+const getChatById = async(req, res) => {
   const { chatId } = req.params;
   const { limit, offset } = req.query;
 
@@ -19,7 +20,17 @@ const get = async(req, res) => {
   res.send(messages);
 };
 
-const create = async(req, res) => {
+const getAllChats = async(req, res) => {
+  const chats = await getChats();
+
+  if (!chats) {
+    throw ApiError.badRequest('No chats');
+  };
+
+  res.send(chats);
+};
+
+const createChat = async(req, res) => {
   const { name, chatAuthor } = req.body;
 
   if (!chatAuthor || !name) {
@@ -35,6 +46,7 @@ const create = async(req, res) => {
 };
 
 module.exports = {
-  get,
-  create,
+  getChatById,
+  createChat,
+  getAllChats,
 };
