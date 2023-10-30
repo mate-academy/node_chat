@@ -18,21 +18,21 @@ async function getMessages(chatId, limit = 11, offset = 0) {
   return messages;
 }
 
-const messagesWS = async(wss, message) => {
-  const { author, text, chatId } = JSON.parse(message);
+// const messagesWS = async(wss, message, clientsByRoom) => {
+//   const { author, text, chatId } = JSON.parse(message);
 
-  const newMessage = await Messages.create({
-    author,
-    text: text.toString(),
-    chatId: +chatId,
-  });
+//   const newMessage = await Messages.create({
+//     author,
+//     text: text.toString(),
+//     chatId: +chatId,
+//   });
 
-  for (const client of wss.clients) {
-    client.send(JSON.stringify(newMessage));
-  }
-};
+//   for (const client of wss.clients) {
+//     client.send(JSON.stringify(newMessage));
+//   }
+// };
 
 module.exports = {
   getMessages,
-  messagesWS,
+  // messagesWS,
 };
