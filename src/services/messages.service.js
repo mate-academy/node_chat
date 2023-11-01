@@ -18,21 +18,25 @@ async function getMessages(chatId, limit = 11, offset = 0) {
   return messages;
 }
 
-// const messagesWS = async(wss, message, clientsByRoom) => {
-//   const { author, text, chatId } = JSON.parse(message);
+async function createMessage(data) {
+  const { chatId, author, text } = data;
 
-//   const newMessage = await Messages.create({
-//     author,
-//     text: text.toString(),
-//     chatId: +chatId,
-//   });
+  const correctRequest = chatId && author && text;
 
-//   for (const client of wss.clients) {
-//     client.send(JSON.stringify(newMessage));
-//   }
-// };
+  if (!correctRequest) {
+    throw ApiError.badRequest('Not enough information to create message');
+  }
+
+  const newMessage = await Messages.create({
+    author,
+    text: text.toString(),
+    chatId,
+  });
+
+  return newMessage;
+}
 
 module.exports = {
   getMessages,
-  // messagesWS,
+  createMessage,
 };

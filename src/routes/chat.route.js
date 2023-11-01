@@ -7,7 +7,6 @@ const chatController = require('../controllers/chat.controller');
 const chatRouter = new express.Router();
 
 chatRouter.get('/:chatId', catchError(chatController.getChatById));
-chatRouter.post('/', catchError(chatController.createChat));
 chatRouter.get('/', catchError(chatController.getAllChats));
 
 module.exports = {

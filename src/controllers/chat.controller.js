@@ -30,23 +30,7 @@ const getAllChats = async(req, res) => {
   res.send(chats);
 };
 
-const createChat = async(req, res) => {
-  const { name, chatAuthor } = req.body;
-
-  if (!chatAuthor || !name) {
-    throw ApiError.badRequest('No chatAuthor or chatName');
-  }
-
-  Chats.create({
-    name,
-    chatAuthor,
-  });
-
-  res.sendStatus(200);
-};
-
 module.exports = {
   getChatById,
-  createChat,
   getAllChats,
 };

@@ -4,12 +4,12 @@
 require('dotenv/config');
 
 const express = require('express');
-const WebSocket = require('ws');
 const cors = require('cors');
-// const messageService = require('./services/messages.service');
+
+const WebSocket = require('ws');
 const { chatRouter } = require('./routes/chat.route');
-const { Messages } = require('./models/messages');
-const { Chats } = require('./models/chats');
+const { createMessage } = require('./services/messages.service');
+const { createChat, deleteChat } = require('./services/chat.service');
 
 const PORT = process.env.PORT;
 
@@ -27,12 +27,13 @@ let roomId = null;
 wss.on('connection', (ws) => {
   ws.on('message', async(data) => {
     const sendedData = JSON.parse(data);
+    const { type, chatId, id } = sendedData;
 
     console.log(sendedData);
 
-    switch (sendedData.type) {
+    switch (type) {
       case 'chatId':
-        roomId = sendedData.id;
+        roomId = id;
 
         if (!clientsByRoom[roomId]) {
           clientsByRoom[roomId] = [];
@@ -42,35 +43,39 @@ wss.on('connection', (ws) => {
         break;
 
       case 'chat':
-        const { chatAuthor, name } = sendedData;
-
-        const newChat = await Chats.create({
-          name,
-          chatAuthor,
-        });
+        const newChat = await createChat(sendedData);
 
         for (const client of wss.clients) {
           client.send(JSON.stringify({
-            type: sendedData.type,
+            type,
             newChat,
           }));
         }
         break;
 
+      case 'deleteChat':
+        deleteChat(chatId);
+
+        if (clientsByRoom[chatId]) {
+          delete clientsByRoom[chatId];
+        }
+
+        for (const client of wss.clients) {
+          client.send(JSON.stringify({
+            type,
+            chatId,
+          }));
+        }
+        break;
+
+      case 'renameChat':
+        break;
+
       case 'message':
-        const { author, text, chatId } = sendedData;
-
-        const newMessage = await Messages.create({
-          author,
-          text: text.toString(),
-          chatId,
-        });
-
+        const newMessage = createMessage(sendedData);
         const roomClients = clientsByRoom[chatId] || [];
 
         for (const client of roomClients) {
-          console.log('this is data type', sendedData.type);
-
           client.send(JSON.stringify({
             type: sendedData.type,
             newMessage,
