@@ -41,18 +41,43 @@ const createChat = async(data) => {
   return newChat;
 };
 
-const deleteChat = async(id) => {
-  const isExist = getChat(id);
+const deleteChat = async({ chatAuthor, chatId }) => {
+  const chat = await getChat(chatId);
 
-  if (!isExist) {
+  if (!chat) {
     throw ApiError.badRequest('Chat does not exist');
   }
 
-  await Chats.destroy({ where: { id } });
+  if (chatAuthor !== chat.chatAuthor) {
+    throw ApiError.badRequest('Chat can delete only his author');
+  }
+
+  await Chats.destroy({ where: { id: chatId } });
+};
+
+const renameChat = async({ chatAuthor, chatId, newTitle }) => {
+  const chat = await getChat(chatId);
+
+  if (!chat) {
+    throw ApiError.badRequest('Chat does not exist');
+  }
+
+  if (chatAuthor !== chat.chatAuthor) {
+    throw ApiError.badRequest('Chat can rename only his author');
+  }
+
+  await Chats.update({ name: newTitle }, {
+    where: { id: chatId },
+  });
+
+  const renamedChat = await getChat(chatId);
+
+  return renamedChat;
 };
 
 module.exports = {
   createChat,
   getChats,
   deleteChat,
+  renameChat,
 };

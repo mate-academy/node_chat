@@ -9,7 +9,11 @@ const cors = require('cors');
 const WebSocket = require('ws');
 const { chatRouter } = require('./routes/chat.route');
 const { createMessage } = require('./services/messages.service');
-const { createChat, deleteChat } = require('./services/chat.service');
+const {
+  createChat,
+  deleteChat,
+  renameChat,
+} = require('./services/chat.service');
 
 const PORT = process.env.PORT;
 
@@ -54,7 +58,7 @@ wss.on('connection', (ws) => {
         break;
 
       case 'deleteChat':
-        deleteChat(chatId);
+        deleteChat(sendedData);
 
         if (clientsByRoom[chatId]) {
           delete clientsByRoom[chatId];
@@ -69,6 +73,15 @@ wss.on('connection', (ws) => {
         break;
 
       case 'renameChat':
+        const renamedChat = await renameChat(sendedData);
+
+        for (const client of wss.clients) {
+          client.send(JSON.stringify({
+            type,
+            renamedChat,
+          }));
+        }
+
         break;
 
       case 'message':
