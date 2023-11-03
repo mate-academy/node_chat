@@ -11,10 +11,9 @@ function App() {
   const [showChat, setShowChat] = useState(false);
 
   const joinRoom = () => {
-    if (userName !== '' && room) {
+    if (userName && room) {
       socket.emit('join_room', room);
       setShowChat(true);
-
       localStorage.setItem('room', room);
       localStorage.setItem('user', userName);
     }
@@ -31,13 +30,18 @@ function App() {
             setUserName(e.target.value);
           }}
          />
-
-        <select name='room' className='input' required>
-          <option>-- Select Room --</option>
-          <option value='1'>1</option>
-          <option value='2'>2</option>
-          <option value='3'>3</option>
-          <option value='4'>4</option>
+        <select
+          name='room'
+          className='input'
+          onChange={(e) => {
+            setRoom(e.target.value)
+          }}
+          required>
+            <option>-- Select Room --</option>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
         </select>
 
         <button onClick={joinRoom}>Join Room</button>
