@@ -1,10 +1,3 @@
-# Chat (with Node.js) 
-Implement a chat application (both client and server)
+To run the server locally, move to the server folder by using cd server in the terminal and type npm start. To run the client locally, go to client folder by cd client and run npm start, as well.
 
-- You type a username and send it to the server
-- It is now username (save it in localStorage)
-- All the messages should have an author, time and text
-- Implement an ability to create rooms (create / rename / join / delete)
-- New user should see all prev messages in the room
-
-**Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
+Messages exchanging suppose joining the same room all of the participants.
