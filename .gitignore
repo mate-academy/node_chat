@@ -1,10 +1,10 @@
 # IDE
 .idea
 .vscode
-.env
 
 # Node
 node_modules
+.env
 
 # MacOS
 .DS_Store
