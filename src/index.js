@@ -85,7 +85,7 @@ wss.on('connection', (ws) => {
         break;
 
       case 'message':
-        const newMessage = createMessage(sendedData);
+        const newMessage = await createMessage(sendedData);
         const roomClients = clientsByRoom[chatId] || [];
 
         for (const client of roomClients) {
@@ -99,11 +99,13 @@ wss.on('connection', (ws) => {
   });
 
   ws.on('close', () => {
-    if (!roomId) {
-      return;
+    if (clientsByRoom[roomId]) {
+      clientsByRoom[roomId] = clientsByRoom[roomId]
+        .filter((client) => {
+          if (client) {
+            return client !== ws;
+          }
+        });
     }
-
-    clientsByRoom[roomId] = clientsByRoom[roomId]
-      .filter((client) => client !== ws);
   });
 });

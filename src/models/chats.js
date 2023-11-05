@@ -17,7 +17,11 @@ const Chats = client.define('chat', {
 });
 
 Messages.belongsTo(Chats);
-Chats.hasMany(Messages);
+
+Chats.hasMany(Messages, {
+  foreignKey: 'chatId',
+  onDelete: 'CASCADE',
+});
 
 module.exports = {
   Chats,

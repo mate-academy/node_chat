@@ -2,6 +2,8 @@
 
 const { ApiError } = require('../exceptions/api.error');
 const { Chats } = require('../models/chats');
+const { Messages } = require('../models/messages');
+const { client } = require('../utils/db');
 
 const getChat = async(id) => {
   if (!id) {
@@ -52,7 +54,11 @@ const deleteChat = async({ chatAuthor, chatId }) => {
     throw ApiError.badRequest('Chat can delete only his author');
   }
 
-  await Chats.destroy({ where: { id: chatId } });
+  const transaction = await client.transaction();
+
+  await Messages.destroy({ where: { chatId } }, { transaction });
+  await Chats.destroy({ where: { id: chatId } }, transaction);
+  await transaction.commit();
 };
 
 const renameChat = async({ chatAuthor, chatId, newTitle }) => {
