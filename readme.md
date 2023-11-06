@@ -1,10 +1,9 @@
-# Chat (with Node.js) 
-Implement a chat application (both client and server)
+## FULLSTACK APP: [ChatApp](https://nazariialieksieiev.github.io/chat_app/)
 
-- You type a username and send it to the server
-- It is now username (save it in localStorage)
-- All the messages should have an author, time and text
-- Implement an ability to create rooms (create / rename / join / delete)
-- New user should see all prev messages in the room
+ChatApp - My Simple Chat App is a lightweight and user-friendly chat application designed for seamless communication
 
-**Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
+# Technologies Used
+
+- DataBase: PostgresSQL was deployed on https://www.elephantsql.com/
+- Backend: Express.JS, server was deployed on https://render.com/
+- Frontend: React.JS, deployed and published on gh-pages
