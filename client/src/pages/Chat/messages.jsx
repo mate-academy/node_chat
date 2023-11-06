@@ -50,7 +50,7 @@ const Messages = ({ socket }) => {
   return (
     <div className={styles.messagesColumn} ref={messagesColumnRef}>
       {messagesRecieved.map((msg, i) => (
-        <div className={styles.message} key={i}>
+        <div className={styles.message} key={msg.id}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span className={styles.msgMeta}>{msg.username}</span>
             <span className={styles.msgMeta}>
