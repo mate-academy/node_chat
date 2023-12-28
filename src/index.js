@@ -1,22 +1,50 @@
-/* eslint-disable no-console */
 'use strict';
 
-require('dotenv').config();
-
 const express = require('express');
-const userRoutes = require('./routes/user');
+const http = require('http');
+const socketIo = require('socket.io');
 const connectDb = require('./utils/db');
+const Chat = require('./models/Chat');
+const chatRoutes = require('./routes/chat');
+const userRoutes = require('./routes/user');
+const roomRoutes = require('./routes/room');
 
 connectDb();
 
 const app = express();
 
 app.use(express.json());
-
-// Routes
+app.use('/api/chats', chatRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/rooms', roomRoutes);
 
-app.listen(
+const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+  socket.on('message', async({ sender, message, room }) => {
+    const chat = new Chat({
+      sender,
+      message,
+      room,
+    });
+
+    await chat.save();
+
+    if (room) {
+      socket.to(room).emit('message', chat);
+    } else {
+      // send the message to all connected clients
+      socket.broadcast.emit('message', chat);
+    }
+  });
+
+  socket.on('join room', (room) => {
+    socket.join(room);
+  });
+});
+
+server.listen(
   process.env.PORT,
-  () => console.log(`Server running on port ${process.env.PORT}`)
-);
+  // eslint-disable-next-line no-console
+  () => console.log(`Server running on port ${process.env.PORT}`));
