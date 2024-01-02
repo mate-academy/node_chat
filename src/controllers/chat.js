@@ -2,6 +2,23 @@
 
 const Chat = require('../models/Chat');
 const Room = require('../models/Room');
+const {
+  NOT_FOUND,
+  FORBIDDEN,
+  CREATED,
+  OK,
+  NO_CONTENT,
+} = require('../constants/httpStatusCodes');
+const {
+  MESSAGE_NOT_FOUND,
+  MUST_JOIN_ROOM,
+} = require('../constants/errorMessages');
+
+const checkChatExists = (chat, res) => {
+  if (!chat) {
+    return res.status(NOT_FOUND).json({ message: MESSAGE_NOT_FOUND });
+  }
+};
 
 exports.createMessage = async(req, res, next) => {
   try {
@@ -11,8 +28,8 @@ exports.createMessage = async(req, res, next) => {
     const roomObj = await Room.findById(room);
 
     if (!roomObj.members.includes(sender)) {
-      return res.status(403).json({
-        message: 'You must join the room before sending messages',
+      return res.status(FORBIDDEN).json({
+        message: MUST_JOIN_ROOM,
       });
     }
 
@@ -22,7 +39,7 @@ exports.createMessage = async(req, res, next) => {
       room,
     });
 
-    res.status(201).json(chat);
+    res.status(CREATED).json(chat);
   } catch (err) {
     next(err);
   }
@@ -50,11 +67,9 @@ exports.editMessage = async(req, res, next) => {
       { new: true }
     );
 
-    if (!chat) {
-      return res.status(404).json({ message: 'Message not found' });
-    }
+    checkChatExists(chat, res);
 
-    res.status(200).json(chat);
+    res.status(OK).json(chat);
   } catch (err) {
     next(err);
   }
@@ -64,11 +79,9 @@ exports.removeMessage = async(req, res, next) => {
   try {
     const chat = await Chat.findByIdAndRemove(req.params.id);
 
-    if (!chat) {
-      return res.status(404).json({ message: 'Message not found' });
-    }
+    checkChatExists(chat, res);
 
-    res.status(204).end();
+    res.status(NO_CONTENT).end();
   } catch (err) {
     next(err);
   }

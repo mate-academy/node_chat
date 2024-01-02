@@ -1,6 +1,21 @@
 'use strict';
 
 const Room = require('../models/Room');
+const {
+  NOT_FOUND,
+  CREATED,
+  OK,
+  NO_CONTENT,
+} = require('../constants/httpStatusCodes');
+const {
+  ROOM_NOT_FOUND,
+} = require('../constants/errorMessages');
+
+const checkRoomExists = (room, res) => {
+  if (!room) {
+    return res.status(NOT_FOUND).json({ message: ROOM_NOT_FOUND });
+  }
+};
 
 exports.createRoom = async(req, res, next) => {
   try {
@@ -8,7 +23,7 @@ exports.createRoom = async(req, res, next) => {
 
     const room = await Room.create({ name });
 
-    res.status(201).json(room);
+    res.status(CREATED).json(room);
   } catch (err) {
     next(err);
   }
@@ -28,11 +43,9 @@ exports.removeRoom = async(req, res, next) => {
   try {
     const room = await Room.findByIdAndRemove(req.params.id);
 
-    if (!room) {
-      return res.status(404).json({ message: 'Room not found' });
-    }
+    checkRoomExists(room, res);
 
-    res.status(204).end();
+    res.status(NO_CONTENT).end();
   } catch (err) {
     next(err);
   }
@@ -48,11 +61,9 @@ exports.renameRoom = async(req, res, next) => {
       { new: true }
     );
 
-    if (!room) {
-      return res.status(404).json({ message: 'Room not found' });
-    }
+    checkRoomExists(room, res);
 
-    res.status(200).json(room);
+    res.status(OK).json(room);
   } catch (err) {
     next(err);
   }
@@ -62,15 +73,13 @@ exports.joinRoom = async(req, res, next) => {
   try {
     const room = await Room.findById(req.params.id);
 
-    if (!room) {
-      return res.status(404).json({ message: 'Room not found' });
-    }
+    checkRoomExists(room, res);
 
     // Add the user to the room's members array
     room.members.push(req.user._id);
     await room.save();
 
-    res.status(200).json(room);
+    res.status(OK).json(room);
   } catch (err) {
     next(err);
   }
