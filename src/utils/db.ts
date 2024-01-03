@@ -1,8 +1,10 @@
 'use strict';
 
-require('dotenv').config();
+import { config } from 'dotenv';
+import * as mongoose from 'mongoose';
 
-const mongoose = require('mongoose');
+config();
+
 
 async function connectDb() {
   try {
@@ -17,4 +19,4 @@ async function connectDb() {
   }
 }
 
-module.exports = connectDb;
+export default connectDb;

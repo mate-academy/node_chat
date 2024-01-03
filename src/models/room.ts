@@ -1,6 +1,12 @@
 'use strict';
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
+export interface IRoom extends mongoose.Document {
+  name: string;
+  members: mongoose.Schema.Types.ObjectId[];
+}
+
 const Schema = mongoose.Schema;
 
 const RoomSchema = new Schema({
@@ -15,4 +21,4 @@ const RoomSchema = new Schema({
   }],
 });
 
-module.exports = mongoose.model('Room', RoomSchema);
+export default mongoose.model<IRoom>('Room', RoomSchema);

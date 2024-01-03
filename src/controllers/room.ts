@@ -1,23 +1,30 @@
 'use strict';
 
-const Room = require('../models/Room');
-const {
+import type { Request as ExpressRequest, Response, NextFunction } from 'express';
+import type { IRoom } from '../models/room';
+import type { IUser } from '../models/user';
+import Room from '../models/room';
+import {
   NOT_FOUND,
   CREATED,
   OK,
   NO_CONTENT,
-} = require('../constants/httpStatusCodes');
-const {
+} from '../constants/httpStatusCodes';
+import {
   ROOM_NOT_FOUND,
-} = require('../constants/errorMessages');
+} from '../constants/errorMessages';
 
-const checkRoomExists = (room, res) => {
+interface Request extends ExpressRequest {
+  user: IUser;
+}
+
+const checkRoomExists = (room: IRoom, res: Response) => {
   if (!room) {
     return res.status(NOT_FOUND).json({ message: ROOM_NOT_FOUND });
   }
 };
 
-exports.createRoom = async(req, res, next) => {
+export const createRoom = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const { name } = req.body;
 
@@ -29,7 +36,7 @@ exports.createRoom = async(req, res, next) => {
   }
 };
 
-exports.getRooms = async(req, res, next) => {
+export const getRooms = async(_: Request, res: Response, next: NextFunction) => {
   try {
     const rooms = await Room.find({});
 
@@ -39,7 +46,7 @@ exports.getRooms = async(req, res, next) => {
   }
 };
 
-exports.removeRoom = async(req, res, next) => {
+export const removeRoom = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const room = await Room.findByIdAndRemove(req.params.id);
 
@@ -51,7 +58,7 @@ exports.removeRoom = async(req, res, next) => {
   }
 };
 
-exports.renameRoom = async(req, res, next) => {
+export const renameRoom = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const { name } = req.body;
 
@@ -69,7 +76,7 @@ exports.renameRoom = async(req, res, next) => {
   }
 };
 
-exports.joinRoom = async(req, res, next) => {
+export const joinRoom = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const room = await Room.findById(req.params.id);
 

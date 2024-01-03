@@ -1,6 +1,13 @@
 'use strict';
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
+export interface IChat extends mongoose.Document {
+  message: string;
+  sender: mongoose.Schema.Types.ObjectId;
+  room: string;
+  timestamp: Date;
+}
 
 const ChatSchema = new mongoose.Schema({
   message: {
@@ -23,4 +30,4 @@ const ChatSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Chat', ChatSchema);
+export default mongoose.model<IChat>('Chat', ChatSchema);

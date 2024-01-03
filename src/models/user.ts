@@ -1,7 +1,13 @@
 'use strict';
 
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+
+export interface IUser extends mongoose.Document {
+  username: string;
+  password: string;
+  matchPassword: (password: string) => Promise<boolean>;
+}
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -31,4 +37,4 @@ UserSchema.methods.matchPassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+export default mongoose.model<IUser>('User', UserSchema);

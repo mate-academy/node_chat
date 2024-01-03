@@ -1,16 +1,17 @@
 'use strict';
 
-const {
+import type { Request, Response } from 'express';
+import {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
-} = require('../constants/httpStatusCodes');
-const {
+} from '../constants/httpStatusCodes';
+import {
   VALIDATION_ERROR,
   CAST_ERROR,
   UNEXPECTED_ERROR,
-} = require('../constants/errorMessages');
+} from '../constants/errorMessages';
 
-module.exports = (err, req, res, next) => {
+export default function (err: any, _: Request, res: Response) {
   if (err.name === 'ValidationError') {
     return res.status(BAD_REQUEST).json({ message: VALIDATION_ERROR });
   }

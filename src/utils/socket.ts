@@ -1,8 +1,9 @@
 'use strict';
 
-const Chat = require('../models/Chat');
+import type {Socket} from 'socket.io';
+import Chat from '../models/chat';
 
-module.exports = (socket) => {
+export default function(socket: Socket) {
   socket.on('message', async({ sender, message, room }) => {
     try {
       const chat = new Chat({

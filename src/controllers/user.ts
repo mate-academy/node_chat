@@ -1,15 +1,16 @@
 'use strict';
 
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { UNAUTHORIZED, CREATED, OK } = require('../constants/httpStatusCodes');
-const { INVALID_CREDENTIALS } = require('../constants/errorMessages');
+import jwt from 'jsonwebtoken';
+import type {Request, Response, NextFunction} from 'express';
+import User from '../models/user';
+import { UNAUTHORIZED, CREATED, OK } from '../constants/httpStatusCodes';
+import { INVALID_CREDENTIALS } from '../constants/errorMessages';
 
-const generateToken = (userId) => {
+const generateToken = (userId: string) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET);
 };
 
-exports.register = async(req, res, next) => {
+export const register = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const { username, password } = req.body;
 
@@ -18,7 +19,7 @@ exports.register = async(req, res, next) => {
       password,
     });
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id.toString());
 
     res.status(CREATED).json({ token });
   } catch (err) {
@@ -26,7 +27,7 @@ exports.register = async(req, res, next) => {
   }
 };
 
-exports.login = async(req, res, next) => {
+export const login = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const { username, password } = req.body;
 
@@ -36,7 +37,7 @@ exports.login = async(req, res, next) => {
       return res.status(UNAUTHORIZED).json({ message: INVALID_CREDENTIALS });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id.toString());
 
     res.status(OK).json({ token });
   } catch (err) {

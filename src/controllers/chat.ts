@@ -1,26 +1,28 @@
 'use strict';
 
-const Chat = require('../models/Chat');
-const Room = require('../models/Room');
-const {
+import type { Request, Response, NextFunction } from 'express';
+import type { IChat } from '../models/chat';
+import Chat from '../models/chat';
+import Room from '../models/room';
+import {
   NOT_FOUND,
   FORBIDDEN,
   CREATED,
   OK,
   NO_CONTENT,
-} = require('../constants/httpStatusCodes');
-const {
+} from '../constants/httpStatusCodes';
+import {
   MESSAGE_NOT_FOUND,
   MUST_JOIN_ROOM,
-} = require('../constants/errorMessages');
+} from '../constants/errorMessages';
 
-const checkChatExists = (chat, res) => {
+const checkChatExists = (chat: IChat, res: Response) => {
   if (!chat) {
     return res.status(NOT_FOUND).json({ message: MESSAGE_NOT_FOUND });
   }
 };
 
-exports.createMessage = async(req, res, next) => {
+export const createMessage = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const { message, sender, room } = req.body;
 
@@ -45,7 +47,7 @@ exports.createMessage = async(req, res, next) => {
   }
 };
 
-exports.getMessages = async(req, res, next) => {
+export const getMessages = async(req: Request, res: Response, next: NextFunction) => {
   try {
     // if no room is specified, get messages for the general chat
     const room = req.params.room || null;
@@ -57,7 +59,7 @@ exports.getMessages = async(req, res, next) => {
   }
 };
 
-exports.editMessage = async(req, res, next) => {
+export const editMessage = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const { message } = req.body;
 
@@ -75,7 +77,7 @@ exports.editMessage = async(req, res, next) => {
   }
 };
 
-exports.removeMessage = async(req, res, next) => {
+export const removeMessage = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const chat = await Chat.findByIdAndRemove(req.params.id);
 
