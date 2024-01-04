@@ -19,4 +19,4 @@ export default function(err: any, _: Request, res: Response) {
   }
 
   res.status(INTERNAL_SERVER_ERROR).json({ message: UNEXPECTED_ERROR });
-};
+}

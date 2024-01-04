@@ -27,4 +27,4 @@ export default function(socket: Socket) {
   socket.on('join room', (room) => {
     socket.join(room);
   });
-};
+}
