@@ -10,13 +10,12 @@ import {
 } from '../constants/errorMessages';
 
 export default function(err: any, _: Request, res: Response) {
-  if (err.name === 'ValidationError') {
+  switch (err.name) {
+  case 'ValidationError':
     return res.status(BAD_REQUEST).json({ message: VALIDATION_ERROR });
-  }
-
-  if (err.name === 'CastError') {
+  case 'CastError':
     return res.status(BAD_REQUEST).json({ message: CAST_ERROR });
+  default:
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: UNEXPECTED_ERROR });
   }
-
-  res.status(INTERNAL_SERVER_ERROR).json({ message: UNEXPECTED_ERROR });
 }
