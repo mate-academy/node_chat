@@ -1,6 +1,8 @@
-'use strict';
-
-import type { Request as ExpressRequest, Response, NextFunction } from 'express';
+import type {
+  Request as ExpressRequest,
+  Response,
+  NextFunction,
+} from 'express';
 import type { IRoom } from '../models/room';
 import type { IUser } from '../models/user';
 import Room from '../models/room';
@@ -24,7 +26,11 @@ const checkRoomExists = (room: IRoom, res: Response) => {
   }
 };
 
-export const createRoom = async(req: Request, res: Response, next: NextFunction) => {
+export const createRoom = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { name } = req.body;
 
@@ -36,7 +42,11 @@ export const createRoom = async(req: Request, res: Response, next: NextFunction)
   }
 };
 
-export const getRooms = async(_: Request, res: Response, next: NextFunction) => {
+export const getRooms = async(
+  _: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const rooms = await Room.find({});
 
@@ -46,7 +56,11 @@ export const getRooms = async(_: Request, res: Response, next: NextFunction) => 
   }
 };
 
-export const removeRoom = async(req: Request, res: Response, next: NextFunction) => {
+export const removeRoom = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const room = await Room.findByIdAndRemove(req.params.id);
 
@@ -58,14 +72,18 @@ export const removeRoom = async(req: Request, res: Response, next: NextFunction)
   }
 };
 
-export const renameRoom = async(req: Request, res: Response, next: NextFunction) => {
+export const renameRoom = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { name } = req.body;
 
     const room = await Room.findByIdAndUpdate(
       req.params.id,
       { name },
-      { new: true }
+      { new: true },
     );
 
     checkRoomExists(room, res);
@@ -76,7 +94,11 @@ export const renameRoom = async(req: Request, res: Response, next: NextFunction)
   }
 };
 
-export const joinRoom = async(req: Request, res: Response, next: NextFunction) => {
+export const joinRoom = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const room = await Room.findById(req.params.id);
 

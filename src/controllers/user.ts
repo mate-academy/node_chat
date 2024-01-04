@@ -1,16 +1,21 @@
-'use strict';
-
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import type {Request, Response, NextFunction} from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import User from '../models/user';
 import { UNAUTHORIZED, CREATED, OK } from '../constants/httpStatusCodes';
 import { INVALID_CREDENTIALS } from '../constants/errorMessages';
+
+dotenv.config();
 
 const generateToken = (userId: string) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET);
 };
 
-export const register = async(req: Request, res: Response, next: NextFunction) => {
+export const register = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { username, password } = req.body;
 

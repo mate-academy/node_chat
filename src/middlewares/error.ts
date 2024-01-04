@@ -1,6 +1,4 @@
-'use strict';
-
-import type { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
@@ -11,7 +9,7 @@ import {
   UNEXPECTED_ERROR,
 } from '../constants/errorMessages';
 
-export default function (err: any, _: Request, res: Response) {
+export default function(err: any, _: Request, res: Response) {
   if (err.name === 'ValidationError') {
     return res.status(BAD_REQUEST).json({ message: VALIDATION_ERROR });
   }

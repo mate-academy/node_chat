@@ -1,12 +1,16 @@
-'use strict';
+import mongoose, { Document, Model } from 'mongoose';
 
-import mongoose from 'mongoose';
-
-export interface IChat extends mongoose.Document {
+export interface IChat {
   message: string;
   sender: mongoose.Schema.Types.ObjectId;
   room: string;
   timestamp: Date;
+}
+
+interface IChatDocument extends IChat, Document {}
+
+interface IChatModel extends Model<IChatDocument> {
+  findByIdAndRemove(id: string): Promise<IChatDocument>;
 }
 
 const ChatSchema = new mongoose.Schema({
@@ -30,4 +34,4 @@ const ChatSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model<IChat>('Chat', ChatSchema);
+export default mongoose.model<IChatDocument>('Chat', ChatSchema) as IChatModel;

@@ -1,5 +1,3 @@
-'use strict';
-
 import type { Request, Response, NextFunction } from 'express';
 import type { IChat } from '../models/chat';
 import Chat from '../models/chat';
@@ -22,7 +20,11 @@ const checkChatExists = (chat: IChat, res: Response) => {
   }
 };
 
-export const createMessage = async(req: Request, res: Response, next: NextFunction) => {
+export const createMessage = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { message, sender, room } = req.body;
 
@@ -47,7 +49,11 @@ export const createMessage = async(req: Request, res: Response, next: NextFuncti
   }
 };
 
-export const getMessages = async(req: Request, res: Response, next: NextFunction) => {
+export const getMessages = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     // if no room is specified, get messages for the general chat
     const room = req.params.room || null;
@@ -59,14 +65,18 @@ export const getMessages = async(req: Request, res: Response, next: NextFunction
   }
 };
 
-export const editMessage = async(req: Request, res: Response, next: NextFunction) => {
+export const editMessage = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { message } = req.body;
 
     const chat = await Chat.findByIdAndUpdate(
       req.params.id,
       { message },
-      { new: true }
+      { new: true },
     );
 
     checkChatExists(chat, res);
@@ -77,7 +87,11 @@ export const editMessage = async(req: Request, res: Response, next: NextFunction
   }
 };
 
-export const removeMessage = async(req: Request, res: Response, next: NextFunction) => {
+export const removeMessage = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const chat = await Chat.findByIdAndRemove(req.params.id);
 

@@ -1,6 +1,4 @@
-'use strict';
-
-import type {Socket} from 'socket.io';
+import type { Socket } from 'socket.io';
 import Chat from '../models/chat';
 
 export default function(socket: Socket) {

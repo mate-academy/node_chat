@@ -1,4 +1,4 @@
-
+import dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -9,6 +9,8 @@ import userRoutes from './routes/user';
 import roomRoutes from './routes/room';
 import errorHandler from './middlewares/error';
 import handleSocketConnection from './utils/socket';
+
+dotenv.config();
 
 connectDb().then(() => {
   // eslint-disable-next-line no-console
@@ -37,4 +39,5 @@ app.use(errorHandler);
 server.listen(
   process.env.PORT,
   // eslint-disable-next-line no-console
-  () => console.log(`Server running on port ${process.env.PORT}`));
+  () => console.log(`Server running on port ${process.env.PORT}`),
+);
