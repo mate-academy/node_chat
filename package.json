@@ -6,7 +6,7 @@
   "scripts": {
     "init": "mate-scripts init",
     "start": "mate-scripts start",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --ext .ts --no-cache",
     "lint:fix": "eslint . --ext .ts --fix",
     "update": "mate-scripts update",
     "postinstall": "npm run update",
