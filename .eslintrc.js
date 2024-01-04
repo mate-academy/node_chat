@@ -3,6 +3,7 @@ module.exports = {
     '@mate-academy/eslint-config',
     'plugin:@typescript-eslint/recommended',
   ],
+  parser: '@typescript-eslint/parser',
   env: {
     jest: true,
   },
