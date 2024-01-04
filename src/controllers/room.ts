@@ -104,7 +104,6 @@ export const joinRoom = async(
 
     checkRoomExists(room, res);
 
-    // Add the user to the room's members array
     room.members.push(req.user._id);
     await room.save();
 

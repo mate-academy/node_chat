@@ -28,7 +28,6 @@ export const createMessage = async(
   try {
     const { message, sender, room } = req.body;
 
-    // Check if the sender is a member of the room
     const roomObj = await Room.findById(room);
 
     if (!roomObj.members.includes(sender)) {
@@ -55,7 +54,6 @@ export const getMessages = async(
   next: NextFunction,
 ) => {
   try {
-    // if no room is specified, get messages for the general chat
     const room = req.params.room || null;
     const chats = await Chat.find({ room }).populate('sender');
 

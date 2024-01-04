@@ -33,7 +33,6 @@ const io = new Server(server);
 
 io.on('connection', handleSocketConnection);
 
-// Error handling middleware
 app.use(errorHandler);
 
 server.listen(

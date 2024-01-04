@@ -15,7 +15,6 @@ export default function(socket: Socket) {
       if (room) {
         socket.to(room).emit('message', chat);
       } else {
-        // send the message to all connected clients
         socket.broadcast.emit('message', chat);
       }
     } catch (err) {
