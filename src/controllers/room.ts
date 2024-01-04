@@ -50,7 +50,7 @@ export const getRooms = async(
   try {
     const rooms = await Room.find({});
 
-    res.status(200).json(rooms);
+    res.status(OK).json(rooms);
   } catch (err) {
     next(err);
   }

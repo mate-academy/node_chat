@@ -57,7 +57,7 @@ export const getMessages = async(
     const room = req.params.room || null;
     const chats = await Chat.find({ room }).populate('sender');
 
-    res.status(200).json(chats);
+    res.status(OK).json(chats);
   } catch (err) {
     next(err);
   }
