@@ -5,7 +5,6 @@ import type {
 } from 'express';
 import type { IRoom } from '../models/room';
 import type { IUser } from '../models/user';
-import Room from '../models/room';
 import {
   NOT_FOUND,
   CREATED,
@@ -15,6 +14,7 @@ import {
 import {
   ROOM_NOT_FOUND,
 } from '../constants/errorMessages';
+import * as roomService from '../services/room';
 
 interface Request extends ExpressRequest {
   user: IUser;
@@ -34,7 +34,7 @@ export const createRoom = async(
   try {
     const { name } = req.body;
 
-    const room = await Room.create({ name });
+    const room = await roomService.createRoom(name);
 
     res.status(CREATED).json(room);
   } catch (err) {
@@ -48,7 +48,7 @@ export const getRooms = async(
   next: NextFunction,
 ) => {
   try {
-    const rooms = await Room.find({});
+    const rooms = await roomService.findAllRooms();
 
     res.status(OK).json(rooms);
   } catch (err) {
@@ -62,7 +62,7 @@ export const removeRoom = async(
   next: NextFunction,
 ) => {
   try {
-    const room = await Room.findByIdAndRemove(req.params.id);
+    const room = await roomService.removeRoomById(req.params.id);
 
     checkRoomExists(room, res);
 
@@ -80,11 +80,7 @@ export const renameRoom = async(
   try {
     const { name } = req.body;
 
-    const room = await Room.findByIdAndUpdate(
-      req.params.id,
-      { name },
-      { new: true },
-    );
+    const room = await roomService.updateRoomById(req.params.id, name);
 
     checkRoomExists(room, res);
 
@@ -100,14 +96,13 @@ export const joinRoom = async(
   next: NextFunction,
 ) => {
   try {
-    const room = await Room.findById(req.params.id);
+    const room = await roomService.findRoomById(req.params.id);
 
     checkRoomExists(room, res);
 
-    room.members.push(req.user._id);
-    await room.save();
+    const updatedRoom = await roomService.addMemberToRoom(room, req.user._id);
 
-    res.status(OK).json(room);
+    res.status(OK).json(updatedRoom);
   } catch (err) {
     next(err);
   }

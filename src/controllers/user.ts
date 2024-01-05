@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import type { Request, Response, NextFunction } from 'express';
-import User from '../models/user';
 import { UNAUTHORIZED, CREATED, OK } from '../constants/httpStatusCodes';
 import { INVALID_CREDENTIALS } from '../constants/errorMessages';
+import * as userService from '../services/user';
 
 dotenv.config();
 
@@ -19,10 +19,7 @@ export const register = async(
   try {
     const { username, password } = req.body;
 
-    const user = await User.create({
-      username,
-      password,
-    });
+    const user = await userService.createUser(username, password);
 
     const token = generateToken(user._id.toString());
 
@@ -36,7 +33,7 @@ export const login = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    const user = await userService.findUserByUsername(username);
 
     if (!user || !(await user.matchPassword(password))) {
       return res.status(UNAUTHORIZED).json({ message: INVALID_CREDENTIALS });

@@ -1,7 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { IChat } from '../models/chat';
-import Chat from '../models/chat';
-import Room from '../models/room';
 import {
   NOT_FOUND,
   FORBIDDEN,
@@ -13,6 +11,8 @@ import {
   MESSAGE_NOT_FOUND,
   MUST_JOIN_ROOM,
 } from '../constants/errorMessages';
+import * as roomService from '../services/room';
+import * as chatService from '../services/chat';
 
 const checkChatExists = (chat: IChat, res: Response) => {
   if (!chat) {
@@ -28,7 +28,7 @@ export const createMessage = async(
   try {
     const { message, sender, room } = req.body;
 
-    const roomObj = await Room.findById(room);
+    const roomObj = await roomService.findRoomById(room);
 
     if (!roomObj.members.includes(sender)) {
       return res.status(FORBIDDEN).json({
@@ -36,11 +36,7 @@ export const createMessage = async(
       });
     }
 
-    const chat = await Chat.create({
-      message,
-      sender,
-      room,
-    });
+    const chat = await chatService.createChat(message, sender, room);
 
     res.status(CREATED).json(chat);
   } catch (err) {
@@ -55,7 +51,7 @@ export const getMessages = async(
 ) => {
   try {
     const room = req.params.room || null;
-    const chats = await Chat.find({ room }).populate('sender');
+    const chats = await chatService.findChatsByRoom(room);
 
     res.status(OK).json(chats);
   } catch (err) {
@@ -71,11 +67,7 @@ export const editMessage = async(
   try {
     const { message } = req.body;
 
-    const chat = await Chat.findByIdAndUpdate(
-      req.params.id,
-      { message },
-      { new: true },
-    );
+    const chat = await chatService.updateChatById(req.params.id, message);
 
     checkChatExists(chat, res);
 
@@ -91,7 +83,7 @@ export const removeMessage = async(
   next: NextFunction,
 ) => {
   try {
-    const chat = await Chat.findByIdAndRemove(req.params.id);
+    const chat = await chatService.removeChatById(req.params.id);
 
     checkChatExists(chat, res);
 
