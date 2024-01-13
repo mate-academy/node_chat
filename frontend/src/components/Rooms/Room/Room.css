@@ -1,0 +1,21 @@
+.rooms__room {
+  margin-bottom: 10px;
+}
+
+.room {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 10px;
+  border-radius: 10px;
+
+  background-color: rgb(213, 235, 255);
+}
+
+.room__name {
+  align-self: center;
+}
+
+.room__form {
+  width: 60%;
+}

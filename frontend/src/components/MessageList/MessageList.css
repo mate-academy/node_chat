@@ -1,0 +1,22 @@
+.messageList {
+  list-style-type: none;
+}
+
+.messageList__item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message {
+  padding: 0 10px;
+  border-radius: 10px;
+  background-color: rgb(213, 235, 255);
+}
+
+.message__text {
+  align-self: center;
+}
+
+.message__details {
+  text-align: right;
+}
