@@ -11,7 +11,9 @@ const app = express();
 
 app.use(cors());
 
-app.use('/rooms', express.json(), roomRouter);
+app.use(express.json());
+
+app.use(roomRouter);
 
 const server = app.listen(PORT, () => {
   // eslint-disable-next-line no-console

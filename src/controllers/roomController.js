@@ -20,11 +20,13 @@ const create = async(req, res) => {
       .send(HAS_NOT_ROOM_NAME);
   }
 
-  const room = await roomService.create(roomName);
+  try {
+    const room = await roomService.create(roomName);
 
-  res.statusCode = 201;
-
-  res.send(roomService.normalize(room));
+    res.status(201).send(roomService.normalize(room));
+  } catch (error) {
+    res.status(500).send('Internal server error');
+  }
 };
 
 const getOne = async(req, res) => {
