@@ -1,0 +1,69 @@
+@import './variables';
+
+@mixin standartText {
+  font-size: 16px;
+  color: $main-text-color;
+}
+
+@mixin smallText {
+  font-size: 12px;
+  color: $button-color;
+}
+
+@mixin warningText {
+  position: absolute;
+  right: -120px;
+
+  font-size: 12px;
+  color: $warning-color;
+}
+
+@mixin headingText_h1 {
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+  color: $main-text-color;
+}
+
+@mixin headingText_h2 {
+  font-size: 24px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: $main-text-color;
+}
+
+@mixin headingText_h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: $main-text-color;
+}
+
+@mixin input($outline-color) {
+  @include standartText;
+
+  height: 40px;
+  padding-left: 20px;
+
+  border-radius: 10px;
+
+  &:focus {
+    outline: $outline-color solid 2px;
+  }
+}
+
+@mixin button($outline-color) {
+  @include standartText;
+
+  height: 40px;
+
+  padding-inline: 20px;
+
+  border-radius: 10px;
+  background-color: $button-color;
+
+  cursor: pointer;
+
+  &:hover {
+    outline: $outline-color solid 2px;
+  }
+}

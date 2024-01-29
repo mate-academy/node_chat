@@ -1,0 +1,57 @@
+@import "../../helpers/styles/mixins";
+
+.HomePage {
+  padding-top: 60px;
+
+  &__content {
+    margin: auto;
+    width: 400px;
+    padding: 50px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+
+    border-radius: 10px;
+    background-color: $secondary-bg-color;
+  }
+
+  &__title {
+    @include headingText_h1;
+
+    margin-bottom: 60px;
+  }
+
+  &__input {
+    @include input($main-bg-color);
+
+    width: calc(100% - 20px);
+  }
+
+  &__rooms {
+    width: 100%;
+
+    display: flex;
+    gap: 10px;
+  }
+
+  &__select {
+    @include input($main-bg-color);
+
+    width: 100%;
+    background-color: $field-bg-color;
+  }
+
+  &__button {
+    @include button($main-bg-color);
+
+    width: 100%;
+
+    &--short {
+      width: 60%;
+    }
+  }
+}
+
+

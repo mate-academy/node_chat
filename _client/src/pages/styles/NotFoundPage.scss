@@ -1,0 +1,14 @@
+@import "../../helpers/styles/mixins";
+
+.NotFoundPage {
+  padding-block: 120px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 150px;
+
+  &__title {
+    @include headingText_h1;
+  }
+}

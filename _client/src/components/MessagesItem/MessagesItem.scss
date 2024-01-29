@@ -1,0 +1,25 @@
+@import '../../helpers/styles/mixins';
+
+.MessagesItem {
+  padding: 10px;
+
+  border-radius: 10px;
+  background-color: $secondary-bg-color;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__author {
+    @include smallText;
+  }
+
+  &__time {
+    @include smallText;
+  }
+
+  &__text {
+    @include standartText;
+  }
+}

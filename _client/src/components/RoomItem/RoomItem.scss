@@ -1,0 +1,47 @@
+@import "../../helpers/styles/mixins";
+
+.RoomItem {
+  position: relative;
+  height: 40px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 10px;
+  background-color: $secondary-bg-color;
+
+  &__name {
+    @include standartText;
+
+    padding-left: 20px;
+  }
+
+  &__remove {
+    @include button($main-text-color);
+
+    padding: 5px;
+    margin-right: 10px;
+
+    background: none;
+
+    &:hover {
+      outline: none;
+    }
+  }
+
+  &__edit {
+    @include input($main-text-color);
+
+    width: 100%;
+    background-color: $secondary-bg-color;
+
+    &--warning {
+      @include input($warning-color);
+    }
+  }
+
+  &__warning {
+    @include warningText;
+  }
+}

@@ -1,0 +1,30 @@
+@import "../../helpers/styles/mixins";
+
+.NewRoom {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  &__add {
+    @include button($main-text-color);
+
+    width: 100%;
+    background-color: $secondary-bg-color;
+  }
+
+  &__edit {
+    @include input($main-text-color);
+
+    width: calc(100% - 20px);
+    background-color: $secondary-bg-color;
+
+    &--warning {
+      @include input($warning-color);
+    }
+  }
+
+  &__warning {
+    @include warningText;
+  }
+}

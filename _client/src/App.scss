@@ -1,0 +1,11 @@
+@import "./helpers/styles/reset";
+@import "./helpers/styles/variables";
+@import "./helpers/styles/mixins";
+
+body {
+  max-width: 1136px;
+  margin: auto;
+
+  background-color: $main-bg-color;
+  font-family: 'Public Sans', sans-serif;
+}
