@@ -1,0 +1,40 @@
+@import "../../helpers/styles/mixins";
+
+.RoomInfo {
+  width: 200px;
+
+  &__title {
+    @include headingText_h2;
+    margin-bottom: 40px;
+  }
+
+  &__subtitle {
+    @include headingText_h3;
+  }
+
+  &__users {
+    @include standartText;
+
+    margin-top: 20px;
+    margin-bottom: 80px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    list-style: none;
+  }
+
+  &__user {
+    color: $main-text-color;
+
+    &--active {
+      color: $secondary-bg-color;
+      font-weight: 700;
+    }
+  }
+
+  &__leave {
+    @include button($secondary-bg-color);
+  }
+}

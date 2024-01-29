@@ -1,0 +1,21 @@
+@import "../../helpers/styles/mixins";
+
+.RoomsPage {
+  margin: auto;
+  padding-top: 40px;
+  width: 300px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  &__title {
+    @include headingText_h1;
+  }
+
+  &__rooms {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

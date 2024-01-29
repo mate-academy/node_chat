@@ -1,0 +1,15 @@
+.ChatPage {
+  padding: 40px;
+
+  display: flex;
+
+  &__right {
+    flex-grow: 1;
+
+    padding-right: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+}
