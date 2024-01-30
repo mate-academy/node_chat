@@ -1,0 +1,26 @@
+.rooms {
+  display: grid;
+}
+
+.room {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  column-gap: 16px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--light-gray);
+  }
+  &:active,
+  &--active,
+  &--active:hover {
+    background-color: var(--background-secondary);
+    color: var(blue);
+  }
+
+  &__exit {
+    margin-left: auto;
+  }
+}

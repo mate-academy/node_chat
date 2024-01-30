@@ -1,0 +1,74 @@
+.chat {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 60px 1fr 60px;
+  grid-template-areas:
+    "user room"
+    "rooms messages"
+    "rooms input";
+  height: 100vh;
+
+  &__user {
+    grid-area: user;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    column-gap: 16px;
+    font-weight: 700;
+    border: 1px solid var(--light-gray);
+    border-top: none;
+    border-left: none;
+    background-color: var(--light-gray);
+
+    &-exit {
+      margin-left: auto;
+    }
+  }
+
+  &__rooms {
+    grid-area: rooms;
+    border-right: 1px solid var(--light-gray);
+  }
+
+  &__current-room {
+    grid-area: room;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    column-gap: 16px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--light-gray);
+    background-color: var(--light-gray);
+  }
+
+  &__form {
+    display: flex;
+    gap: 8px;
+    flex-grow: 1;
+  }
+
+  &__new-message {
+    grid-area: input;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+  }
+
+  &__input {
+    background-color: var(--input-background);
+    margin: 0;
+    padding: 0.6em 0.9em;
+    border-radius: 0.7em;
+    border: none;
+    flex-grow: 1;
+    height: 40px;
+    outline: none;
+  }
+
+  &__messages {
+    grid-area: messages;
+    flex: 1;
+    overflow-y: auto;
+    border-bottom: 1px solid var(--light-gray);
+  }
+}
