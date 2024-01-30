@@ -1,0 +1,30 @@
+.login-form {
+  display: grid;
+  align-content: center;
+  gap: 15px;
+  max-width: 300px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 15px;
+  text-align: center;
+
+  &__input {
+    padding: 10px;
+    border: 1px solid var(--light-gray);
+    border-radius: 5px;
+    outline: none;
+  }
+
+  &__button {
+    padding: 10px;
+    border: 1px solid var(--light-gray);
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--light-gray);
+      color: var(--white);
+    }
+  }
+}
