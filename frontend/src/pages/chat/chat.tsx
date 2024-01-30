@@ -10,6 +10,7 @@ import { useData } from "../../data/useData";
 import axios from "axios";
 import { NewRoomForm } from "../../components/new-room-form";
 import { CurrentRoom } from "../../components/current-room";
+import { toast } from "react-toastify";
 
 export const ChatPage = () => {
   const { chatName } = useParams();
@@ -31,11 +32,15 @@ export const ChatPage = () => {
 
   const handleSubmitNewMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios.post("http://localhost:4000/messages", {
-      userName,
-      text: newMessage,
-      roomId: currentRoom?.id,
-    });
+    axios
+      .post("http://localhost:4000/messages", {
+        userName,
+        text: newMessage,
+        roomId: currentRoom?.id,
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
     setNewMessage("");
   };
 

@@ -5,7 +5,6 @@ interface Data {
   rooms: Room[];
 }
 
-
 export const useData = () => {
   const [data, setData] = useState<Data>({
     rooms: [],

@@ -21,7 +21,9 @@ export const CurrentRoom: FC<Props> = ({ room }) => {
   const ref = useRef<HTMLInputElement>(null);
 
   const handleDeleteRoom = () => {
-    axios.delete(`http://localhost:4000/rooms/${id}`);
+    axios.delete(`http://localhost:4000/rooms/${id}`).catch((err) => {
+      toast.error(err.message);
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
