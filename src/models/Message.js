@@ -20,10 +20,10 @@ export const Message = sequelize.define('message', {
 
 Message.belongsTo(Room, {
   onDelete: 'CASCADE',
-  hooks: true 
+  hooks: true
 });
 
-Room.hasOne(Message, {
+Room.hasMany(Message, {
   onDelete: 'CASCADE',
   hooks: true
 });

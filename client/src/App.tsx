@@ -12,6 +12,7 @@ export const App: React.FC = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [isCreate, setIsCreate] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     socket.onopen = () => {
@@ -23,7 +24,22 @@ export const App: React.FC = () => {
 
       switch (data.type) {
         case 'room_list':
-          setRoomList(data.rooms);
+          const sanitizedRooms = data.rooms.map(
+            (room: { [x: string]: any; messages: any }) => {
+              const { messages, ...sanitizedRoom } = room;
+
+              return sanitizedRoom;
+            },
+          );
+
+          setRoomList(sanitizedRooms);
+
+          const allMessages = data.rooms.reduce(
+            (acc: any, room: { messages: any }) => [...acc, ...room.messages],
+            [],
+          );
+
+          setChatLog(allMessages);
           break;
 
         case 'message':
@@ -37,17 +53,13 @@ export const App: React.FC = () => {
 
         case 'create_room':
           setIsCreate(false);
-          setRoomList(data.rooms);
           break;
 
         case 'rename_room':
-          setRoomList(data.rooms);
-          console.log(data.renamedRoom);
           setSelectedRoom(data.renamedRoom);
           break;
 
         case 'delete_room':
-          setRoomList(data.rooms);
           setSelectedRoom(null);
           break;
 
@@ -57,11 +69,11 @@ export const App: React.FC = () => {
     };
 
     socket.onclose = () => {
-      console.log('Connection is break, try reload page');
+      setError('Connection is broken, try to reload the page');
     };
 
     socket.onerror = () => {
-      console.log('Error conection, try reload page');
+      setError('Error connection, try to reload the page');
     };
 
     return () => {
@@ -80,7 +92,6 @@ export const App: React.FC = () => {
   };
 
   const handleRoomCreate = (input: string) => {
-    console.log(input);
     socket.send(JSON.stringify({ type: 'create_room', roomName: input }));
   };
 
@@ -96,51 +107,57 @@ export const App: React.FC = () => {
       <header className="bg-blue-500 text-white py-4 text-center">
         <h1 className="text-2xl">Simple Chat</h1>
       </header>
-      <main className="flex flex-grow">
-        {!username && (
-          <div className="flex-grow bg-white p-4">
-            <ModalForm onSubmit={handleRegister} buttonText="Register" />
-          </div>
-        )}
-        {isCreate && (
-          <div className="flex-grow bg-white p-4">
-            <ModalForm
-              onSubmit={handleRoomCreate}
-              buttonText="Create new room"
-            />
-          </div>
-        )}
-        {username && !isCreate && (
-          <>
-            <aside className="bg-gray-200 p-4 w-1/4">
-              <div className="flex justify-between">
-                <button
-                  type="button"
-                  className="bg-blue-500 text-white py-2 px-4 rounded"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-                <button
-                  type="button"
-                  className="bg-blue-500 text-white py-2 px-4 rounded"
-                  onClick={() => setIsCreate(true)}
-                >
-                  Create room
-                </button>
-              </div>
-              <RoomList rooms={roomList} onSelectRoom={handleSelectRoom} />
-            </aside>
-            <section className="flex-grow p-4">
-              {selectedRoom ? (
-                <ChatRoom room={selectedRoom} chatLog={chatLog} />
-              ) : (
-                <div className="text-center">Select a room</div>
-              )}
-            </section>
-          </>
-        )}
-      </main>
+      {error ? (
+        <div className="flex-grow bg-white p-4">
+          <div className="text-red-500">{error}</div>
+        </div>
+      ) : (
+        <main className="flex flex-grow">
+          {!username && (
+            <div className="flex-grow bg-white p-4">
+              <ModalForm onSubmit={handleRegister} buttonText="Register" />
+            </div>
+          )}
+          {isCreate && (
+            <div className="flex-grow bg-white p-4">
+              <ModalForm
+                onSubmit={handleRoomCreate}
+                buttonText="Create new room"
+              />
+            </div>
+          )}
+          {username && !isCreate && (
+            <>
+              <aside className="bg-gray-200 p-4 w-1/4">
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    className="bg-blue-500 text-white py-2 px-4 rounded"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-blue-500 text-white py-2 px-4 rounded"
+                    onClick={() => setIsCreate(true)}
+                  >
+                    Create room
+                  </button>
+                </div>
+                <RoomList rooms={roomList} onSelectRoom={handleSelectRoom} />
+              </aside>
+              <section className="flex-grow p-4">
+                {selectedRoom ? (
+                  <ChatRoom room={selectedRoom} chatLog={chatLog} />
+                ) : (
+                  <div className="text-center">Select a room</div>
+                )}
+              </section>
+            </>
+          )}
+        </main>
+      )}
     </div>
   );
 };

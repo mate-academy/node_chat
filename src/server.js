@@ -3,9 +3,12 @@ import WebSocket, { WebSocketServer } from "ws";
 import { Message } from "./models/Message.js";
 import { Room } from "./models/Room.js";
 import cors from "cors";
+import EventEmitter from "events";
 
 const app = express();
 const server = app.listen(5000);
+
+const emitter = new EventEmitter();
 
 app.use(cors());
 app.use(express.json());
@@ -13,19 +16,7 @@ app.use(express.json());
 const wss = new WebSocketServer({ server });
 
 wss.on("connection", async (ws, req) => {
-  try {
-    const rooms = await Room.findAll();
-    ws.send(JSON.stringify({ type: "room_list", rooms: rooms }));
-
-    for (const room of rooms) {
-      const messages = await Message.findAll({ where: { roomId: room.id } });
-      messages.forEach((message) => {
-        ws.send(JSON.stringify({ type: "message", ...message.dataValues }));
-      });
-    }
-  } catch (error) {
-    console.error("Error sending room list:", error);
-  }
+  emitter.emit("updateRoomList");
 
   ws.on("message", async (message) => {
     try {
@@ -55,9 +46,13 @@ wss.on("connection", async (ws, req) => {
 
         case "create_room":
           await Room.create({ name: data.roomName });
-          const roomsFromDb = await Room.findAll();
 
-          ws.send(JSON.stringify({ type: "create_room", rooms: roomsFromDb }));
+          ws.send(
+            JSON.stringify({
+              type: "create_room",
+            })
+          );
+          emitter.emit("updateRoomList");
           break;
 
         case "rename_room":
@@ -66,15 +61,14 @@ wss.on("connection", async (ws, req) => {
             { where: { id: data.roomId }, returning: true }
           );
 
-          const renamedRooms = await Room.findAll();
-
           ws.send(
             JSON.stringify({
               type: "rename_room",
-              rooms: renamedRooms,
               renamedRoom: updatedRoom[0].dataValues,
             })
           );
+
+          emitter.emit("updateRoomList");
           break;
 
         case "delete_room":
@@ -83,15 +77,12 @@ wss.on("connection", async (ws, req) => {
               id: data.roomId,
             },
           });
-
-          const newRooms = await Room.findAll();
-
           ws.send(
             JSON.stringify({
               type: "delete_room",
-              rooms: newRooms,
             })
           );
+          emitter.emit("updateRoomList");
           delete ws.roomId;
           break;
 
@@ -102,6 +93,25 @@ wss.on("connection", async (ws, req) => {
       console.error("Error handling message:", error);
     }
   });
+});
+
+emitter.on("updateRoomList", async () => {
+  let roomsList;
+
+  try {
+    roomsList = {
+      type: "room_list",
+      rooms: await Room.findAll({
+        include: Message,
+      }),
+    };
+  } catch (error) {
+    console.error("Error sending room list:", error);
+  }
+
+  for (const client of wss.clients) {
+    client.send(JSON.stringify(roomsList));
+  }
 });
 
 function broadcastMessage(roomId, message) {
