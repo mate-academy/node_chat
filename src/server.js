@@ -90,7 +90,11 @@ wss.on("connection", async (ws, req) => {
           console.log("Unknown message type:", data.type);
       }
     } catch (error) {
-      console.error("Error handling message:", error);
+      ws.send(JSON.stringify({
+        type: 'error',
+        message: `Error handling message`,
+        error,
+      }))
     }
   });
 });
@@ -106,7 +110,11 @@ emitter.on("updateRoomList", async () => {
       }),
     };
   } catch (error) {
-    console.error("Error sending room list:", error);
+    roomsList = {
+      type: 'error',
+      message: `Can't load new rooms list after update`,
+      error,
+    };
   }
 
   for (const client of wss.clients) {

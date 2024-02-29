@@ -63,8 +63,12 @@ export const App: React.FC = () => {
           setSelectedRoom(null);
           break;
 
+        case 'error':
+          setError(data.message);
+          break;
+
         default:
-          console.log('Unknown message type:', data.type);
+          setError('Unknown message type');
       }
     };
 
