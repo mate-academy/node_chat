@@ -1,0 +1,25 @@
+.ChatPage {
+  &__field {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+}
+
+.is-full-height {
+  height: 100%;
+}
+
+.is-full-v-height {
+  height: 100vh;
+}
+
+.is-overflow-auto {
+overflow: auto;
+}
+
+.container::-webkit-scrollbar { /* WebKit */
+  width: 0;
+  height: 0;
+}
