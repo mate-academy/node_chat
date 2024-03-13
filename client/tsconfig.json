@@ -1,0 +1,16 @@
+{
+  "extends": "@mate-academy/students-ts-config",
+  "include": [
+    "src",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/**/*.ts",
+    "**/**/*.tsx"
+  ],
+  "compilerOptions": {
+    "baseUrl": "src",
+    "jsx": "react",
+    "allowUmdGlobalAccess": true,
+  },
+  
+}
