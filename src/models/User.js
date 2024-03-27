@@ -11,6 +11,6 @@ const User = db.define('users', {
   },
 }, {
   updatedAt: false,
-},) || {};
+}) || {};
 
 module.exports = { User };

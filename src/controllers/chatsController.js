@@ -5,6 +5,7 @@ const { ErrorApi } = require('../exceptions/ErrorApi');
 const { getRemoves } = require('../exceptions/getRemoves');
 const { chatsService } = require('../services/chatsService');
 const { socketEmitter } = require('./socketController');
+const { sockets } = require('../exceptions/SocketManager');
 
 async function create(req, res) {
   const { name, userName, members } = req.body;
@@ -26,6 +27,9 @@ async function create(req, res) {
   };
 
   const newChat = await chatsService.create(createParams);
+
+  // eslint-disable-next-line no-console
+  console.log('--create-chat-controller is-UserB =', sockets.isOnline('UserB'));
 
   socketEmitter.emit(typeSocket.chatCreate, newChat);
 

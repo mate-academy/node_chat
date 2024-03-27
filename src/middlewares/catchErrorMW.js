@@ -5,6 +5,9 @@ function catchErrorMW(action) {
     try {
       await action(req, res, next);
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('x catchErrorMW, error =', error);
+
       // redirect error to handleErrorsMW()
       next(error);
     }

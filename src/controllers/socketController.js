@@ -24,7 +24,7 @@ function socketController(server) {
 
     ws.on('close', () => {
       // eslint-disable-next-line no-console
-      console.log('==socket-close', sockets);
+      console.log('==ws-close is-UserB =', sockets.isOnline('UserB'));
 
       sockets.removeBySocket(ws);
     });
@@ -38,7 +38,7 @@ function socketController(server) {
     };
 
     // eslint-disable-next-line no-console
-    console.log('==sockets==', sockets.getLength());
+    console.log('==ws-chat-create', sockets.getLength());
 
     sockets.sendToUsers(members, message);
   });

@@ -15,7 +15,7 @@ class SocketManager {
 
   create(userName, socket) {
     // eslint-disable-next-line no-console
-    console.log('==create-socket', userName, socket.readyState);
+    console.log('==set-socket', userName, socket.readyState);
 
     this.connections.set(userName, socket);
   }
@@ -30,7 +30,7 @@ class SocketManager {
         this.connections.delete(userName);
 
         // eslint-disable-next-line no-console
-        console.log('==removeBySocket', this.connections.has(userName));
+        console.log('==delete-socket', this.connections.has(userName));
         break;
       }
     }
@@ -43,7 +43,7 @@ class SocketManager {
       const socket = this.connections.get(name);
 
       // eslint-disable-next-line no-console
-      console.log('==sendToUsers', name, socket.readyState, messageInString);
+      console.log('==sendToUsers', name, !!socket, messageInString);
 
       if (socket) {
         socket.send(messageInString);

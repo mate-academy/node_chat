@@ -3,6 +3,9 @@
 const { User } = require('../models/User.js');
 
 function normalize({ id, name }) {
+  // eslint-disable-next-line no-console
+  console.log('normalize-user =', id, name);
+
   return {
     id, name,
   };
