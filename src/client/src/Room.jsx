@@ -1,16 +1,52 @@
-export const Room = ({ room, setRoom }) => {
+import React, { useState } from 'react';
+
+export const Room = ({ room, setRoom, setMessages }) => {
+  const [rooms, setRooms] = useState(['room1', 'room2', 'room3']);
+
   const handleRoomChange = (event) => {
     setRoom(event.target.value);
   };
 
+  const handleCreateRoom = () => {
+    const roomName = prompt('Enter the name for the new room:');
+    if (roomName) {
+      setRooms([...rooms, roomName]);
+    }
+  };
+
+  const handleRenameRoom = () => {
+    const newRoomName = prompt('Enter the new name for the room:', room);
+    if (newRoomName) {
+      setMessages(prevMessages => {
+        return prevMessages.map(message => {
+          if (message.room === room) {
+            message.room = newRoomName;
+          }
+          return message;
+        })
+      })
+      setRooms(rooms.map(r => r === room ? newRoomName : r));
+      setRoom(newRoomName);
+    }
+  };
+
+  const handleDeleteRoom = () => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete room ${room}?`);
+    if (confirmDelete) {
+      setRooms(rooms.filter(r => r !== room));
+      setRoom(rooms[0] || '');
+    }
+  };
+
   return (
     <>
-      <h2>Room {room}</h2>
-      <select onChange={handleRoomChange}>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
+      <h2>{room}</h2>
+      <select value={room} onChange={handleRoomChange}>
+        {rooms.map(r => <option key={r} value={r}>{r}</option>)}
       </select>
+      <button onClick={handleCreateRoom}>Create Room</button>
+      <button onClick={handleRenameRoom}>Rename Room</button>
+      <button onClick={handleDeleteRoom}>Delete Room</button>
     </>
   );
 };

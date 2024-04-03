@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-'use strict';
+// eslint-disable-next-line no-console
 import 'dotenv/config';
 import cors from 'cors';
 import { EventEmitter } from 'events';
@@ -26,17 +25,35 @@ const wss = new WebSocketServer({ server });
 
 export const emitter = new EventEmitter();
 
-// 1
+const roomMessages = {};
+
+wss.on('connection', (socket) => {
+  socket.on('message', (message) => {
+    const data = JSON.parse(message);
+
+    if (data.type === 'join') {
+      socket.room = data.room;
+      const room = data.room;
+      if (roomMessages[room]) {
+        for (const message of roomMessages[room]) {
+          socket.send(JSON.stringify({ text: message }));
+        }
+      }
+    }
+  });
+});
+
 emitter.on('message', (data) => {
   const { room, text } = data;
 
-  console.log('room', room);
+  if (!roomMessages[room]) {
+    roomMessages[room] = [];
+  }
+  roomMessages[room].push(text);
 
   for (const client of wss.clients) {
-    console.log('client.room', client.room);
-
     if (client.room === room) {
-      client.send(JSON.stringify({ text }));
+      client.send(JSON.stringify(data));
     }
   }
 });

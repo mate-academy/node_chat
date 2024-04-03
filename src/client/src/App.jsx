@@ -1,5 +1,5 @@
-// #region imports 
-import { useEffect, useState } from 'react';
+// #region imports
+import { useEffect, useMemo, useState } from 'react';
 import './App.css'
 import { MessageForm } from './MessageForm.jsx';
 import { MessageList } from './MessageList.jsx';
@@ -27,7 +27,7 @@ const DataLoader = ({ onData, room, userName }) => {
     return () => {
       socket.close();
     };
-  }, [])
+  }, [room])
 
   return (
     <h1 className="title">Chat application</h1>
@@ -37,7 +37,11 @@ const DataLoader = ({ onData, room, userName }) => {
 export function App() {
   const [messages, setMessages] = useState([]);
   const [userName, setUserName] = useState(null);
-  const [room, setRoom] = useState(1);
+  const [room, setRoom] = useState('room1');
+
+  const sortedMessages = useMemo(() => {
+    return messages.filter(message => message.room === room);
+  },[messages, room]);
 
   useEffect(() => {
     if (!localStorage.getItem('name')) {
@@ -66,10 +70,10 @@ export function App() {
   return (
     <section className="section content">
       <h3>Hi, {userName}</h3>
-      <Room room={room} setRoom={setRoom} />
+      <Room room={room} setRoom={setRoom} setMessages={setMessages} />
       <DataLoader onData={saveData} room={room} userName={userName} />
       <MessageForm room={room} userName={userName} />
-      <MessageList messages={messages} />
+      <MessageList messages={sortedMessages} />
     </section>
   )
 }

@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { apiUtils } from './API/apiUtils';
-
 
 
 export const MessageForm = ({ room, userName }) => {
@@ -9,11 +7,11 @@ export const MessageForm = ({ room, userName }) => {
 
   const handleMessage = async (event) => {
     event.preventDefault();
-    
+
     apiUtils.post({
       text, userName, room, type: 'message'
     })
-    
+
     setText('');
   };
 
