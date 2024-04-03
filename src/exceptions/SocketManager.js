@@ -9,14 +9,7 @@ class SocketManager {
     return this.connections.has(userName);
   }
 
-  getLength() {
-    return this.connections.size;
-  }
-
   create(userName, socket) {
-    // eslint-disable-next-line no-console
-    console.log('==set-socket', userName, socket.readyState);
-
     this.connections.set(userName, socket);
   }
 
@@ -28,9 +21,6 @@ class SocketManager {
     for (const [userName, socket] of this.connections.entries()) {
       if (socket === ws) {
         this.connections.delete(userName);
-
-        // eslint-disable-next-line no-console
-        console.log('==delete-socket', this.connections.has(userName));
         break;
       }
     }
@@ -41,9 +31,6 @@ class SocketManager {
 
     for (const name of userNames) {
       const socket = this.connections.get(name);
-
-      // eslint-disable-next-line no-console
-      console.log('==sendToUsers', name, !!socket, messageInString);
 
       if (socket) {
         socket.send(messageInString);

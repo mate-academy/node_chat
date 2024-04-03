@@ -8,9 +8,6 @@ const { typeSocket } = require('../config');
 const socketEmitter = new EventEmitter();
 
 function socketController(server) {
-  // eslint-disable-next-line no-console
-  console.log('==f--socketController', sockets);
-
   const wss = new WebSocketServer({ server });
 
   wss.on('connection', (ws) => {
@@ -23,9 +20,6 @@ function socketController(server) {
     });
 
     ws.on('close', () => {
-      // eslint-disable-next-line no-console
-      console.log('==ws-close is-UserB =', sockets.isOnline('UserB'));
-
       sockets.removeBySocket(ws);
     });
   });
@@ -36,9 +30,6 @@ function socketController(server) {
       type: typeSocket.chatCreate,
       chat: newChat,
     };
-
-    // eslint-disable-next-line no-console
-    console.log('==ws-chat-create', sockets.getLength());
 
     sockets.sendToUsers(members, message);
   });

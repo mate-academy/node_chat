@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use strict';
 
 const { ErrorApi } = require('../exceptions/ErrorApi');
@@ -26,13 +25,11 @@ async function login(req, res) {
     throw ErrorApi.Conflict();
   }
 
-  if (!foundUser && !userIsLoading) {
+  if (!foundUser) {
     usersLogining.add(name);
 
     const newUser = await userService.createByName(name);
     const normalizedNewUser = userService.normalize(newUser);
-
-    console.log('--login !foundUser newUser =', normalizedNewUser);
 
     usersLogining.delete(name);
 
@@ -43,18 +40,11 @@ async function login(req, res) {
   }
 
   const normalizedUser = userService.normalize(foundUser);
-
-  console.log('--login normalizedUser =', normalizedUser);
-
   const userChats = await chatsService.getByUser(name);
-
-  console.log('--login userChats =', userChats);
 
   if (!userChats) {
     throw ErrorApi.NotFound('chats of the user');
   }
-
-  console.log('--login oldUser =', normalizedUser);
 
   return res.status(200).send({
     ...normalizedUser,
