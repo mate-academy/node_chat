@@ -64,13 +64,13 @@ export function App() {
   }, [room]);
 
   function saveData(message) {
-    setMessages((messages) => { return [...messages, message] })
+    setMessages((messages) => [...messages, message])
   }
 
   return (
     <section className="section content">
       <h3>Hi, {userName}</h3>
-      <Room room={room} setRoom={setRoom} setMessages={setMessages} />
+      <Room room={room} setRoom={setRoom} setMessages={setMessages} messages={messages} />
       <DataLoader onData={saveData} room={room} userName={userName} />
       <MessageForm room={room} userName={userName} />
       <MessageList messages={sortedMessages} />

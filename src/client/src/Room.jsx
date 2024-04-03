@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const Room = ({ room, setRoom, setMessages }) => {
+export const Room = ({ room, setRoom, setMessages, messages }) => {
   const [rooms, setRooms] = useState(['room1', 'room2', 'room3']);
 
   const handleRoomChange = (event) => {
@@ -17,14 +17,15 @@ export const Room = ({ room, setRoom, setMessages }) => {
   const handleRenameRoom = () => {
     const newRoomName = prompt('Enter the new name for the room:', room);
     if (newRoomName) {
-      setMessages(prevMessages => {
-        return prevMessages.map(message => {
-          if (message.room === room) {
-            message.room = newRoomName;
-          }
-          return message;
-        })
+
+      const updatedMessages = messages.map(message => {
+        if (message.room === room) {
+          message.room = newRoomName;
+        }
+        return message;
       })
+
+      setMessages(updatedMessages);
       setRooms(rooms.map(r => r === room ? newRoomName : r));
       setRoom(newRoomName);
     }
