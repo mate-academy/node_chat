@@ -27,6 +27,7 @@ export const Root = () => {
         <NavBar />
         <Container>
           <Routes>
+            <Route path='/' element={<Navigate to='/login' />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/chat' element={user ? <ChatPage /> : <LoginPage />} />
