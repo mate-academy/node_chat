@@ -1,9 +1,12 @@
 # IDE
 .idea
 .vscode
+.env
+setup.js
 
 # Node
 node_modules
+client
 
 # MacOS
 .DS_Store
