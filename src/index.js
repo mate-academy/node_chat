@@ -11,7 +11,7 @@ const { errorMiddleware } = require('./middlewares/errorMiddleware.js');
 
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(express.json());
