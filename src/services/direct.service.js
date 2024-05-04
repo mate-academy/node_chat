@@ -13,9 +13,9 @@ const getById = (id) => {
   return Direct.findByPk(id);
 };
 
-const create = async ({ userId, anotherUser }) => {
+const create = async ({ userId, anotherUserId }) => {
   const user1 = await userService.getById(userId);
-  const user2 = await userService.getByName(anotherUser);
+  const user2 = await userService.getById(anotherUserId);
 
   if (!user1 || !user2) {
     throw ApiError.NotFound('User not found');
@@ -46,6 +46,16 @@ const create = async ({ userId, anotherUser }) => {
   return newDirect;
 };
 
+const remove = async (directId) => {
+  const direct = await getById(directId);
+
+  if (!direct) {
+    throw ApiError.NotFound('Direct does not exist');
+  }
+
+  await Direct.destroy({ where: { id: directId } });
+};
+
 const getAllByUser = async (userId) => {
   const user = await userService.getById(userId);
 
@@ -66,5 +76,6 @@ module.exports = {
   normalize,
   getById,
   create,
+  remove,
   getAllByUser,
 };

@@ -8,7 +8,7 @@ const directRouter = express.Router();
 
 directRouter.post('/', catchError(directController.create));
 
-directRouter.get('/:directId', catchError(directController.getDirectMessages));
+directRouter.delete('/:directId', catchError(directController.remove));
 
 directRouter.get('/user/:userId', catchError(directController.getUserDirects));
 

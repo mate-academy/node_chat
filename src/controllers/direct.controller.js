@@ -5,31 +5,28 @@ const messageService = require('../services/message.service');
 const { ApiError } = require('../exceptions/ApiError');
 
 const create = async (req, res) => {
-  const { userId, anotherUser } = req.body;
+  const { userId, anotherUserId } = req.body;
 
-  if (typeof anotherUser !== 'string' || typeof userId !== 'string') {
+  if (typeof anotherUserId !== 'string' || typeof userId !== 'string') {
     throw ApiError.BadRequest('Invalid request');
   }
 
-  const direct = await directService.create({ userId, anotherUser });
+  const direct = await directService.create({ userId, anotherUserId });
 
   res.status(201).send(directService.normalize(direct));
 };
 
-const getDirectMessages = async (req, res) => {
+const remove = async (req, res) => {
   const { directId } = req.params;
 
   if (!directId) {
     throw ApiError.BadRequest('Invalid request');
   }
 
-  if (!(await directService.getById(directId))) {
-    throw ApiError.NotFound('Dialogue does not exist');
-  }
+  await messageService.deleteAllByDirect(directId);
+  await directService.remove(directId);
 
-  const directMessages = await messageService.getAllByDirect(directId);
-
-  res.send(directMessages.map((message) => messageService.normalize(message)));
+  res.sendStatus(204);
 };
 
 const getUserDirects = async (req, res) => {
@@ -46,6 +43,6 @@ const getUserDirects = async (req, res) => {
 
 module.exports = {
   create,
-  getDirectMessages,
+  remove,
   getUserDirects,
 };

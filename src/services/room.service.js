@@ -28,7 +28,9 @@ const getAllByUser = async (userId) => {
     throw ApiError.NotFound('User does not exist');
   }
 
-  const userRooms = await user.getRooms();
+  const userRooms = await user.getRooms({
+    order: [['updatedAt', 'DESC']],
+  });
 
   return userRooms;
 };
@@ -50,6 +52,7 @@ const getAllNotByUser = async (userId) => {
         [Op.notIn]: userRooms.map((room) => room.id),
       },
     },
+    order: [['updatedAt', 'DESC']],
   });
 
   return notUserRooms;

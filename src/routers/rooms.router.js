@@ -8,8 +8,6 @@ const roomRouter = express.Router();
 
 roomRouter.post('/', catchError(roomController.create));
 
-roomRouter.get('/:roomId', catchError(roomController.getRoomMessages));
-
 roomRouter.patch('/:roomId', catchError(roomController.rename));
 
 roomRouter.delete('/:roomId', catchError(roomController.remove));

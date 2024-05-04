@@ -45,22 +45,6 @@ const remove = async (req, res) => {
   res.sendStatus(204);
 };
 
-const getRoomMessages = async (req, res) => {
-  const { roomId } = req.params;
-
-  if (!roomId) {
-    throw ApiError.BadRequest('Invalid request');
-  }
-
-  if (!(await roomService.getById(roomId))) {
-    throw ApiError.NotFound('Room does not exist');
-  }
-
-  const roomMessages = await messageService.getAllByRoom(roomId);
-
-  res.send(roomMessages.map((message) => messageService.normalize(message)));
-};
-
 const getRoomUsers = async (req, res) => {
   const { roomId } = req.params;
 
@@ -127,7 +111,6 @@ module.exports = {
   create,
   rename,
   remove,
-  getRoomMessages,
   getRoomUsers,
   join,
   leave,
