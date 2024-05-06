@@ -1,0 +1,25 @@
+.chatPage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - 55px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  transform: translateX(-100%);
+  transition: all 0.3s ease;
+}
+
+.chatPage--active {
+  transform: translateX(0%);
+}
+
+@media (min-width: 640px) {
+  .chatPage {
+    position: relative;
+    transform: translateX(0%);
+  }
+}
