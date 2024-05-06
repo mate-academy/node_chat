@@ -1,0 +1,28 @@
+.list__item {
+  position: relative;
+  min-width: 150px;
+  max-width: 300px;
+  width: max-content;
+  padding: 10px;
+  padding-bottom: 25px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  background-color: #EFEFEF;
+  align-self: start;
+}
+
+.list__item--right {
+  align-self: end;
+}
+
+.list__author {
+  font-size: 1em;
+  color: #3726F0 !important;
+}
+
+.list__time {
+  position: absolute;
+  font-size: 0.8em;
+  bottom: 5px;
+  right: 10px;
+}
