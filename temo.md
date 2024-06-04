@@ -1,17 +1,6 @@
-# Chat (with Node.js) 
-Implement a chat application (both client and server)
-
-- You type a username and send it to the server
-- It is now username (save it in localStorage)
-- All the messages should have an author, time and text
-- Implement an ability to create rooms (create / rename / join / delete)
-- New user should see all prev messages in the room
-
-**Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
-
-
 const { User, Room, Message } = require('../models');
 
+// Socket event handlers
 const handleNewUser = async (socket, username) => {
     let user = await User.findOne({ where: { username } });
     if (!user) {
@@ -20,11 +9,11 @@ const handleNewUser = async (socket, username) => {
     socket.emit('user set', username);
 };
 
-const handleCreateRoom = async (socket, roomName) => {
+const handleCreateRoom = async (io, roomName) => {
     let room = await Room.findOne({ where: { name: roomName } });
     if (!room) {
         room = await Room.create({ name: roomName });
-        socket.broadcast.emit('room created', roomName);
+        io.emit('room created', roomName);
     }
 };
 
@@ -50,24 +39,24 @@ const handleJoinRoom = async (socket, roomName) => {
     }
 };
 
-const handleRenameRoom = async (socket, { oldName, newName }) => {
+const handleRenameRoom = async (io, { oldName, newName }) => {
     const room = await Room.findOne({ where: { name: oldName } });
     if (room) {
         room.name = newName;
         await room.save();
-        socket.broadcast.emit('room renamed', { oldName, newName });
+        io.emit('room renamed', { oldName, newName });
     }
 };
 
-const handleDeleteRoom = async (socket, roomName) => {
+const handleDeleteRoom = async (io, roomName) => {
     const room = await Room.findOne({ where: { name: roomName } });
     if (room) {
         await room.destroy();
-        socket.broadcast.emit('room deleted', roomName);
+        io.emit('room deleted', roomName);
     }
 };
 
-const handleSendMessage = async (socket, { roomName, message }) => {
+const handleSendMessage = async (io, socket, { roomName, message }) => {
     const room = await Room.findOne({ where: { name: roomName } });
     if (room) {
         const user = await User.findOne({ where: { username: socket.handshake.query.username } });
@@ -77,10 +66,32 @@ const handleSendMessage = async (socket, { roomName, message }) => {
             UserId: user.id,
             time: new Date()
         });
-        socket.broadcast.to(roomName).emit('new message', {
+        io.to(roomName).emit('new message', {
             author: user.username,
             text: newMessage.text,
             time: newMessage.time
         });
     }
 };
+
+module.exports = {
+    handleNewUser,
+    handleCreateRoom,
+    handleJoinRoom,
+    handleRenameRoom,
+    handleDeleteRoom,
+    handleSendMessage
+};
+
+
+
+socket.on('new user', (username) => handleNewUser(socket, username));
+    socket.on('create room', (roomName) => handleCreateRoom(io, roomName));
+    socket.on('join room', (roomName) => handleJoinRoom(socket, roomName));
+    socket.on('rename room', (data) => handleRenameRoom(io, data));
+    socket.on('delete room', (roomName) => handleDeleteRoom(io, roomName));
+    socket.on('send message', (data) => handleSendMessage(io, socket, data));
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
