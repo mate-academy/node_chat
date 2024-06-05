@@ -26,6 +26,7 @@ export const onJoinRoom = async (name, socket) => {
 
   if (room) {
     const user = await userService.getByName(socket.handshake.query.username);
+
     await room.addChatuser(user);
     socket.join(name);
 
