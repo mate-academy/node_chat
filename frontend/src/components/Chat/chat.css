@@ -1,0 +1,53 @@
+.message {
+  border-radius: 20px;
+  background-color: #525050;
+  padding: 10px;
+  max-width: 500px;
+  font-size: 15px;
+  position: relative;
+  transition: all 3s;
+}
+
+.message:hover .btn-del {
+  opacity: 1;
+}
+
+.author {
+  margin-inline-end: 15px;
+  color: #ffcdcd;
+}
+
+.time {
+  font-size: 13px;
+  color: #dbe5db;
+}
+
+.btn-del {
+  opacity: 0;
+  transition: all .3s;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #bf2a2abd;
+  color: black;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  padding: 1px 1px 1px 1px;
+}
+
+.message-right {
+  display: flex;
+  justify-content: right;
+}
+
+.list-of-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.form-full > input {
+   width: 70%;
+}

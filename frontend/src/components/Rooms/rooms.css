@@ -1,0 +1,185 @@
+.overflow {
+  overflow-y: scroll;
+  max-height: 40vh;
+  height: 50vh;
+}
+
+.rename-form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 3px 0 0 5px;
+}
+
+.rename-form > input {
+  background-color: #a1a1a1;
+  width: 82%;
+  height: 81%;
+  border: none;
+  border-radius: 10px;
+  padding-left: 15px;
+  color: white;
+  font-size: 15px;
+}
+
+.rename-form > input:target {
+  outline: none;
+}
+
+.rename-form > input:focus {
+  outline: none;
+}
+
+.rename-form > button {
+  background-color: #ddd9d9;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 6px 15px;
+  border-radius: 10px;
+}
+
+.container-rooms {
+  background-color: #9790909c;
+  width: 90%;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.container-actions {
+  background-color: #9790909c;
+  width: 90%;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 0 auto;
+  display: flex;
+  gap: 25px;
+
+}
+
+.list-of-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.btn-action {
+  font-size: 15px;
+  padding: 5px 15px;
+  border-radius: 10px;
+  color: white;
+}
+
+.btn-action:disabled {
+  border: 2px solid #403e3e96;
+  background-color: #4e3c3c45;
+  color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.del {
+  border: 2px solid #ff000096;
+  background-color: #ff000045;
+}
+
+.add {
+  border: 2px solid #00ff3796;
+  background-color: #00ff3445;
+}
+
+.rn {
+  border: 2px solid #ff810096;
+  background-color: #ffa20045;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.form-add-room {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.form-add-room > input {
+  font-size: 13px;
+  padding-inline: 10px;
+  border-radius: 10px;
+  outline: none;
+  border: 5px solid transparent;
+  transition: all .3s;
+}
+
+.form-add-room > input:hover {
+  border-color: #999595;
+}
+
+.back {
+  background-color: #463d3d;
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.back:hover {
+  -webkit-box-shadow: 29px 28px 7px -18px rgba(255,255,255,1);
+  -moz-box-shadow: 29px 28px 7px -18px rgba(255,255,255,1);
+  box-shadow: 29px 28px 7px -18px rgba(255,255,255,1);
+}
+
+.list-of-rooms {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  position: relative;
+}
+
+.contaimer-of-room {
+  position: relative;
+  display: block;
+  width: 88%;
+  border: none;
+  background-color: #a1a1a1a8;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+  text-align: left;
+  padding: 10px 10px 10px 50px;
+  transition: all .3s;
+  cursor: pointer;
+}
+
+.contaimer-of-room:hover {
+  background-color: #ebe8e8a8;
+  color: black;
+}
+
+.btn-select {
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border-radius: 5px;
+  border: 1px solid #c2f998;
+}
+
+.selected {
+  background-image: url('../../../images/done.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
