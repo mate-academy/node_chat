@@ -1,3 +1,5 @@
+const { default: axios } = require("axios");
+
 function createSocket(io) {
   io.on('connection', (socket) => {
     socket.on('joinRoom', (idRoom) => {
@@ -24,7 +26,9 @@ function createSocket(io) {
       }
     });
 
-    socket.on('disconnect');
+    socket.on('disconnect', () => {
+      console.log('A user disconnected:', socket.id);
+    });
   });
 }
 

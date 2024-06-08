@@ -30,7 +30,9 @@ function createServer() {
 
   createSocket(io);
 
-  server.listen(PORT)
+  server.listen(PORT, () => {
+    console.log('listening on port');
+  })
 
   return server;
 }
