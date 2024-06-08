@@ -1,0 +1,92 @@
+.form-input-name {
+  width: 100%;
+}
+
+.form-input-wrapper {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.message-result {
+  margin: 10px auto;
+  padding: 10px 30px;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #d16767;
+  width: fit-content;
+}
+
+.input-name {
+  font-size: 15px;
+  padding: 10px;
+  width: 50%;
+  border-radius: 10px;
+  outline: none;
+  border: 5px solid transparent;
+  transition: all .3s;
+}
+
+.input-name:hover {
+  border-color: #999595;
+}
+
+.btn-submit-name {
+  font-size: 15px;
+  display: block;
+  padding: 10px 20px;
+  border: 5px solid #999595;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all .3s;
+}
+
+.btn-submit-name:hover {
+  background-color: #999595;
+  color: white;
+}
+
+
+.spin {
+  position: relative;
+}
+
+.spin::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #d3d0d0d9;
+}
+
+.spin::after {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  border: 2px solid black;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  animation: spin 1s ease-in-out 0s infinite;
+
+}
+@keyframes spin {
+  from {
+    transform: translate(50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(50%, -50%) rotate(360deg);
+  }
+}
+
+.error {
+  border-color: red;
+}
