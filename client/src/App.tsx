@@ -1,25 +1,26 @@
 import { Textarea, Button } from '@headlessui/react';
 import { useEffect, useRef, useState } from 'react';
-import { messages } from './data.json';
 
 import './App.scss';
+import { Messages } from './types';
 
 function App() {
-  const [listOfMessage, setListOfMessage] = useState(messages);
+  const [listOfMessage, setListOfMessage] = useState<Messages[]>([]);
   const newMessageRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:8000');
 
     socket.addEventListener('message', (e) => {
-      const newMessage = {
-        id: messages[messages.length - 1].id + 1,
-        text: JSON.parse(e.data),
-        createDate: new Date(Date.now()).toISOString(),
-      };
+      const newMessage = JSON.parse(e.data);
 
-      setListOfMessage((prevState) => [...prevState, newMessage]);
+      if (Array.isArray(newMessage)) {
+        setListOfMessage(newMessage.reverse());
+      } else {
+        setListOfMessage((prevState) => [newMessage, ...prevState]);
+      }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (
@@ -28,13 +29,14 @@ function App() {
     e.preventDefault();
 
     if (newMessageRef && newMessageRef.current && newMessageRef.current.value.trimStart()) {
-      const newMessage = {
-        id: messages[messages.length - 1].id + 1,
-        text: newMessageRef.current.value,
-        createDate: new Date(Date.now()).toISOString(),
-      };
+      fetch('http://localhost:8000/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: newMessageRef.current.value }),
+      });
 
-      setListOfMessage((prevState) => [...prevState, newMessage]);
       newMessageRef.current.value = '';
     }
   };
