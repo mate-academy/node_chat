@@ -1,0 +1,33 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #e4e2e2a8;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e4e2e2a8;
+  border-radius: 10px;
+  cursor: auto;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e4e2e248;
+}
