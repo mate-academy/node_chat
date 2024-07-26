@@ -1,0 +1,37 @@
+@import '../../utils/mixins';
+@import '../../utils/vars';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.AuthUser {
+  padding: 16px;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 25vmin;
+  background-color: $first-main-color;
+  border: 1px solid $border-color;
+  @include border-radius();
+
+  &__center {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__form {
+    &__label {
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    &__input {
+      display: block;
+    }
+  }
+}

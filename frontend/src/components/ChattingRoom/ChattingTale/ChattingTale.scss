@@ -1,0 +1,26 @@
+@import '../../../utils/mixins.scss';
+@import '../../../utils/vars.scss';
+
+
+.positionRelativeSender {
+  display: flex;
+  justify-content: right;
+  width: 100%;
+}
+
+.ChattingTale {
+  margin-bottom: 8px;
+  background-color: white;
+  width: fit-content;
+  box-sizing: border-box;
+  padding: 8px;
+  @include border-radius();
+
+  &__from {
+    display: flex;
+  }
+
+  &__time {
+    display: flex;
+  }
+}
