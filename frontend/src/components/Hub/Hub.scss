@@ -1,0 +1,38 @@
+@import '../../utils/vars.scss';
+@import '../../utils/mixins.scss';
+
+.Hub {
+  margin-top: 16px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  &__center {
+    padding: 16px;
+    background-color: $first-main-color;
+    width: 50%;
+    border: 1px solid $border-color;
+    @include border-radius()
+  }
+
+  &__title {
+     margin-bottom: 16px;
+  }
+
+  &__body {
+    &__title {
+      margin-bottom: 16px;
+    }
+
+    &__create-button {
+      margin-top: 16px;
+      text-transform: uppercase;
+      outline: 0;
+      border-color: $border-color;
+
+      &:hover {
+        background-color: darkgray;
+      }
+    }
+  }
+}

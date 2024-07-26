@@ -1,0 +1,45 @@
+@import '../../utils/vars.scss';
+@import '../../utils/mixins.scss';
+
+.ChattingRoom {
+  display: flex;
+  justify-content: center;
+
+  &__message {
+  }
+
+  &__close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__center {
+    position: relative;
+    padding: 24px;
+    width: 80vmin;
+    background-color: $first-main-color;
+    margin-top: 20px;
+    border: 1px solid $border-color;
+    @include border-radius();
+  }
+
+  &__title {
+    width: 100%;
+    text-align: center;
+  }
+
+  &__form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  
+    &__button {
+      &__input {
+        width: 70%;
+      }
+    }
+  }
+}
