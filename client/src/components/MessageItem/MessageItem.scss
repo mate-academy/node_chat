@@ -1,0 +1,33 @@
+.message {
+  width: 500px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  &__iconBlock {
+     display: flex;
+     flex-direction: column-reverse;
+
+     &--icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background-color: #348fde;
+      color: white;
+     }
+  }
+
+  &__block {
+    &--name {
+      color: #e67e22;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+}

@@ -1,0 +1,84 @@
+.room {
+  width: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  &__selected {
+    background-color: lightgrey;
+  }
+
+  &__delete {
+    width: 55px;
+    height: 25px;
+
+    display: flex;
+    gap: 5px;
+
+    &--item {
+      width: 25px;
+      height: 25px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: #348fde;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 23px;
+    color: white;
+  }
+
+  &__block {
+    display: flex;
+    gap: 7px;
+    flex-direction: column;
+    height: 100%;
+
+    &--name {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    &--lastMessage {
+      font-size: 15px;
+    }
+
+    &--nameChange {
+      border: none;
+      border-radius: 5px;
+      padding-left: 5px;
+    }
+
+    &--nameChangeForm {
+      display: flex;
+      gap: 10px;
+    }
+
+    &--nameChangeButton {
+      background-color: #348fde;
+      color: white;
+      border-radius: 5px;
+      border: none;
+      font-size: 10px;
+    }
+  }
+}
