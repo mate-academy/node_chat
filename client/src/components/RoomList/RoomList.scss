@@ -1,0 +1,110 @@
+.roomList {
+  height: 100%;
+  width: 500px;
+  border-right: 1px solid #808080;
+
+  &__list {
+    overflow-y: auto;
+    height: calc(100vh - 210px);
+  }
+
+  &__search {
+    height: 70px;
+    padding-inline: 15px;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    &--input {
+      border: none;
+      background-color: #e3e4e6;
+      border-radius: 20px;
+
+      width: 430px;
+      height: 30px;
+      box-sizing: border-box;
+      padding-left: 15px;
+    }
+
+    &--loupe {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  &__create {
+    height: 70px;
+    padding: 15px;
+    box-sizing: border-box;
+
+    &--form {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    &--text {
+      width: 140px;
+      font-size: 17px;
+    }
+
+    &--input {
+      border: none;
+      background-color: #e3e4e6;
+      border-radius: 20px;
+
+      width: 230px;
+      height: 30px;
+      box-sizing: border-box;
+      padding-left: 15px;
+    }
+
+    &--button {
+      border: none;
+      background-color: #358fdf;
+      border-radius: 5px;
+
+      color: white;
+
+      height: 30px;
+      width: 70px;
+
+      &:hover {
+        background-color: #e67e22;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.logout {
+  height: 70px;
+  border-top: 1px solid #ccc;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 15px;
+
+  &__button {
+    border: none;
+    background-color: #358fdf;
+    border-radius: 5px;
+
+    color: white;
+
+    height: 40px;
+    width: 200px;
+
+    &:hover {
+      background-color: #e67e22;
+      cursor: pointer;
+    }
+  }
+}

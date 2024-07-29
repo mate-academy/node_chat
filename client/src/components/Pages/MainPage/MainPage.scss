@@ -1,0 +1,39 @@
+.mainPage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  &__block {
+    width: 100%;
+    display: flex;
+  }
+
+  &__rightBlock {
+    width: calc(100vw - 500px);
+    min-width: 300px;
+    height: 100%;
+  }
+}
+
+.rightBlock {
+  &__roomNameBlock {
+    height: 70px;
+    padding-inline: 15px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1px solid #ccc;
+    font-size: 25px;
+  }
+}
+
+input {
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
