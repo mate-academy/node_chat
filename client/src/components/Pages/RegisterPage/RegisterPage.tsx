@@ -1,8 +1,5 @@
-// @ts-ignore
 import loginImg from '../../../images/login.png';
-// @ts-ignore
 import userIcon from '../../../images/user.png';
-// @ts-ignore
 import passIcon from '../../../images/key.png';
 
 import React, { useState } from 'react';
