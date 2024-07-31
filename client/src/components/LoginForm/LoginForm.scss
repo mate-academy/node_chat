@@ -1,0 +1,41 @@
+@import '../../styles/vars.scss';
+@import '../../styles/mixins.scss';
+
+.login {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 1;
+  background-color: $login-bg;
+  transition: all .5s;
+  overflow: hidden;
+
+  &__form {
+    text-align: center;
+    padding: 50px;
+    width: 400px;
+    border-radius: 50px;
+    background-color: $white-color;
+
+    &--title {
+      font-family: $font-family;
+      font-size: 65px;
+      line-height: 100%;
+      color: $login-title;
+      font-weight: bold;
+    }
+
+    @include on-mobile {
+      width: 280px;
+      padding: 40px 30px;
+
+      &--title {
+        font-size: 45px;
+      }
+    }
+  }
+}
