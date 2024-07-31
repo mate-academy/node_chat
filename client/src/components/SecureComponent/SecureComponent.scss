@@ -1,0 +1,22 @@
+.secure {
+  position: absolute;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background-image: url(../../icons/secure.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translateY(50%);
+  transition: all .5s;
+  list-style-type: none;
+
+  &__hidden {
+    transform: translateY(-100%);
+  }
+
+  &__no-display {
+    visibility: hidden;
+  }
+}

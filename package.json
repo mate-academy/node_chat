@@ -1,30 +1,31 @@
 {
   "name": "node_chat",
   "version": "1.0.0",
-  "description": "Chat using Node.js",
-  "main": "src/index.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "init": "mate-scripts init",
-    "start": "node src/index.js",
-    "lint": "npm run format && mate-scripts lint",
-    "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
-    "test:only": "mate-scripts test",
-    "update": "mate-scripts update",
-    "postinstall": "npm run update",
-    "test": "npm run lint && npm run test:only"
+    "server": "cd server && npm run watch",
+    "client": "cd client && npm run start",
+    "buildClient": "cd client && npm run build",
+    "clientInstall": "cd client&& npm install ",
+    "serverInstall": "cd server&& npm install",
+    "watch": "concurrently \"npm run client\" \"npm run server\"",
+    "installDep": "concurrently \"npm run serverInstall\"&& npm run clientInstall"
   },
-  "author": "Mate academy",
-  "license": "GPL-3.0",
-  "devDependencies": {
-    "@mate-academy/eslint-config": "latest",
-    "@mate-academy/scripts": "^1.7.3",
-    "eslint": "^7.32.0",
-    "eslint-plugin-jest": "^22.4.1",
-    "eslint-plugin-node": "^8.0.1",
-    "jest": "^29.7.0",
-    "prettier": "^3.2.5"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mate-academy/node_chat.git"
   },
-  "mateAcademy": {
-    "projectType": "javascript"
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mate-academy/node_chat/issues"
+  },
+  "homepage": "https://github.com/mate-academy/node_chat#readme",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3"
   }
 }

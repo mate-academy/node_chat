@@ -1,0 +1,49 @@
+@import '../../styles/vars.scss';
+@import '../../styles/mixins.scss';
+
+.chat-modale {
+  position: absolute;
+  white-space: pre-wrap;
+  font-family: $font-family;
+  font-size: 30px;
+  top: 3%;
+  left: calc(50% - 215px);
+  color: #555d64;
+  background-color: rgba(255, 255, 255, 0.205);
+  border-radius: 35px;
+  width: 430px;
+  padding: 30px;
+  text-align: center;
+  opacity: 1;
+  transition: all .5s;
+
+  &__hidden {
+    opacity: 0;
+  }
+
+  &__no-display {
+    visibility: hidden;
+  }
+
+  &__no-author {
+    top: 100% !important;
+  }
+
+  &__no-room {
+    padding: 50px;
+    top: 30%;
+  }
+
+  @include on-mobile {
+    font-size: 25px;
+    width: 250px;
+    left: calc(50% - 125px);
+  }
+
+  @include on-tablet {
+    &__no-room {
+      padding: 30px;
+      top: 3%;
+    }
+  }
+}

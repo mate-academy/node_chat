@@ -1,0 +1,86 @@
+@import '../../styles/vars';
+@import '../../styles/mixins';
+
+.inp {
+  font-family: $font-family;
+  line-height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
+
+  &__login {
+    font-size: 27px;
+    color: $white-color;
+    padding: 10px;
+    margin-block: 40px 35px;
+    border-radius: 10px;
+    background-color: $input-login-bg;
+    transition: all .3s;
+    box-shadow: none;
+
+    @include on-mobile {
+      font-size: 22px;
+    }
+
+    &::placeholder {
+      color: $input-placehplder-2;
+    }
+
+    &:focus,
+    &:hover {
+      box-shadow: 0 0 10px 3px $input-box-shadow;
+    }
+  }
+
+  &__room-create {
+    font-size: 25px;
+    color: $white-color;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: $blue-color-dark;
+    transition: all .3s;
+    box-shadow: none;
+    height: 100%;
+
+    &::placeholder {
+      color: $input-placehplder-3;
+    }
+
+    &:focus,
+    &:hover {
+      box-shadow: 0 0 10px 3px $input-box-shadow;
+    }
+  }
+
+  &__room-rename {
+    color: $input-placehplder-1;
+    background-color: inherit;
+    font-size: 35px;
+    padding: 0;
+    height: 100%;
+    
+    @include on-mobile {
+      text-align: center;
+    }
+
+    &::placeholder {
+      color: $input-placehplder-1;
+    }
+  }
+
+  &__send {
+    color: $white-color;
+    background-color: inherit;
+    font-size: 25px;
+    padding: 0;
+    height: 100%;
+    
+    @include on-mobile {
+      font-size: 20px;
+    }
+
+    &::placeholder {
+      color: $input-placehplder-1;
+    }
+  }
+}

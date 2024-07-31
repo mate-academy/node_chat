@@ -1,0 +1,154 @@
+@import '../../styles/vars.scss';
+@import '../../styles/mixins.scss';
+
+.btn {
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  min-width: 40px;
+  min-height: 40px;
+  transition: all .3s;
+  transform: none;
+
+  @include on-mobile {
+    min-width: initial;
+    min-height: initial;
+
+    &__rename,
+    &__delete,
+    &__close,
+    &__send {
+      width: 30px;
+      height: 30px
+    }
+
+    &__login {
+      font-size: 22px;
+    }
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &__container {
+    padding: 7px;
+    border-radius: 20%;
+    background-color: $white-color;
+
+    &--logout {
+      border-radius: 50%;
+      background-color: $red-color-off;
+
+      &:hover {
+        background-color: $red-color-on;
+      }
+    }
+
+    &--refresh {
+      border-radius: 50%;
+      background-color: $blue-light-color-off;
+
+      &:hover {
+        background-color: $blue-light-color-on;
+      }
+    }
+
+    &--create {
+      border-radius: 50%;
+      background-color: $green-add-color-off;
+
+      &:hover {
+        background-color: $green-add-color-on;
+      }
+    }
+
+    &--rename {
+      background-color: $orange-color-off;
+
+      &:hover {
+        background-color: $orange-color-on;
+      }
+    }
+
+    &--delete {
+      background-color: $red-color-off;
+
+      &:hover {
+        background-color: $red-color-on;
+      }
+    }
+
+    &--close {
+      background-color: $blue-night-color-off;
+
+      &:hover {
+        background-color: $blue-night-color-on;
+      }
+    }
+
+    &--send {
+      height: 100%;
+      border-radius: 20px 0 0 20px;
+      padding-inline: 30px;
+      background-color: $green-search-color-off;
+
+      @include on-mobile {
+        padding-inline: 15px;
+      }
+
+      &:hover {
+        background-color: $green-search-color-on;
+      }
+    }
+  }
+
+  &__login {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    background-color: $login-btn-off;
+    font-family: $font-family;
+    line-height: 100%;
+    font-size: 25px;
+    color: $black-color;
+    transition: all .3s;
+
+    &:hover {
+      background-color: $login-btn-of;
+    }
+  }
+
+  &__logout {
+    background-image: url(../../icons/shutdown-svgrepo-com.svg);
+  }
+
+  &__room {
+    background-image: url(../../icons/group-svgrepo-com.svg);
+  }
+
+  &__refresh {
+    background-image: url(../../icons/upload-svgrepo-com.svg);
+  }
+
+  &__create {
+    background-image: url(../../icons/add-to-svgrepo-com.svg);
+  }
+
+  &__rename {
+    background-image: url(../../icons/edit-svgrepo-com.svg);
+  }
+
+  &__delete {
+    background-image: url(../../icons/delete-svgrepo-com.svg);
+  }
+
+  &__close {
+    background-image: url(../../icons/quit-svgrepo-com.svg);
+  }
+
+  &__send {
+    background-image: url(../../icons/mail-mail-email-svgrepo-com.svg);
+  }
+}
