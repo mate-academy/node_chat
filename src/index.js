@@ -1,9 +1,11 @@
 'use strict';
-import express, { json } from 'express';
-import cors from 'cors';
-import 'dotenv/config';
-import { EventEmitter } from 'events';
-import { WebSocketServer } from 'ws';
+const express = require('express');
+const { json } = require('express');
+const cors = require('cors');
+require('dotenv').config(); // Для 'dotenv/config' використовуємо require()
+const { EventEmitter } = require('events');
+const { WebSocketServer } = require('ws');
+
 
 const app = express();
 const PORT = process.env.PORT || 3005;
