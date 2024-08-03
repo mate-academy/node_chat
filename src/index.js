@@ -6,7 +6,6 @@ require('dotenv').config(); // Для 'dotenv/config' використовуєм
 const { EventEmitter } = require('events');
 const { WebSocketServer } = require('ws');
 
-
 const app = express();
 const PORT = process.env.PORT || 3005;
 const emitter = new EventEmitter();
@@ -126,7 +125,6 @@ emitter.on('newRoom', (roomList) => {
     }
   }
 });
-
 
 emitter.on('message', ({ room, message }) => {
   for (const [client, clientRoom] of clients) {
