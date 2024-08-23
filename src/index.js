@@ -12,9 +12,12 @@ const messageRouter = require('./routes/message.route');
 const roomRouter = require('./routes/room.route');
 const { errorMiddleware } = require('./middleware/error.middleware');
 const { emitter } = require('./controllers/message.controller');
+// const db = require('./db/models');
 
 const PORT = process.env.PORT || 10000;
 const app = express();
+
+// db.sequelize.sync({ force: true });
 
 app.use(express.json());
 
