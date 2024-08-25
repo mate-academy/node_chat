@@ -2,7 +2,7 @@ const { ApiError } = require('../exceptions/api.error');
 const userService = require('../services/user.service');
 const { validateName } = require('../utils');
 
-const getOne = async (req, res) => {
+const getOneById = async (req, res) => {
   const { id } = req.params;
 
   const user = await userService.getById(id);
@@ -32,6 +32,6 @@ const create = async (req, res) => {
 };
 
 module.exports = {
-  getOne,
+  getOneById,
   create,
 };

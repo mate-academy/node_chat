@@ -18,7 +18,7 @@ const getOne = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { name, UserId } = req.body;
+  const { name, userId } = req.body;
 
   const errors = {
     name: validateName(name),
@@ -28,7 +28,7 @@ const create = async (req, res) => {
     throw ApiError.BadRequest('Validation error', errors);
   }
 
-  const room = await roomService.create(name, UserId);
+  const room = await roomService.create(name, userId);
 
   res.statusCode = 201;
   res.send(room);

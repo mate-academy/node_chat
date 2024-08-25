@@ -12,7 +12,7 @@ const getAll = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { UserId, text, RoomId } = req.body;
+  const { text, userId, roomId } = req.body;
 
   const errors = {
     text: validateText(text),
@@ -22,7 +22,7 @@ const create = async (req, res) => {
     throw ApiError.BadRequest('Validation error', errors);
   }
 
-  const message = await messageService.create(UserId, text, RoomId);
+  const message = await messageService.create(userId, roomId, text);
 
   emitter.emit('message', message);
   res.statusCode = 201;

@@ -9,6 +9,7 @@ async function getAll() {
 
 async function getById(id) {
   return Room.findByPk(id, { include: User });
+  // return Room.findByPk(id);
 }
 
 async function create(name, UserId) {
@@ -21,7 +22,7 @@ async function create(name, UserId) {
   const user = await userService.getById(UserId);
 
   if (!user) {
-    throw ApiError.NotFound();
+    throw ApiError.NotFound({ user: 'User does not exist' });
   }
 
   const newRoom = await Room.create({

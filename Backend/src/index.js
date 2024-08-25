@@ -24,16 +24,16 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.CLIENT_HOST,
-    credentials: true,
+    // credentials: true,
   }),
 );
 
-app.use('users', userRouter);
-app.use('messages', messageRouter);
-app.use('rooms', roomRouter);
+app.use('/users', userRouter);
+app.use('/messages', messageRouter);
+app.use('/rooms', roomRouter);
 
 app.use((req, res) => {
-  res.status(404).send('Page not found');
+  res.status(404).send('Page not found: EXPRESS APP ROUTE');
 });
 app.use(errorMiddleware);
 
