@@ -8,6 +8,6 @@ function sendMessage(username, message) {
   return newMessage;
 }
 
-export const messagesService = {
+module.exports = {
   sendMessage,
 };

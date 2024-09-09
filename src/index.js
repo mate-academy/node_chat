@@ -1,7 +1,8 @@
-import express from 'express';
-import { messagesRoute } from './routes/messages.route.js';
-import WebSocketServer from 'wss';
-import { websocketEmitter } from './websocket.js';
+const express = require('express');
+const WebSocketServer = require('wss');
+
+const { messagesRoute } = require('./routes/messages.route.js');
+const { websocketEmitter } = require('./websocket.js');
 
 const app = express();
 

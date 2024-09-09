@@ -1,5 +1,5 @@
-import { messagesService } from '../services/messages.service.js';
-import { websocketEmitter } from '../websocket.js';
+const { messagesService } = require('../services/messages.service.js');
+const { websocketEmitter } = require('../websocket.js');
 
 function sendMessage(req, res) {
   const { username, message } = req.body;
@@ -23,6 +23,6 @@ function sendMessage(req, res) {
   res.sendStatus(201);
 }
 
-export const messagesController = {
+module.exports = {
   sendMessage,
 };

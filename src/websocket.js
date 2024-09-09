@@ -1,3 +1,7 @@
-import { EventEmitter } from 'events';
+const { EventEmitter } = require('events');
 
-export const websocketEmitter = new EventEmitter();
+const websocketEmitter = new EventEmitter();
+
+module.exports = {
+  websocketEmitter,
+};

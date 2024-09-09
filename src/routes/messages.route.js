@@ -1,6 +1,8 @@
-import express from 'express';
-import { messagesController } from '../controllers/messages.controller.js';
+const express = require('express');
+const messagesController = require('../controllers/messages.controller.js');
 
-export const messagesRoute = express.Router();
+const messagesRoute = express.Router();
 
 messagesRoute.post('/', messagesController.sendMessage);
+
+module.exports = { messagesRoute };
