@@ -1,7 +1,16 @@
 const messages = [];
 
-function sendMessage(username, message) {
-  const newMessage = { username, message, time: new Date() };
+function getMessagesByGroupId(groupId) {
+  return messages.filter((message) => message.groupId === groupId);
+}
+
+function sendMessage(username, message, groupId = null) {
+  const newMessage = {
+    username,
+    message,
+    time: new Date(),
+    groupId,
+  };
 
   messages.push(newMessage);
 
@@ -9,5 +18,6 @@ function sendMessage(username, message) {
 }
 
 module.exports = {
+  getMessagesByGroupId,
   sendMessage,
 };

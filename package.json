@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "init": "mate-scripts init",
-    "start": "node src/index.js",
+    "start": "npx nodemon src/index.js",
     "lint": "npm run format && mate-scripts lint",
     "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
     "test:only": "mate-scripts test",
@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "nodemon": "^3.1.4",
-    "wss": "^3.3.4"
+    "nodemon": "^3.1.4"
   }
 }

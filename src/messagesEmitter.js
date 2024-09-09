@@ -1,7 +1,7 @@
 const { EventEmitter } = require('events');
 
-const websocketEmitter = new EventEmitter();
+const messagesEmitter = new EventEmitter();
 
 module.exports = {
-  websocketEmitter,
+  messagesEmitter,
 };
