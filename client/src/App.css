@@ -1,0 +1,45 @@
+html * {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: grey;
+}
+::-webkit-scrollbar {
+  width: 20px;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+.btn {
+  padding: 14px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border: none;
+}
+.btn-outline {
+  color: rgb(152, 227, 176);
+  background: black;
+}
+.btn-primary {
+  background: black;
+  color:  rgb(152, 227, 176);
+}
+.btn-secondary {
+  background: black;
+  color: rgb(152, 227, 176);
+}

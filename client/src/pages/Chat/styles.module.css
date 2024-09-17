@@ -1,0 +1,65 @@
+.chatContainer {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 20px;
+}
+
+/* Room and users component */
+.roomAndUsersColumn {
+  border-right: 1px solid rgb(152, 227, 176);
+}
+.roomTitle {
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  font-size: 2rem;
+  color: rgb(152, 227, 176)
+}
+.usersTitle {
+  font-size: 1.2rem;
+  color: #040101;
+}
+.usersList {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 60px;
+  color: rgb(152, 227, 176);
+}
+.usersList li {
+  margin-bottom: 12px;
+}
+
+/* Messages */
+.messagesColumn {
+  height: 85vh;
+  overflow: auto;
+  padding: 10px 10px 10px 40px;
+}
+.message {
+  background: rgb(255, 255, 255);
+  border-radius: 6px;
+  margin-bottom: 24px;
+  max-width: 600px;
+  padding: 12px;
+}
+.msgMeta {
+  color:black;
+  font-size: 0.75rem;
+}
+.msgText {
+  color: black;
+}
+
+/* Message input and button */
+.sendMessageContainer {
+  padding: 16px 20px 20px 16px;
+}
+.messageInput {
+  padding: 14px;
+  margin-right: 16px;
+  width: 60%;
+  border-radius: 6px;
+  border: 1px solid rgb(255, 255, 255);
+  font-size: 0.9rem;
+}
