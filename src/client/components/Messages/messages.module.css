@@ -1,0 +1,13 @@
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.messages__item {
+  display: grid;
+  grid-template-columns: 100px 1fr 75px;
+  border: 1px solid darkcyan;
+  border-radius: 10px;
+  padding: 10px 20px;
+}

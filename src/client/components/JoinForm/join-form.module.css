@@ -1,0 +1,43 @@
+.join-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid darkcyan;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.join-form__field-wrapper {
+  display: grid;
+  grid-template-columns: 100px minmax(100px, 200px);
+  align-items: center;
+}
+
+.join-form__field {
+  padding: 5px;
+  border: 1px solid darkcyan;
+  border-radius: 5px;
+}
+
+.join-form__action {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.join-form__action-list {
+  display: flex;
+  gap: 10px;
+}
+
+.join-form__action-label {
+  padding: 3px 5px;
+  cursor: pointer;
+}
+
+.join-form__radio:checked + .join-form__action-label {
+  background-color: darkcyan;
+  color: white;
+  border-radius: 3px;
+  cursor: default;
+}

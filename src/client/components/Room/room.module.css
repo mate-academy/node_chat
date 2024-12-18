@@ -1,0 +1,30 @@
+.room {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid darkcyan;
+  border-radius: 10px;
+  padding: 15px 20px;
+  line-height: 31px;
+}
+
+.room__name {
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.room__controller {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.room__input {
+  padding: 5px;
+  height: 100%;
+  border: 1px solid darkcyan;
+  border-radius: 5px;
+  width: 200px;
+}
