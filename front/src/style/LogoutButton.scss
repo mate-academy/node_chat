@@ -1,0 +1,19 @@
+.logout-button {
+  .button {
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+
+    &.is-danger {
+      background-color: #ff3860;
+      color: white;
+
+      &:hover {
+        background-color: #d9364a;
+      }
+    }
+
+    &.is-light {
+      border: 1px solid #ff3860;
+    }
+  }
+}

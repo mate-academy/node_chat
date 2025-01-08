@@ -1,0 +1,36 @@
+.menu {
+  border-right: 1px solid #dbdbdb;
+  height: 100%;
+  overflow-y: auto;
+
+  .menu-label {
+    color: #363636;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .menu-list {
+    li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      .has-text-link {
+        cursor: pointer;
+        font-weight: bold;
+
+        &:hover {
+          color: #225d9c;
+        }
+      }
+
+      .dropdown {
+        margin-left: auto;
+
+        .button {
+          padding: 0.25rem;
+        }
+      }
+    }
+  }
+}

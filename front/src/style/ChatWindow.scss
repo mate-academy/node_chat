@@ -1,0 +1,41 @@
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  .messages-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #f7f7f7;
+
+    .box {
+      margin-bottom: 0.75rem;
+      border-radius: 5px;
+
+      .dropdown {
+        position: absolute;
+        right: 1rem;
+        top: 0.5rem;
+
+        .button {
+          padding: 0.25rem;
+        }
+      }
+    }
+  }
+
+  .has-text-centered {
+    padding: 2rem 0;
+
+    .button {
+      background-color: #3273dc;
+      color: white;
+
+      &:hover {
+        background-color: #225d9c;
+      }
+    }
+  }
+}

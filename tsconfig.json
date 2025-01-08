@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    // "outDir": "./dist",  // Вказати, куди будуть зберігатися файли .js
+    "rootDir": "./front",  // Вказати папку з вихідними файлами
+  },
+  "include": ["front/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
