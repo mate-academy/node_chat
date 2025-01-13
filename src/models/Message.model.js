@@ -20,5 +20,5 @@ export const Message = client.define('message', {
   },
 });
 
-Message.belongsTo(Room);
-Room.hasMany(Message, { onDelete: 'CASCADE' });
+Message.belongsTo(Room, { onDelete: 'CASCADE' });
+Room.hasMany(Message);
