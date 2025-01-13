@@ -21,4 +21,4 @@ export const Message = client.define('message', {
 });
 
 Message.belongsTo(Room);
-Room.hasOne(Message);
+Room.hasMany(Message, { onDelete: 'CASCADE' });
