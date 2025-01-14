@@ -5,6 +5,7 @@ import {
   validateId,
   validateText,
 } from '../utils/validation.js';
+import { eventEmitter } from '../utils/socket.js';
 
 const addMessage = async (req, res) => {
   const { author, text, roomId } = req.body;
@@ -20,6 +21,7 @@ const addMessage = async (req, res) => {
   }
 
   const message = await messageService.addMessage(author, text, roomId);
+  eventEmitter.emit('messageAdd', message);
 
   res.statusCode = 201;
   res.send(message);

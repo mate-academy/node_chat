@@ -1,6 +1,7 @@
 import { roomService } from '../services/room.service.js';
 import { ApiError } from '../exeptions/api.error.js';
 import { validateId, validateName } from '../utils/validation.js';
+import { eventEmitter } from '../utils/socket.js';
 
 const getAllRooms = async (req, res) => {
   const rooms = await roomService.getAllRooms();
@@ -21,6 +22,8 @@ const create = async (req, res) => {
 
   const newRoom = await roomService.create(name);
 
+  eventEmitter.emit('createRoom', newRoom);
+
   res.statusCode = 201;
   res.send(newRoom);
 };
@@ -40,6 +43,8 @@ const rename = async (req, res) => {
 
   const updatedRoom = await roomService.rename({ id, newName });
 
+  eventEmitter.emit('updateRoom', updatedRoom);
+
   res.statusCode = 200;
   res.send(updatedRoom);
 };
@@ -56,6 +61,8 @@ const remove = async (req, res) => {
   }
 
   await roomService.remove(id);
+
+  eventEmitter.emit('removeRoom', id)
 
   res.statusCode = 200;
   res.send({
