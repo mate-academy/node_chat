@@ -3,7 +3,17 @@ const ChatOfUser = require('../models/ChatOfUser');
 
 const { wss } = require('../server');
 
-exports.sendByWS = async (chatId, userId, typeOfPayload, payload) => {
+function sendWSMessageToUsers(userIds, type, payload) {
+  wss.clients.forEach((connection) => {
+    const { userId } = connection;
+
+    if (userIds.includes(userId)) {
+      connection.send(JSON.stringify({ type, payload }));
+    }
+  });
+}
+
+async function sendWSMessageIntoChat(chatId, userId, typeOfPayload, payload) {
   const listOfChatClientsWithoutOwnID = await ChatOfUser.findAll({
     where: { ChatId: chatId, UserId: { [Op.ne]: userId } },
     attributes: ['UserId'],
@@ -14,11 +24,10 @@ exports.sendByWS = async (chatId, userId, typeOfPayload, payload) => {
     (user) => user.UserId,
   );
 
-  wss.clients.forEach((connection) => {
-    const { userId: connectionId } = connection;
+  sendWSMessageToUsers(listOfUserIds, typeOfPayload, payload);
+}
 
-    if (listOfUserIds.includes(connectionId)) {
-      connection.send(JSON.stringify({ type: typeOfPayload, payload }));
-    }
-  });
+module.exports = {
+  sendWSMessageToUsers,
+  sendWSMessageIntoChat,
 };

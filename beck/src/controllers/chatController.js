@@ -3,6 +3,7 @@
 const Chat = require('../models/Chat');
 const ChatOfUser = require('../models/ChatOfUser');
 const Message = require('../models/Message');
+const { Op } = require('sequelize');
 
 exports.getChats = async (req, res) => {
   const userId = req.userId;
@@ -20,8 +21,6 @@ exports.getChats = async (req, res) => {
 
     return res.status(200).json(chats);
   } catch (error) {
-    console.log(error);
-
     return res.status(400).json({ error: 'Помилка при отриманні чатів' });
   }
 };
@@ -53,8 +52,6 @@ exports.exitFromChat = async (req, res) => {
 
     return res.status(200).json({ message: 'Вихід з чату успішний' });
   } catch (error) {
-    console.log(error);
-
     return res.status(400).json({ error: 'Помилка виходу' });
   }
 };
@@ -81,6 +78,16 @@ exports.deleteChat = async (req, res) => {
     return res.status(404).json({ error: 'Ви не є часником чату' });
   }
 
+  const userIds = await ChatOfUser.findAll({
+    where: { ChatId: chatId },
+    attributes: ['UserId'],
+    raw: true,
+  });
+
+  const userIdArray = userIds
+    .map((record) => record.UserId)
+    .filter((id) => id !== userId);
+
   try {
     await ChatOfUser.destroy({ where: { ChatId: chatId } });
 
@@ -88,10 +95,12 @@ exports.deleteChat = async (req, res) => {
 
     await Chat.destroy({ where: { id: chatId } });
 
+    const { sendWSMessageToUsers } = require('./wsController');
+
+    await sendWSMessageToUsers(userIdArray, 'chat_deleted', chatId);
+
     return res.status(200).json({ message: 'Чат видалено' });
   } catch (error) {
-    console.log(error);
-
     return res.status(400).json({ error: 'Помилка видалення чату' });
   }
 };
@@ -122,15 +131,136 @@ exports.renameChat = async (req, res) => {
     return res.status(404).json({ error: 'Ви не є учасником чату' });
   }
 
+  const userIds = await ChatOfUser.findAll({
+    where: { ChatId: chatId },
+    attributes: ['UserId'],
+    raw: true,
+  });
+
+  const userIdArray = userIds
+    .map((record) => record.UserId)
+    .filter((id) => id !== userId);
+
   try {
     chatExist.name = newName.trim();
 
     await chatExist.save();
 
-    return res.status(200).json({ message: 'Чат успішно перейменовано' });
+    const { sendWSMessageToUsers } = require('./wsController');
+
+    await sendWSMessageToUsers(userIdArray, 'chat_renamed', chatExist);
+
+    return res.status(200).json(chatExist);
   } catch (error) {
     console.error(error);
 
     return res.status(400).json({ error: 'Помилка при перейменуванні чату' });
+  }
+};
+
+exports.addUsers = async (req, res) => {
+  const { chatId } = req.params;
+  const { userIds } = req.body;
+  const userId = req.userId;
+
+  if (!chatId) {
+    return res.status(404).json({ error: 'Не обраний чат' });
+  }
+
+  const chatExist = await Chat.findByPk(chatId);
+
+  if (!chatExist) {
+    return res.status(404).json({ error: `Чату з ID=${chatId} не існує` });
+  }
+
+  if (!userIds) {
+    return res.status(404).json({ error: 'не обрані учасники' });
+  }
+
+  const usersOfChat = await ChatOfUser.findAll({
+    where: {
+      ChatId: chatId,
+      UserId: { [Op.ne]: userId },
+    },
+    attributes: ['UserId'],
+    raw: true,
+  });
+
+  const listOfUsersOfChat = usersOfChat.map((user) => user.UserId);
+
+  try {
+    const newUsers = [];
+    const deletedUsers = [];
+
+    await Promise.all(
+      userIds.map(async (id) => {
+        const iAmInChat = await ChatOfUser.findOne({
+          where: { ChatId: chatId, UserId: id },
+        });
+
+        if (!iAmInChat) {
+          await ChatOfUser.create({ ChatId: chatId, UserId: id });
+          newUsers.push(id);
+        }
+      }),
+    );
+
+    await Promise.all(
+      listOfUsersOfChat.map(async (prevId) => {
+        if (!userIds.includes(prevId)) {
+          await ChatOfUser.destroy({
+            where: { ChatId: chatId, UserId: prevId },
+          });
+
+          deletedUsers.push(prevId);
+        }
+      }),
+    );
+
+    const { sendWSMessageToUsers } = require('./wsController');
+
+    await sendWSMessageToUsers(newUsers, 'new_chat', chatExist);
+
+    await sendWSMessageToUsers(deletedUsers, 'chat_deleted', chatExist.id);
+
+    return res.status(200).json(chatExist);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ error: 'Помилка при додаванні користувачів' });
+  }
+};
+
+exports.getUsersOfChat = async (req, res) => {
+  const { chatId } = req.params;
+  const userId = req.userId;
+
+  if (!chatId) {
+    return res.status(404).json({ error: 'Не обраний чат' });
+  }
+
+  const chatExist = await Chat.findByPk(chatId);
+
+  if (!chatExist) {
+    return res.status(404).json({ error: `Чату з ID=${chatId} не існує` });
+  }
+
+  try {
+    const userIds = await ChatOfUser.findAll({
+      where: {
+        ChatId: chatId,
+        UserId: { [Op.ne]: userId },
+      },
+      attributes: ['UserId'],
+      raw: true,
+    });
+
+    const listOfUserIds = userIds.map((user) => user.UserId);
+
+    return res.status(200).json(listOfUserIds);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ error: 'Помилка при додаванні користувачів' });
   }
 };

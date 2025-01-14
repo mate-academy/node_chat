@@ -1,15 +1,15 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
-// const { Op } = require('sequelize');
 const Chat = require('../models/Chat');
 const ChatOfUser = require('../models/ChatOfUser');
 const Message = require('../models/Message');
 const User = require('../models/User');
 
-const normalizedMessage = ({ id, text, UserId, ChatId }) => {
+const normalizedMessage = ({ id, text, createdAt, UserId, ChatId }) => {
   return {
     id,
     text,
+    createdAt,
     UserId,
     ChatId,
   };
@@ -51,9 +51,14 @@ exports.createMessage = async (req, res) => {
       author: author.name,
     };
 
-    const { sendByWS } = require('./wsController');
+    const { sendWSMessageIntoChat } = require('./wsController');
 
-    await sendByWS(chatId, userId, 'new_message', messageWithAuthor);
+    await sendWSMessageIntoChat(
+      chatId,
+      userId,
+      'new_message',
+      messageWithAuthor,
+    );
 
     res.status(201).json(messageWithAuthor);
   } catch (error) {
@@ -83,7 +88,7 @@ exports.getMessages = async (req, res) => {
   try {
     const messages = await Message.findAll({
       where: { ChatId: chatId },
-      include: [{ model: User, attributes: ['name'] }], // Отримуємо автора
+      include: [{ model: User, attributes: ['name'] }],
     });
 
     const normalizedMessages = messages.map((message) => ({
@@ -115,6 +120,14 @@ exports.deleteMessage = async (req, res) => {
     }
 
     await message.destroy();
+
+    const { sendWSMessageIntoChat } = require('./wsController');
+
+    await sendWSMessageIntoChat(chatId, userId, 'delete_message', {
+      messageId,
+      chatId,
+    });
+
     res.status(200).json({ message: 'Повідомлення видалено' });
   } catch (error) {
     res.status(500).json({ error: 'Помилка при видаленні повідомлення' });
@@ -152,11 +165,16 @@ exports.updateMessage = async (req, res) => {
     message.text = newText.trim();
     await message.save();
 
-    const { sendByWS } = require('./wsController');
+    const { sendWSMessageIntoChat } = require('./wsController');
 
-    await sendByWS(findChatId.ChatId, userId, 'updated_message', message);
+    await sendWSMessageIntoChat(
+      findChatId.ChatId,
+      userId,
+      'updated_message',
+      normalizedMessage(message),
+    );
 
-    res.status(200).json({ updatedMessage: normalizedMessage(message) });
+    res.status(200).json(normalizedMessage(message));
   } catch (error) {
     res.status(500).json({ error: 'Помилка при оновленні повідомлення' });
   }

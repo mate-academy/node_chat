@@ -16,7 +16,6 @@ import { socket } from './services/socketService';
 const App: React.FC = () => {
   const { user, setUser } = useUser();
   const isLoading = user === undefined;
-  console.log(user);
 
   useEffect(() => {
     userService
@@ -31,12 +30,23 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      socket.send(
-        JSON.stringify({
-          id: user?.id,
-          type: 'CONNECT',
-        }),
-      );
+      if (socket.readyState === 1) {
+        socket.send(
+          JSON.stringify({
+            id: user?.id,
+            type: 'CONNECT',
+          }),
+        );
+      } else {
+        setTimeout(function (){
+          socket.send(
+            JSON.stringify({
+              id: user?.id,
+              type: 'CONNECT',
+            }),
+          );
+      },100);
+      }
     }
   }, [user]);
 
@@ -56,8 +66,8 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/auth/login" element={<AuthComponent />} />
-        <Route path="/auth/register" element={<RegisterComponent />} />
+        <Route path="/auth/login" element={user ? <Navigate to="/chats" /> : <AuthComponent />} />
+        <Route path="/auth/register" element={user ? <Navigate to="/chats" /> : <RegisterComponent />} />
         <Route
           path="/chats"
           element={
@@ -66,7 +76,7 @@ const App: React.FC = () => {
             </RequireAuth>
           }
         />
-        <Route path="*" element={<Navigate to="/auth/login" />} />
+        <Route path="*" element={<Navigate to={user ? "/chats" : "/auth/login"} />} />
       </Routes>
     </Router>
   );

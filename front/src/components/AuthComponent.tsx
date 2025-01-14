@@ -22,7 +22,6 @@ export const AuthComponent: React.FC = () => {
         return navigate('/auth/register');
       }
       setUser(userExist);
-      console.log('User logged in:', userExist);
       navigate('/chats');
     } catch (error) {
       console.error(error);

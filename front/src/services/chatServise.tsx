@@ -13,8 +13,16 @@ function deleteChat(chatId: number): Promise<{ message: string }> {
   return httpClient.delete('/chats/delete', { data: { chatId } })
 }
 
-function renameChat(newName: string, chatId: number): Promise<{ message: string }> {
+function renameChat(newName: string, chatId: number): Promise<Types.Chat> {
   return httpClient.patch('/chats/rename', { newName, chatId });
+}
+
+function addUsers(chatId: number, userIds: number[]): Promise<Types.Chat> {
+  return httpClient.patch(`/chats/${chatId}/add-users`, { userIds });
+}
+
+function getUsersOfChat(chatId: number): Promise<number[]> {
+  return httpClient.get(`/chats/${chatId}/available-users`);
 }
 
 export const roomService = {
@@ -22,4 +30,6 @@ export const roomService = {
   exitFromChat,
   deleteChat,
   renameChat,
+  addUsers,
+  getUsersOfChat,
 };

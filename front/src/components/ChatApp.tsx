@@ -8,26 +8,55 @@ import CreateNewChatModal from './CreateNewChatModal';
 
 const ChatApp = () => {
   const [chats, setChats] = useState<Types.Chat[]>([]);
-  // const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
   const [selectedChat, setSelectedChat] = useState<Types.Chat | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState<
+    Record<number, Set<number>>
+    >({});
+  const [editingChat, setEditingChat] = useState<Types.Chat | null>(null);
+  const [usersOfChat, setUsersOfChat] = useState<number[]>([]);
 
   useEffect(() => {
     roomService.getAll().then(setChats).catch(console.error);
   }, []);
 
+  useEffect(() => {
+    if (editingChat) {
+      roomService.getUsersOfChat(editingChat.id).then(setUsersOfChat).catch(console.error);
+    }
+  }, [editingChat]);
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const handleOpenModalToEditChat = (chat: Types.Chat) => {
+    setEditingChat(chat);
+    openModal();
+  }
+
+  const handleChatUpdated = (updatedChat: Types.Chat) => {
+    setChats((prevChats) =>
+      prevChats.map((chat) =>
+        chat.id === updatedChat.id ? updatedChat : chat
+      )
+    );
+    setSelectedChat(updatedChat);
+  };
+
   const handleChatCreated = (newChat: Types.Chat) => {
     setChats((prevChats) => [...prevChats, newChat]);
-    // setSelectedChatId(newChat.id);
     setSelectedChat(newChat);
   };
 
   const handleSelectChat = (chat: Types.Chat) => {
-    // setSelectedChatId(chatId);
     setSelectedChat(chat);
+    setUnreadMessages((prevState) => {
+      const newUnreadMessages = { ...prevState };
+      if (newUnreadMessages[chat.id]) {
+        delete newUnreadMessages[chat.id];
+      }
+      return newUnreadMessages;
+    });
   };
 
   const handleRenameChat = async (chatId: number) => {
@@ -59,9 +88,27 @@ const ChatApp = () => {
     try {
       await roomService.deleteChat(chatId);
       setChats((prev) => prev.filter((chat) => chat.id !== chatId));
+      setUnreadMessages((prevState) => {
+        const newUnreadMessages = { ...prevState };
+        if (newUnreadMessages[chatId]) {
+          delete newUnreadMessages[chatId];
+        }
+        return newUnreadMessages;
+      });
     } catch (error) {
       console.error('Помилка видалення чату:', error);
     }
+  };
+
+  const handleNewMessage = (chatId: number, messageId: number) => {
+    setUnreadMessages((prevState) => {
+      const newUnreadMessages = { ...prevState };
+      if (!newUnreadMessages[chatId]) {
+        newUnreadMessages[chatId] = new Set();
+      }
+      newUnreadMessages[chatId].add(messageId);
+      return newUnreadMessages;
+    });
   };
 
   return (
@@ -72,11 +119,17 @@ const ChatApp = () => {
       />
       <div className="columns is-gapless is-fullheight">
         <ChatList
+          selectedChatId={selectedChat ? selectedChat.id : null}
+          setSelectedChat={setSelectedChat}
           chats={chats}
+          setChats={setChats}
+          unreadMessages={unreadMessages}
+          setUnreadMessages={setUnreadMessages}
+          handleNewMessage={handleNewMessage}
           onSelectChat={handleSelectChat}
-          onRenameChat={handleRenameChat}
           onExitChat={handleExitChat}
           onDeleteChat={handleDeleteChat}
+          handleOpenModalToEditChat={handleOpenModalToEditChat}
         />
         <div className="column is-flex is-justify-content-center is-align-items-center">
           {selectedChat && <ChatWindow chatId={selectedChat?.id} />}
@@ -86,6 +139,10 @@ const ChatApp = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         onChatCreated={handleChatCreated}
+        onChatUpdated={handleChatUpdated}
+        editingChat={editingChat}
+        usersOfChat={usersOfChat}
+        setEditingChat={setEditingChat}
       />
     </div>
   );

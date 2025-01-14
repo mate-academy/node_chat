@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable no-console */
 const { Op } = require('sequelize');
 const Chat = require('../models/Chat');
@@ -62,6 +63,10 @@ exports.createChat = async (req, res) => {
 
     await ChatOfUser.bulkCreate(chatUsers);
 
+    const { sendWSMessageToUsers } = require('./wsController');
+
+    await sendWSMessageToUsers(uniqueUserIds, 'new_chat', chat);
+
     return res.status(201).json(chat);
   } catch (error) {
     console.error('Помилка:', error);
@@ -84,13 +89,9 @@ const normalizedUser = ({
 exports.returnAllUsers = async (req, res) => {
   const userId = req.userId;
 
-  console.log('------------------------------Current user ID:', userId);
-
   try {
     const users = await User.findAll({ where: { id: { [Op.ne]: userId } } });
     const normalizedUserList = users.map((user) => normalizedUser(user));
-
-    console.log('---------------------Users fetched from database:', users);
 
     return res.status(201).json(normalizedUserList);
   } catch (error) {

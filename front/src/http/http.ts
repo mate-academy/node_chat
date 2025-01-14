@@ -1,13 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-// const baseURL = process.env.VITE_API_URL;
-
 const baseURL = 'http://localhost:5000';
 
 export function createClient(): AxiosInstance {
   return axios.create({
     baseURL,
-    withCredentials: true, 
+    withCredentials: true,
   });
 }
 

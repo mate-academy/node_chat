@@ -1,6 +1,7 @@
 export interface Message {
   id: number;
   text: string;
+  createdAt: string;
   UserId: number;
   ChatId: number;
 }
@@ -19,7 +20,13 @@ export type WSMessage = WSEvent<'new_message', MessageWithAuthor>;
 
 export type WSUpdatedMessage = WSEvent<'updated_message', Message>;
 
-export type WSNewChat = WSEvent<'NewChat', Chat>;
+export type WSDeleteMessage = WSEvent<'delete_message', {messageId: number, chatId: number}>;
+
+export type WSNewChat = WSEvent<'new_chat', Chat>;
+
+export type WSChatRenamed = WSEvent<'chat_renamed', Chat>;
+
+export type WSChatDeleted = WSEvent<'chat_deleted', number>;
 
 export interface Chat {
   id: number;

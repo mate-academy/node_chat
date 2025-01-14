@@ -23,33 +23,49 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ chatId }) => {
     if (!chatId) {
       return;
     }
-    messageService.getMessages(chatId).then(setMessages).catch(console.error);
+    messageService
+      .getMessages(chatId)
+      .then((fetchedMessages) => {
+        setMessages(fetchedMessages);
+      })
+      .catch(console.error);
 
     const listener = (event: { data: string }) => {
       try {
-        const incomingMessage: Types.WSEvent<string, any> = JSON.parse(event.data);
+        const incomingMessage: Types.WSEvent<string, any> = JSON.parse(
+          event.data,
+        );
 
         switch (incomingMessage.type) {
           case 'new_message': {
-            const newMessage = incomingMessage.payload as Types.WSMessage['payload'];
+            const newMessage =
+              incomingMessage.payload as Types.WSMessage['payload'];
             if (newMessage.message.ChatId === chatId) {
               setMessages((prev) => [...prev, newMessage]);
             }
-            console.log(`new message on client - ${newMessage}`);
             break;
           }
           case 'updated_message': {
-            const updatedMessage = incomingMessage.payload as Types.WSUpdatedMessage['payload'];
+            const updatedMessage =
+              incomingMessage.payload as Types.WSUpdatedMessage['payload'];
             setMessages((prev) =>
-              prev.map((msg) => (msg.message.id === updatedMessage.id ? { ...msg, message: updatedMessage } : msg))
+              prev.map((msg) =>
+                msg.message.id === updatedMessage.id
+                  ? { ...msg, message: updatedMessage }
+                  : msg,
+              ),
             );
-            console.log(`updated message on client - ${updatedMessage}`)
             break;
           }
-          default:
-            console.warn('Unknown WebSocket event type:', incomingMessage.type);
+          case 'delete_message': {
+            const messageId = +(incomingMessage as Types.WSDeleteMessage)
+              .payload.messageId;
+            setMessages((prev) =>
+              prev.filter((msg) => msg.message.id !== messageId),
+            );
+            break;
+          }
         }
-
       } catch (error) {
         console.error(error);
       }
@@ -77,7 +93,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ chatId }) => {
     try {
       if (chatId) {
         setMessages((prev) =>
-          prev.map((msg) => (msg.message.id === updatedMessage.id ? { ...msg, message: updatedMessage } : msg))
+          prev.map((msg) =>
+            msg.message.id === updatedMessage.id
+              ? { ...msg, message: updatedMessage }
+              : msg,
+          ),
         );
         setEditingMessage(null);
         setActiveMessage(null);
@@ -102,6 +122,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ chatId }) => {
     }
   };
 
+  const formatDate = (timestamp: string) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
+  };
+
   return (
     <section className="column chat-window panel">
       {messages.length === 0 ? (
@@ -113,13 +138,16 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ chatId }) => {
         </div>
       ) : (
         <div className="messages-list">
-          {messages.map(({ message, author }) => (
+            {messages.map(({ message, author }) => (
             <div
               key={message.id}
-              className="box mb-2 is-flex is-align-items-center is-justify-content-space-between"
+              className={`box mb-2 is-flex is-align-items-center is-justify-content-space-between`}
             >
               <p>
                 <strong>{author}:</strong> {message.text}
+              </p>
+              <p className="has-text-grey is-size-7">
+                {formatDate(message.createdAt)}
               </p>
               {message.UserId === user?.id && (
                 <div className="dropdown is-hoverable is-right">

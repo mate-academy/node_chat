@@ -33,6 +33,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           editingMessage.id,
           messageText,
         );
+        debugger
         onMessageSaved(updatedMessage);
       } else {
         if (chatId) {

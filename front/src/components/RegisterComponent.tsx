@@ -13,8 +13,7 @@ const RegisterComponent: React.FC = () => {
     e.preventDefault();
     setError(null);
     try {
-      const user = await userService.create(name, email, password);
-      console.log('User registered:', user);
+      await userService.create(name, email, password);
       navigate('/auth/login');
     } catch (error) {
       console.error('Registration failed:', error);
