@@ -1,0 +1,104 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding: 5px;
+  height: 350px;
+  background-color: #15121262;
+  border-radius: 10px;
+  border: #397ec7 1px solid;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 10%;
+  width: 100%;
+  background-color: #454647;
+}
+
+.messageBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 80%;
+  width: 100%;
+  background-color: rgb(128, 138, 138);
+}
+
+.form {
+  display: flex;
+  gap: 10px;
+  height: 10%;
+  width: 100%;
+  background-color: rgb(58, 58, 62);
+}
+
+input {
+  width: 80%;
+}
+
+.sender {
+  width: 70%;
+  background-color: brown;
+  padding: 5px;
+  border-radius: 10px 0 0 10px;
+  margin-left: auto;
+}
+
+.recipient {
+  width: 70%;
+  background-color: rgb(42, 93, 165);
+  padding: 5px;
+  border-radius: 0 10px 10px 0;
+}
+
+.name {
+  font-size: 10px;
+  color: black;
+}
+
+.text {
+  font-size: 10px;
+}
+
+.btnLeave {
+  background-color: #ff4d4d;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btnSend {
+  background-color: #20c16e;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+li {
+  font-size: 5px;
+}
+
+ul {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  padding: 10px;
+}
+
+.timestamp {
+  font-size: 5px;
+  color: #888;
+  text-align: right;
+}
