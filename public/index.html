@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chat</title>
+</head>
+<body>
+  <div>
+    <h1>Chat Application</h1>
+    <input type="text" id="username" placeholder="Enter your username">
+    <input type="text" id="room" placeholder="Enter room name">
+    <button onclick="connect()">Join Room</button>
+  </div>
+
+  <div id="chat" style="display:none;">
+    <h2 id="roomName"></h2>
+    <div id="messages" style="border: 1px solid #000; height: 200px; overflow-y: auto;"></div>
+    <input type="text" id="message" placeholder="Type a message">
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="createRoom()">Create Room</button>
+    <button onclick="renameRoom()">Rename Room</button>
+    <button onclick="deleteRoom()">Delete Room</button>
+  </div>
+
+  <script>
+    let socket;
+    let username;
+    let currentRoom;
+
+    function connect() {
+      username = document.getElementById('username').value;
+      currentRoom = document.getElementById('room').value;
+
+      if (!username || !currentRoom) {
+        return alert('Please enter both username and room name');
+      }
+
+      socket = new WebSocket('ws://localhost:8080');
+
+      socket.onopen = () => {
+        document.getElementById('chat').style.display = 'block';
+        document.getElementById('roomName').innerText = `Room: ${currentRoom}`;
+        socket.send(JSON.stringify({ type: 'join', room: currentRoom }));
+      };
+
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === 'history') {
+          document.getElementById('messages').innerHTML = '';
+          data.messages.forEach((msg) => {
+            addMessageToChat(msg.time, msg.author, msg.text);
+          });
+        }
+
+        if (data.type === 'message') {
+          const { time, author, text } = data.message;
+          addMessageToChat(time, author, text);
+        }
+
+        if (data.type === 'roomCreated') {
+          alert(`Room "${data.room}" created`);
+        }
+
+        if (data.type === 'roomRenamed') {
+          alert(`Room renamed from "${data.oldName}" to "${data.newName}"`);
+        }
+
+        if (data.type === 'roomDeleted') {
+          alert(`Room "${data.room}" deleted`);
+        }
+      };
+    }
+
+    function addMessageToChat(time, author, text) {
+      const msgElem = document.createElement('p');
+      msgElem.innerText = `${time} - ${author}: ${text}`;
+      document.getElementById('messages').appendChild(msgElem);
+      document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+    }
+
+    function sendMessage() {
+      const message = document.getElementById('message').value;
+      if (!message) return;
+
+      socket.send(JSON.stringify({
+        type: 'message',
+        author: username,
+        text: message,
+      }));
+      document.getElementById('message').value = '';
+    }
+
+    function createRoom() {
+      const roomName = prompt('Enter room name:');
+      if (roomName) {
+        socket.send(JSON.stringify({
+          type: 'createRoom',
+          room: roomName,
+        }));
+      }
+    }
+
+    function renameRoom() {
+      const oldName = prompt('Enter current room name:');
+      const newName = prompt('Enter new room name:');
+      if (oldName && newName) {
+        socket.send(JSON.stringify({
+          type: 'renameRoom',
+          oldName,
+          newName,
+        }));
+      }
+    }
+
+    function deleteRoom() {
+      const roomName = prompt('Enter room name to delete:');
+      if (roomName) {
+        socket.send(JSON.stringify({
+          type: 'deleteRoom',
+          room: roomName,
+        }));
+      }
+    }
+  </script>
+</body>
+</html>
