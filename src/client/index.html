@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NODEJS CHAT APP</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>Chat App</h1>
+      <div class="username">
+        <label for="username">Ваше ім'я:</label>
+        <input type="text" id="username" placeholder="Введіть ім'я">
+        <button id="save-username">Зберегти</button>
+      </div>
+
+      <div class="room">
+        <label for="room-name">Назва кімнати:</label>
+        <input type="text" id="room-name" placeholder="Введіть назву кімнати">
+        <button id="create-room">Створити кімнату</button>
+        <button id="join-room">Приєднатися</button>
+      </div>
+
+      <div id="chat">
+        <div id="messages"></div>
+        <div class="message-input">
+          <input type="text" id="message" placeholder="Введіть повідомлення">
+          <button id="send-message">Надіслати</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
