@@ -16,7 +16,16 @@ const getMessages = async (req, res) => {
 const createMessage = async (req, res) => {
   try {
     const { roomId } = req.params;
-    const { content } = req.body;
+    let content = req.body.content;
+
+    content = content.trim();
+
+    if (!content || typeof content !== 'string' || content.length < 1) {
+      res.status(400).send('Bad Request');
+
+      return;
+    }
+
     const room = await roomModel.findById(roomId).exec();
 
     if (!room) {

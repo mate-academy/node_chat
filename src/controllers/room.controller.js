@@ -14,7 +14,16 @@ const getRooms = async (_req, res) => {
 
 const createRoom = async (req, res) => {
   try {
-    const { name } = req.body;
+    let name = req.body.name;
+
+    name = name.trim();
+
+    if (!name || typeof name !== 'string' || name.length < 3) {
+      res.status(400).send('Bad Request');
+
+      return;
+    }
+
     const room = await roomModel.create({
       name,
       owner: req.user.username,
@@ -61,7 +70,7 @@ const deleteRoom = async (req, res) => {
     const io = SocketService.getInstance().getSocket();
 
     io.emit('message', {
-      type: 'delte-room',
+      type: 'delete-room',
       payload: {
         id: room._id,
       },
