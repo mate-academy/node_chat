@@ -77,7 +77,7 @@ function ChatApp() {
           ws.send(JSON.stringify({ type: "message", text: message, author: username, time: new Date().toLocaleTimeString() }));
             setMessage('');
         }
-    }, [message]);
+    }, [message, username]);
 
     const memoizedMessages = useMemo(() => {
         return messages.map((msg, index) => <ChatMessage key={index} message={msg} />);
@@ -89,7 +89,7 @@ function ChatApp() {
                 <div>
                     <h2>Введіть ваше ім'я:</h2>
                     <input type="text" onChange={(e) => setUsername(e.target.value)} placeholder="Ваше ім'я" />
-                    <button onClick={() => localStorage.setItem("username", username)}>Зберегти</button>
+                    <button onClick={() => localStorage.setItem('username', username)}>Зберегти</button>
                 </div>
             ) : !joined ? (
                 <div>
@@ -108,7 +108,8 @@ function ChatApp() {
                     <button onClick={sendMessage}>Відправити</button>
                     <hr />
                     <input type="text" onChange={(e) => renameRoom(e.target.value)} placeholder="Нова назва кімнати" />
-                    <button onClick={() => renameRoom(room)}>Перейменувати</button>
+                    <button onClick={(e) => renameRoom(e.target.value)}>Перейменувати</button>
+                    {/* <button onClick={() => renameRoom(room)}>Перейменувати</button> */}
                     <button onClick={deleteRoom}>Видалити кімнату</button>
                 </div>
             )}
