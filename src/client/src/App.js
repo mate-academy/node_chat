@@ -74,7 +74,7 @@ function ChatApp() {
 
     const sendMessage = useCallback(() => {
         if (message.trim()) {
-            ws.send(JSON.stringify({ type: "message", text: message }));
+          ws.send(JSON.stringify({ type: "message", text: message, author: username, time: new Date().toLocaleTimeString() }));
             setMessage('');
         }
     }, [message]);
