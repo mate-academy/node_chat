@@ -29,10 +29,10 @@ const UsersState = {
   },
 
   removeRoom(room) {
-    if (![...this.users].some((user) => user.room === room)) {
+    if (![...this.users].some(user => user.room === room)) {
       this.rooms.delete(room);
     }
-  },
+  }
 };
 
 const io = new Server(expressServer, {
@@ -46,7 +46,6 @@ const io = new Server(expressServer, {
 
 io.on('connection', (socket) => {
   console.log(`User ${socket.id} connected`);
-  socket.emit('message', buildMsg(ADMIN, 'Welcome to Chat!'));
 
   socket.emit('roomList', { rooms: [...UsersState.rooms] });
 
@@ -56,19 +55,14 @@ io.on('connection', (socket) => {
 
     if (prevRoom) {
       socket.leave(prevRoom);
-      io.to(prevRoom).emit(
-        'message',
-        buildMsg(ADMIN, `${name} has left the room`),
-      );
+      io.to(prevRoom).emit('message', buildMsg(ADMIN, `${name} has left the room`));
     }
 
     const user = activateUser(socket.id, name, room);
     socket.join(user.room);
 
     socket.emit('message', buildMsg(ADMIN, `You joined ${user.room}`));
-    socket.broadcast
-      .to(user.room)
-      .emit('message', buildMsg(ADMIN, `${user.name} joined the room`));
+    socket.broadcast.to(user.room).emit('message', buildMsg(ADMIN, `${user.name} joined the room`));
 
     io.to(user.room).emit('userList', { users: getUsersInRoom(user.room) });
     updateRoomList();
@@ -82,10 +76,7 @@ io.on('connection', (socket) => {
       if (user.room === oldRoom) user.room = newRoom;
     });
 
-    io.emit(
-      'message',
-      buildMsg(ADMIN, `Room "${oldRoom}" was renamed to "${newRoom}"`),
-    );
+    io.emit('message', buildMsg(ADMIN, `Room "${oldRoom}" was renamed to "${newRoom}"`));
     updateRoomList();
   });
 
@@ -102,10 +93,7 @@ io.on('connection', (socket) => {
     userLeavesApp(socket.id);
 
     if (user) {
-      io.to(user.room).emit(
-        'message',
-        buildMsg(ADMIN, `${user.name} has left the room`),
-      );
+      io.to(user.room).emit('message', buildMsg(ADMIN, `${user.name} has left the room`));
     }
 
     updateRoomList();
@@ -114,12 +102,12 @@ io.on('connection', (socket) => {
 
   socket.on('message', ({ name, text }) => {
     const room = getUser(socket.id)?.room;
-    if (room) io.to(room).emit('message', buildMsg(name, text));
+    if (room) io.to(room).emit('message', buildMsg(name, text, Date.now()));
   });
 });
 
-function buildMsg(name, text) {
-  return { name, text };
+function buildMsg(name, text, time = Date.now()) {
+  return { name, text, time };
 }
 
 function activateUser(id, name, room) {

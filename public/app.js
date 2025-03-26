@@ -9,11 +9,20 @@ const renameRoomBtn = document.querySelector('#rename-room');
 const deleteRoomBtn = document.querySelector('#delete-room');
 
 document.addEventListener('DOMContentLoaded', () => {
+  const storedName = localStorage.getItem('chatUsername');
+  if (storedName) {
+    nameInput.value = storedName;
+  }
+
   document.querySelector('.form-msg').addEventListener('submit', sendMessage);
   document.querySelector('.form-join').addEventListener('submit', enterRoom);
 
   if (renameRoomBtn) renameRoomBtn.addEventListener('click', renameRoom);
   if (deleteRoomBtn) deleteRoomBtn.addEventListener('click', deleteRoom);
+});
+
+nameInput.addEventListener('input', () => {
+  localStorage.setItem('chatUsername', nameInput.value);
 });
 
 function sendMessage(e) {
@@ -56,7 +65,7 @@ function deleteRoom() {
 }
 
 socket.on('message', (data) => {
-  const { name, text } = data;
+  const { name, text, time } = data;
   const li = document.createElement('li');
   li.className = 'post';
   if (name === nameInput.value) li.classList.add('post--left');
@@ -65,6 +74,7 @@ socket.on('message', (data) => {
   li.innerHTML = `
         <div class="post__header">
             <span class="post__header--name">${name}</span>
+            <span class="post__header--time">${formatTime(time)}</span>
         </div>
         <div class="post__text">${text}</div>
     `;
@@ -84,4 +94,9 @@ function showRooms(rooms) {
     li.textContent = room;
     roomList.appendChild(li);
   });
+}
+
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
 }
