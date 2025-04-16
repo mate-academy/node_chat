@@ -1,0 +1,107 @@
+.Message {
+	width: fit-content;
+	max-width: 80%;
+	padding: 1rem;
+	background-color: #1a1a1a;
+	margin-top: 0.3rem;
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+	gap: 1.5rem;
+}
+
+.Message--me {
+	margin-left: auto;
+}
+
+.Message__cnt {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.Message__cnt--left {
+	align-items: flex-start;
+}
+
+.Message__cnt--right {
+	align-items: flex-end;
+}
+
+.Message__author {
+	font-size: 1rem;
+	font-weight: 500;
+	color: #3cc64e;
+}
+
+.Message--me .Message__author {
+	color: #646cff;
+}
+
+.Message--me .Message__btn {
+	visibility: visible;
+	opacity: 1;;
+}
+
+.Message--editable .Message__btn--delete {
+	visibility: visible;
+	opacity: 1;
+}
+
+.Message__text {
+	font-size: 1.2rem;
+	word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  word-break: break-word; 
+  white-space: pre-wrap;
+}
+
+.Message__edit {
+	width: 100%;
+}
+
+.Message__btns {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.Message__btn {
+	padding: 0.3rem;
+	background-color: #242424;
+	visibility: hidden;
+	opacity: 0;
+}
+
+.Message__btn:disabled {
+	cursor: not-allowed;
+	border-color: #242424;
+}
+
+.Message__btn--edit:hover {
+	border-color: #f5c60a;
+}
+.Message__btn--delete:hover {
+	border-color: #ff4d4d;
+}
+.Message__btn--save:hover {
+	border-color: #4df50a;
+}
+.Message__btn--cancel:hover {
+	border-color: #ff2626;
+}
+
+.Message__date {
+	font-size: 0.8rem;
+	color: #ff6868;
+	align-self: flex-end;
+	position: relative;
+	top: 0.5rem;
+	display: flex;
+	gap: 0.2rem;
+}
+
+.Message__alert {
+	font-style: italic;
+	color: #ffa8a8;
+}

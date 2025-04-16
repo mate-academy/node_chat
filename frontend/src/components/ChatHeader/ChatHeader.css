@@ -1,0 +1,20 @@
+.ChatHeader {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	gap: 1rem;
+}
+
+.ChatHeader__label {
+	font-size: 1.4rem;
+	font-weight: 500;
+	color: #646cff;
+}
+
+.ChatHeader__btn{
+	font-size: 1.5rem;
+	padding: 0.5rem;
+}
+.ChatHeader__btn:hover {
+	border-color: red;
+}

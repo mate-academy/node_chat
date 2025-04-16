@@ -1,0 +1,17 @@
+.NewMessageForm {
+	display: flex;
+	gap: 1rem;
+}
+
+.NewMessageForm__input {
+	width: 100%;
+}
+
+.NewMessageForm__btn {
+	padding: 0.5rem 1rem;
+	font-size: 1.5rem;
+}
+
+.NewMessageForm__btn:hover {
+	border-color: #22fe00;
+}

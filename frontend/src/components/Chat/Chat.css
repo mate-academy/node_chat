@@ -1,0 +1,22 @@
+.Chat {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.Chat__title {
+	margin: 0;
+	text-align: center;
+}
+
+.Chat__header {
+	margin-top: 1rem;
+}
+
+.Chat__newMessageForm {
+	margin-top: 1.5rem;
+}
+
+.Chat__messages {
+	margin-top: 2rem;
+}
