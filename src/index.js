@@ -28,6 +28,7 @@ app.post('/messages', (req, res) => {
   };
 
   io.emit('message', message);
+  messages.push(message);
 
   res.status(200).json({ success: true });
 });
@@ -67,8 +68,6 @@ io.on('connection', (socket) => {
     } catch (error) {
       console.log(error, 'error');
     }
-
-    socket.to(roomId).emit('message', `Пользователь ${socket.id} присоединился`);
   });
 
   socket.on('renameRoom', (roomId, newName) => {
