@@ -1,0 +1,39 @@
+// my-fullstack-app/.vscode/settings.json
+{
+  // Set Prettier as the default formatter for relevant languages
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Enable format on save
+  "editor.formatOnSave": true,
+
+  // Enable ESLint auto-fixing on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit" // or true pre VSCode 1.88
+  },
+
+  // Tell ESLint to validate these file types
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}

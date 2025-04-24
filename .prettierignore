@@ -1,2 +1,16 @@
-/node_modules
-/dist
+# my-fullstack-app/.prettierignore
+
+# Dependencies
+node_modules/
+
+# Build output
+client/build/
+server/dist/
+
+# Lock files
+package-lock.json
+client/package-lock.json
+server/package-lock.json
+
+# Env files
+.env*
