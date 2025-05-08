@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @unique
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  token        Token?
+  messages     Message[]
+  memberships  Member[]
+  createdRooms Room[]
+
+  @@map("users")
+  @@index([name])
+}
+
+model Token {
+  id           String   @id @default(uuid()) @db.Uuid
+  token        String   @unique
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  userId       String   @unique @map("user_id") @db.Uuid
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
+  @@index([token])
+}
+
+model Room {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String    @unique
+  updatedAt    DateTime? @map("updated_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  messages     Message[]
+  members      Member[]
+
+  creatorId    String   @map("creator_id") @db.Uuid
+  creator      User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@map("rooms")
+  @@index([name])
+}
+
+model Member {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  roomId       String   @map("room_id") @db.Uuid
+  room         Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  userId       String   @map("user_id") @db.Uuid
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@map("members")
+  @@index([roomId, userId])
+}
+
+model Message {
+  id           Int      @id @default(autoincrement())
+  text         String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  roomId       String   @map("room_id") @db.Uuid
+  room         Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  authorId     String   @map("author_id") @db.Uuid
+  author       User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+  @@index([roomId, authorId])
+}
