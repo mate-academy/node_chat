@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <!-- Форма входу -->
+        <div id="loginForm" class="mb-4">
+            <h2 class="text-2xl font-bold mb-4">Вхід до чату</h2>
+            <div class="flex gap-2">
+                <input type="text" id="username" placeholder="Ваше ім'я" class="flex-1 p-2 border rounded">
+                <button id="loginBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Увійти</button>
+            </div>
+        </div>
+
+        <!-- Основний інтерфейс чату -->
+        <div id="chatInterface" class="hidden">
+            <!-- Верхня панель з ім'ям користувача та кнопкою виходу -->
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Чат</h2>
+                <div class="flex items-center gap-4">
+                    <span id="currentUsername" class="text-gray-600"></span>
+                    <button id="logoutBtn" class="bg-red-500 text-white px-4 py-2 rounded">Вийти</button>
+                </div>
+            </div>
+
+            <!-- Керування кімнатами -->
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold mb-4">Кімнати</h2>
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="newRoomName" placeholder="Назва нової кімнати" class="flex-1 p-2 border rounded">
+                    <button id="createRoomBtn" class="bg-green-500 text-white px-4 py-2 rounded">Створити кімнату</button>
+                </div>
+                <div id="roomList" class="grid grid-cols-3 gap-2"></div>
+            </div>
+
+            <!-- Чат -->
+            <div class="bg-white rounded-lg shadow-lg p-4">
+                <h3 id="currentRoom" class="text-xl font-bold mb-4">Виберіть кімнату</h3>
+                <div id="messages" class="h-96 overflow-y-auto mb-4"></div>
+                <div class="flex gap-2">
+                    <input type="text" id="messageInput" placeholder="Ваше повідомлення" class="flex-1 p-2 border rounded">
+                    <button id="sendBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Надіслати</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>

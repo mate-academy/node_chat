@@ -1,0 +1,51 @@
+.message {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #f3f4f6;
+}
+
+.message .author {
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.message .time {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.room-item {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.room-item:hover {
+    background-color: #e5e7eb;
+}
+
+.room-item.active {
+    background-color: #2563eb;
+    color: white;
+}
+
+#messages {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+#messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+#messages::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+}
