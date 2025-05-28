@@ -70,6 +70,12 @@ function socketHandler(ws) {
 
             rooms.delete(data.oldRoom);
             rooms.set(data.newRoom, messages);
+
+            clients.forEach((client) => {
+              if (client.room === data.oldRoom) {
+                client.room = data.newRoom;
+              }
+            });
             sendToAll({ type: 'rooms_list', rooms: [...rooms.keys()] });
           }
           break;
