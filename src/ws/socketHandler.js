@@ -19,7 +19,7 @@ function socketHandler(ws) {
         case 'create_room':
           if (!rooms.has(data.room)) {
             rooms.set(data.room, []);
-            sendToAll({ type: 'rooms_list', rooms: [...rooms.keys()] })
+            sendToAll({ type: 'rooms_list', rooms: [...rooms.keys()] });
           }
           break;
 
@@ -29,7 +29,13 @@ function socketHandler(ws) {
 
             userData.room = data.room;
             clients.set(ws, userData);
-            ws.send(JSON.stringify({ type: 'room_history', messages: rooms.get(data.room) }));
+
+            ws.send(
+              JSON.stringify({
+                type: 'room_history',
+                messages: rooms.get(data.room),
+              }),
+            );
           }
           break;
 
@@ -45,7 +51,7 @@ function socketHandler(ws) {
             author: user.username,
             time: new Date().toISOString(),
             text: data.text,
-          }
+          };
 
           rooms.get(user.room).push(msg);
           broadcastToRoom(user.room, { type: 'new_message', message: msg });
@@ -69,6 +75,7 @@ function socketHandler(ws) {
           break;
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Invalid message:', err);
     }
   });
