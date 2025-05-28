@@ -1,0 +1,44 @@
+.room_list {
+  max-width: 500px;
+  margin: 2rem;
+  padding: 1rem;
+  background: #fffdfc;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.room_listed {
+  list-style: none;
+  padding: 0;
+}
+
+.room_item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.room_list input {
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.room_list button {
+  background: #38bdf8;
+  border: none;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.room_list button:hover {
+  background: #0ea5e9;
+}
+
+.active {
+  font-weight: bold;
+  color: #4f46e5;
+}

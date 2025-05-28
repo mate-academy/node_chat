@@ -1,0 +1,8 @@
+.app {
+  min-height: 100vh;
+  background-image: url('./assets/10254589.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+}
