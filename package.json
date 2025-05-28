@@ -1,0 +1,8 @@
+{
+  "name": "root-placeholder",
+  "version": "1.0.0",
+  "description": "Temporary root package.json to satisfy GitHub Actions",
+  "scripts": {
+    "test": "echo \"No tests in root. Skipping...\""
+  }
+}
