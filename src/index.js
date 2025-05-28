@@ -6,6 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const socketHandler = require('./ws/socketHandler');
 const wss = new WebSocket.Server({ server });
+const path = require('path');
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,12 +16,14 @@ app.use((req, res, next) => {
 
 wss.on('connection', socketHandler);
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('/', (req, res) => {
-  res.send('WebSocket Chat Server is running');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
