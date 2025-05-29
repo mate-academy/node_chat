@@ -97,9 +97,10 @@ function App() {
 
     socket.send(
       JSON.stringify({
-      type: 'rename-room',
-      payload: { oldName: room, newName: trimmed },
-    }));
+        type: 'rename-room',
+        payload: { oldName: room, newName: trimmed },
+      }),
+    );
 
     setRoom(newName);
     setNewRoomName('');
@@ -161,7 +162,10 @@ function App() {
               <form
                 action="#"
                 className="mt-4 flex gap-2"
-                onSubmit={handleMessageSend}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleMessageSend();
+                }}
               >
                 <input
                   ref={inputRef}

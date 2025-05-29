@@ -14,7 +14,14 @@ export function Login({ setUsername }) {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Enter your username:</h1>
-      <form action="#" className="flex gap-2" onSubmit={handleNameSubmit}>
+      <form
+        action="#"
+        className="flex gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleNameSubmit();
+        }}
+      >
         <input
           className="border p-2 rounded"
           placeholder="Your name"

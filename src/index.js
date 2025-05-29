@@ -68,7 +68,8 @@ wss.on('connection', async (ws) => {
       try {
         await handlers[type](ws, payload);
       } catch (err) {
-        throw Error(`Error in ${type}: ${err.message}`);
+        // eslint-disable-next-line no-console
+        console.error(`Error in ${type}: ${err.message}`);
       }
     }
   });
