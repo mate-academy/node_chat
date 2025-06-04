@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: Node Chat
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    rootDir: server # <- важливо, якщо сервер у підпапці!
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: my-database
+          property: connectionString
