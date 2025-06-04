@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Application</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      #chat {
+        margin-top: 20px;
+      }
+      .message {
+        margin-bottom: 10px;
+      }
+      .message strong {
+        color: #007bff;
+      }
+      .message span {
+        font-size: 0.9em;
+        color: grey;
+      }
+      .message p {
+        margin: 0;
+      }
+      .user-message {
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Chat Application</h1>
+
+    <div>
+      <label for="username">Set Username:</label>
+      <input type="text" id="username" placeholder="Enter username" />
+      <button id="setUsernameButton">Set Username</button>
+    </div>
+
+    <div>
+      <label for="room">Room Name:</label>
+      <input type="text" id="room" placeholder="Room name" />
+      <button id="createRoomButton">Create Room</button>
+    </div>
+
+    <div>
+      <label for="roomId">Join Room by ID:</label>
+      <input type="text" id="roomId" placeholder="Room ID" />
+      <button id="joinRoomButton">Join Room</button>
+    </div>
+
+    <div id="chat"></div>
+
+    <div>
+      <input type="text" id="message" placeholder="Write a message" disabled />
+      <button id="sendMessageButton" disabled>Send</button>
+    </div>
+
+    <div id="roomControls" style="display: none">
+      <input type="text" id="newRoomName" placeholder="New room name" />
+      <button id="renameRoomButton">Rename Room</button>
+      <button id="deleteRoomButton">Delete Room</button>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
