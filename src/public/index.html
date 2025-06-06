@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket.io Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #2d3748;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4a5568;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #718096;
+      }
+      .system-message {
+        color: #a0aec0;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-800 text-white font-sans">
+    <!-- Username Modal Overlay -->
+    <div
+      id="username-modal"
+      class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    >
+      <div class="bg-gray-700 p-8 rounded-lg shadow-xl text-center">
+        <h2 class="text-2xl font-bold mb-4">Enter Your Username</h2>
+        <form id="username-form">
+          <input
+            id="username-input"
+            type="text"
+            placeholder="Your cool name..."
+            class="w-full bg-gray-800 border border-gray-600 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+          <button
+            type="submit"
+            class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-300"
+          >
+            Enter Chat
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Chat Interface -->
+    <div id="chat-container" class="hidden h-screen w-screen flex">
+      <!-- Sidebar for Rooms -->
+      <div class="w-1/4 bg-gray-900 flex flex-col p-4 border-r border-gray-700">
+        <div class="flex-shrink-0 mb-4">
+          <h1 class="text-2xl font-bold">Chat Rooms</h1>
+          <p class="text-sm text-gray-400">
+            Welcome, <span id="display-username" class="font-bold"></span>!
+          </p>
+        </div>
+
+        <div id="room-list" class="flex-grow overflow-y-auto mb-4">
+          <!-- Room items will be populated by JS -->
+        </div>
+
+        <div class="flex-shrink-0 space-y-2">
+          <button
+            id="create-room-btn"
+            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md text-sm"
+          >
+            Create Room
+          </button>
+          <button
+            id="rename-room-btn"
+            class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-md text-sm"
+          >
+            Rename Current
+          </button>
+          <button
+            id="delete-room-btn"
+            class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md text-sm"
+          >
+            Delete Current
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Chat Area -->
+      <div class="w-3/4 flex flex-col">
+        <div id="chat-header" class="p-4 bg-gray-700 border-b border-gray-600">
+          <h2 id="current-room-name" class="text-xl font-semibold">
+            No room selected
+          </h2>
+        </div>
+        <!-- Messages Display -->
+        <div
+          id="messages"
+          class="flex-grow p-4 overflow-y-auto bg-gray-800 flex flex-col space-y-4"
+        >
+          <!-- Messages will be populated by JS -->
+        </div>
+
+        <!-- Message Input Form -->
+        <div class="p-4 bg-gray-700 border-t border-gray-600">
+          <form id="message-form" class="flex space-x-4">
+            <input
+              id="message-input"
+              type="text"
+              placeholder="Type a message..."
+              autocomplete="off"
+              class="flex-grow bg-gray-800 border border-gray-600 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button
+              type="submit"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
