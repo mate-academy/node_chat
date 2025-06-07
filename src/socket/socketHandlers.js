@@ -17,6 +17,10 @@ function setupSocketHandlers(io) {
       const user = userManager.getUser(socket.id);
 
       if (!user) {
+        if (callback) {
+          callback({ status: 'error', message: 'User not found' });
+        }
+
         return;
       }
 
