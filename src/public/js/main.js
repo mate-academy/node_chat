@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const socket = window.io();
 
   const state = {
+    socket,
     username: window.localStorage.getItem('chat_username'),
     currentRoomId: null,
-    socket: socket,
   };
 
   initializeAuth(state);

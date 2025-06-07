@@ -61,6 +61,7 @@ function initializeUI(state) {
       )
     ) {
       state.socket.emit('delete room', state.currentRoomId);
+      state.currentRoomId = null;
     }
   });
 }
