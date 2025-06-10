@@ -1,16 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 
-const API_URL = 'http://localhost:3005/messages';
-
-export const MessageForm = ({ room }) => {
+export const MessageForm = ({ room, onSend }) => {
   const [text, setText] = useState('');
-
-  function sendMessage(text, room) {
-    const author = localStorage.getItem('username');
-  
-    return axios.post(API_URL, { text, author, room });
-  }
 
   return (
     <form
@@ -18,9 +9,9 @@ export const MessageForm = ({ room }) => {
       onSubmit={async (event) => {
         event.preventDefault();
         if (!text.trim()) return;
-        
-        await sendMessage(text, room);
-        
+
+        await onSend(text, room);
+
         setText('');
       }}
     >

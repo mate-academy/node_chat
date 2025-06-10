@@ -24,6 +24,12 @@ export function App() {
     setMessages(res.data.reverse());
   };
 
+  const sendMessage = (text, room) => {
+    const author = localStorage.getItem('username');
+
+    return axios.post(`${API}/messages`, { text, author, room });
+  }
+
   const saveData = (msg) => {
     setMessages((prev) => [msg, ...prev]);
   };
@@ -172,7 +178,7 @@ export function App() {
           <>
             <h1 className="title mt-6">Chat application</h1>
 
-            <MessageForm room={currentRoom} />
+            <MessageForm room={currentRoom} onSend={sendMessage} />
             <MessageList messages={messages} />
           </>
         )}

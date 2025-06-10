@@ -25,7 +25,7 @@ app.post('/messages', (req, res) => {
     text,
     author,
     room,
-    time: new Date(),
+    time: new Date().toISOString(),
   };
 
   rooms.get(room).push(message);
