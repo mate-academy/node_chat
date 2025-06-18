@@ -1,0 +1,115 @@
+@use '../../utils/scss/variables.scss' as var;
+
+.room {
+  background-color: var.$secondary-color;
+  border-radius: 50px;
+
+  padding: 20px;
+
+  &__wrapper {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  &__chat {
+    width: 100%;
+    height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    background-color: white;
+    border-radius: 50px;
+
+    padding: 20px;
+
+    overflow-y: auto;
+  }
+
+  &__form {
+    display: flex;
+    gap: 20px;
+  }
+
+  &__input {
+    height: 50px;
+    width: 100%;
+
+    border-radius: 10px;
+
+    padding: 10px;
+  }
+
+  &__button {
+    width: 100px;
+    height: 100%;
+    padding: 0 5px 3px;
+
+    background-color: rgb(64, 220, 87);
+    color: white;
+
+    font-size: 16px;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: var.$secondary-color;
+      color: black;
+    }
+  }
+}
+
+.message {
+  width: max-content;
+
+  border-radius: 10px;
+  padding: 10px;
+
+  list-style: none;
+  background-color: var.$secondary-color;
+
+  &__name {
+    font-weight: bolder;
+    color: var.$primary-color;
+  }
+
+  &__content {
+    font-size: 18px;
+  }
+
+  &__date {
+    font-size: 12px;
+    text-align: end;
+  }
+
+  &-activeUser {
+    width: max-content;
+
+    border-radius: 10px;
+    padding: 10px;
+
+    list-style: none;
+    background-color: var.$primary-color;
+    align-self: flex-end;
+  }
+}
+
+.selectRoom {
+  &__wrapper {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    color: grey;
+  }
+}
