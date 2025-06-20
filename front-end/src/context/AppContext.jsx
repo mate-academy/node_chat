@@ -35,7 +35,7 @@ export const AppProvider = ({ children }) => {
 
       navigate('/rooms');
 
-      console.log('Login successful:', response.data);
+      console.log('Login successful:', user.data);
     } catch (error) {
       console.error('Login failed:', error.response?.data || error.message);
     }

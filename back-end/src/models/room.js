@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import { client } from '../utils/db.js';
+import { sequelize } from '../utils/db.js';
 
-export const Room = client.define('Room', {
+export const Room = sequelize.define('Room', {
   roomName: {
     type: DataTypes.STRING,
     allowNull: false,

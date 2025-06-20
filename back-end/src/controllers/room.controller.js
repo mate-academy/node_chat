@@ -43,8 +43,6 @@ const join = async (req, res) => {
   } catch (error) {
     console.error('Error joining room:', error);
   }
-
-  res.status(201).send();
 };
 
 const remove = async (req, res) => {

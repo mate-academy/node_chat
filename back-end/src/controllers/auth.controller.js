@@ -17,13 +17,21 @@ const login = async (req, res) => {
     // localStorage.setItem('activeUser', JSON.stringify(activeUser));
 
     res.send(activeUser);
-  } catch {
-    throw ApiError.badRequest('Invalid user');
+  } catch (e) {
+    throw ApiError.badRequest(e);
   }
 };
 
 const getUser = async (req, res) => {
-  const activeUser = req.cookies.activeUser;
+  const activeUserCookie = req.cookies.activeUser;
+  let activeUser;
+
+  try {
+    activeUser = JSON.parse(activeUserCookie);
+  } catch (err) {
+    throw ApiError.unauthorized(err);
+  }
+
   const user = await userService.getUser(activeUser.name);
 
   res.send(user);

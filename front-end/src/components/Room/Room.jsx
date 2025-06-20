@@ -14,9 +14,9 @@ export const Room = () => {
   const [textInput, setTextInput] = useState('');
   const messagesEndRef = useRef(null);
 
-  console.log(user.name);
+  // console.log(user.name);
 
-  console.log(messages);
+  // console.log(messages);
 
   const getMessages = async () => {
     try {
@@ -49,9 +49,11 @@ export const Room = () => {
     socket.addEventListener('message', (event) => {
       const content = JSON.parse(event.data);
 
-      console.log(content);
-
-      setMessages((prev) => [...prev, content]);
+      if (+content.roomId === +selectedRoom.id) {
+        setMessages((prev) => [...prev, content]);
+      } else {
+        console.log('Wrong room');
+      }
     });
 
     return () => {
@@ -105,7 +107,7 @@ export const Room = () => {
                   className={styles['message-activeUser']}
                   key={message.createdAt}
                 >
-                  {console.log(user.id, message?.UserId)}
+                  {/* {console.log(user.id, message?.UserId)} */}
                   <div className={styles.message__content}>
                     {message.content}
                   </div>
@@ -116,7 +118,7 @@ export const Room = () => {
                 </li>
               ) : (
                 <li className={styles.message} key={message.createdAt}>
-                  {console.log(user.id, message?.userId)}
+                  {/* {console.log(user.id, message?.userId)} */}
 
                   <div className={styles.message__name}>
                     {message?.User?.name || message?.name}

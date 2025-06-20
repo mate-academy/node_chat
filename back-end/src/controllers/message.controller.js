@@ -14,12 +14,13 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  const { content, name, id } = req.body;
+  const { content, name } = req.body;
   const { roomId } = req.params;
   const activeUser = req.cookies.activeUser;
+  const id = activeUser.id;
   // const { id } = await userService.getUser(activeUser.name);
 
-  console.log(content, name, id);
+  console.log(activeUser.id);
   console.log('strange');
 
   const message = {

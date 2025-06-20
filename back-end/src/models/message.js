@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import { client } from '../utils/db.js';
+import { sequelize } from '../utils/db.js';
 
-export const Message = client.define('Message', {
+export const Message = sequelize.define('Message', {
   content: {
     type: DataTypes.TEXT,
     allowNull: false,

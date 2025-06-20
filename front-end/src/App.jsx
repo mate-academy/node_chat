@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import { AppProvider } from './context/AppContext';
-import { Navigate, Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage';
 import { HomePage } from './pages/MainPage/HomePage';
 
