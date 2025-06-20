@@ -1,0 +1,127 @@
+@use '../../utils/scss/variables.scss' as var;
+
+.menu {
+  position: relative;
+  background-color: var.$secondary-color;
+  border-radius: 50px;
+
+  padding: 20px;
+
+  &__title {
+    margin-bottom: 20px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__item {
+    list-style: none;
+
+    height: 50px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    font-size: 20px;
+
+    transition: 0.3s;
+
+    &:hover {
+      background-color: var.$primary-color;
+    }
+  }
+
+  &__item-join {
+    height: 100%;
+    padding: 0 5px 3px;
+
+    background-color: rgb(64, 220, 87);
+    color: white;
+
+    font-size: 16px;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: var.$secondary-color;
+      color: black;
+    }
+  }
+
+  &__item-delete {
+    height: 100%;
+    padding: 0 5px 3px;
+
+    background-color: rgb(220, 64, 64);
+    color: white;
+
+    font-size: 16px;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: var.$secondary-color;
+      color: black;
+    }
+  }
+
+  &__item-create {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+
+    width: 50px;
+    height: 50px;
+
+    padding: 0;
+    padding-bottom: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    border-radius: 50%;
+
+    background-color: var.$primary-color;
+  }
+
+  &__input-rename {
+    height: 100%;
+
+    border-radius: 10px;
+
+    padding: 10px;
+  }
+
+  &__form {
+    width: 300px;
+
+    position: absolute;
+    bottom: 20px;
+
+    height: 50px;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    transition: 0.3s;
+  }
+
+  &__input-create {
+    height: 50px;
+    width: 100%;
+
+    border-radius: 10px;
+
+    padding: 10px;
+  }
+}
