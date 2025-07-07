@@ -98,8 +98,20 @@ function setupSocketHandlers(io) {
     });
 
     socket.on('delete room', (roomId) => {
+      const usersInRoom = roomManager.getUsersInRoom(roomId);
+
       if (roomManager.deleteRoom(roomId)) {
         console.log(`Room deleted: ${roomId}`);
+
+        // Notifică utilizatorii din cameră
+        usersInRoom.forEach((userSocketId) => {
+          io.to(userSocketId).emit('room deleted', {
+            roomId,
+            message: 'This room has been deleted.',
+          });
+        });
+
+        // Emite lista actualizată de camere către toți
         io.emit('rooms list', roomManager.getRoomsList());
       }
     });

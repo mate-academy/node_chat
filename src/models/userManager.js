@@ -24,6 +24,15 @@ function setUserRoom(socketId, roomId) {
   return false;
 }
 
+function getUsersInRoom(roomId) {
+  return Object.entries(users)
+    .filter(([_, user]) => user.currentRoom === roomId)
+    .map(([socketId, user]) => ({
+      socketId,
+      username: user.username,
+    }));
+}
+
 function removeUser(socketId) {
   const user = users[socketId];
 
@@ -44,6 +53,7 @@ module.exports = {
   createUser,
   getUser,
   getUserRoom,
+  getUsersInRoom,
   setUserRoom,
   removeUser,
   userExists,
