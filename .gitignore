@@ -7,3 +7,10 @@ node_modules
 
 # MacOS
 .DS_Store
+
+/src/generated/prisma
+
+.env
+
+package-lock.json
+

@@ -1,0 +1,121 @@
+.registration-page {
+  background-color: beige;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: cadetblue;
+  width: 400px;
+  height: auto; 
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+  &__title {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  &__success-message {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  &__error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  &__input {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 5px 0;
+
+    label {
+      flex-shrink: 0;
+    }
+
+    input {
+      flex-grow: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  }
+
+  &__button {
+    font-size: 18px;
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    will-change: box-shadow, transform;
+    background: radial-gradient(100% 100% at 100% 0%, #89e5ff 0%, #5468ff 100%);
+    box-shadow:
+      0px 0.01em 0.01em rgb(45 35 66 / 40%),
+      0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%),
+      inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+    padding: 0 2em;
+    border-radius: 0.3em;
+    color: #fff;
+    height: 2.6em;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+    transition:
+      box-shadow 0.15s ease,
+      transform 0.15s ease;
+    margin-top: 10px;
+
+    &:hover:not(:disabled) {
+      box-shadow:
+        0px 0.1em 0.2em rgb(45 35 66 / 40%),
+        0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%),
+        inset 0px -0.1em 0px #3c4fe0;
+      transform: translateY(-0.1em);
+    }
+
+    &:active:not(:disabled) {
+      box-shadow: inset 0px 0.1em 0.6em #3c4fe0;
+      transform: translateY(0em);
+    }
+
+    &:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  &__login-link {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 15px;
+
+    &:hover {
+      text-decoration: underline;
+      color: blue;
+    }
+  }
+}

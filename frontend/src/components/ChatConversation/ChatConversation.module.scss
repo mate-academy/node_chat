@@ -1,0 +1,218 @@
+.chat-conversation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+
+  &__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #343a40;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 10px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  &__rename-button {
+    background-color: #e1ecf4;
+    border-radius: 3px;
+    border: 1px solid #7aa7c7;
+    box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #39739d;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, 'Segoe UI', 'Liberation Sans',
+      sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.15385;
+    margin: 0;
+    outline: none;
+    padding: 8px 0.8em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      background-color: #b3d3ea;
+      color: #2c5777;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 4px rgba(0, 149, 255, 0.15);
+    }
+
+    &:active {
+      background-color: #a0c7e4;
+      box-shadow: none;
+      color: #2c5777;
+    }
+  }
+
+  &__delete-button {
+    background-color: #d64545;
+    border: 1px solid #b13434;
+    border-radius: 3px;
+    box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, 'Segoe UI', 'Liberation Sans',
+      sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.15385;
+    margin: 0;
+    outline: none;
+    padding: 8px 0.8em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      background-color: #b13434;
+      color: #ffffff;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 4px rgba(255, 80, 80, 0.3);
+    }
+
+    &:active {
+      background-color: #911f1f;
+      box-shadow: none;
+      color: #ffffff;
+    }
+  }
+
+  &__messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__input-area {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  &__input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+
+    &:focus {
+      border-color: #007bff;
+    }
+  }
+
+  &__send-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &:active {
+      background-color: #004085;
+    }
+  }
+
+  &__title-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+  }
+
+  &__title-rename {
+    border-bottom: 1px dashed #555;
+    color: #555;
+    display: inline-block;
+  }
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  &--my {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &--other {
+    align-self: flex-start;
+    background-color: #e2f0fe;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  &__sender {
+    font-size: 0.8em;
+    color: #555;
+    margin-bottom: 3px;
+    font-weight: bold;
+  }
+
+  &__text {
+    margin: 0;
+    color: #333;
+  }
+
+  &__timestamp {
+    font-size: 0.8em;
+    color: #888;
+    margin-top: 5px;
+  }
+}
