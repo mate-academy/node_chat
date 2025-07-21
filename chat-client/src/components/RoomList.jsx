@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-export function RoomList({ rooms, selectedRoom, setSelectedRoom, createRoomRequest }) {
+export function RoomList({
+  rooms,
+  selectedRoom,
+  setSelectedRoom,
+  createRoomRequest,
+}) {
   const [roomError, setRoomError] = useState('');
   const [newRoomName, setNewRoomName] = useState('');
 
@@ -19,8 +24,6 @@ export function RoomList({ rooms, selectedRoom, setSelectedRoom, createRoomReque
 
     setSelectedRoom(newRoomName);
     setNewRoomName('');
-
-
   };
 
   return (
