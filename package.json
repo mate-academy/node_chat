@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "init": "mate-scripts init",
+    "dev": "node --watch --env-file=.env src/index.js",
     "start": "node src/index.js",
+    "db:setup": "node setup.js",
     "lint": "npm run format && mate-scripts lint",
     "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
     "test:only": "mate-scripts test",
@@ -17,14 +19,24 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "@mate-academy/eslint-config": "latest",
-    "@mate-academy/scripts": "^1.8.6",
+    "@mate-academy/scripts": "^2.1.1",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-node": "^11.1.0",
     "jest": "^29.7.0",
-    "prettier": "^3.3.2"
+    "postcss": "^8.5.3",
+    "prettier": "^3.3.2",
+    "tailwindcss": "^4.1.7"
   },
   "mateAcademy": {
     "projectType": "javascript"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "pg": "^8.16.0",
+    "sequelize": "^6.37.7",
+    "ws": "^8.18.2"
   }
 }
