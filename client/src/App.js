@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AuthForm } from './components/AuthForm.jsx';
-import { SidebarRooms } from './components/SidebarRooms.jsx';
-import { ChatPanel } from './components/ChatPanel.jsx';
+import { AuthForm } from './components/AuthForm.js';
+import { SidebarRooms } from './components/SidebarRooms.js';
+import { ChatPanel } from './components/ChatPanel.js';
 
 const socket = new WebSocket('ws://localhost:3005');
 
