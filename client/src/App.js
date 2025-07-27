@@ -5,6 +5,20 @@ import { ChatPanel } from './components/ChatPanel.js';
 
 const socket = new WebSocket('ws://localhost:3005');
 
+  const safeSend = (data) => {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(data));
+  } else {
+    socket.addEventListener(
+      'open',
+      () => {
+        socket.send(JSON.stringify(data));
+      },
+      { once: true }
+    );
+  }
+  }
+
 const App = () => {
   const storedNickname = localStorage.getItem('nickname') || '';
   const [chatHistory, setChatHistory] = useState([]);
@@ -43,7 +57,7 @@ const App = () => {
   useEffect(() => {
     safeSend({ type: 'list-rooms' });
 
-    if (activeRoom && nickname) {
+    if (activeRoom) {
       safeSend({
         type: 'join-room',
         payload: { room: activeRoom, username: nickname },
@@ -56,19 +70,7 @@ const App = () => {
     }
   }, [nickname, activeRoom]);
 
-  const safeSend = (data) => {
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(data));
-  } else {
-    socket.addEventListener(
-      'open',
-      () => {
-        socket.send(JSON.stringify(data));
-      },
-      { once: true }
-    );
-  }
-}
+
 
   const handleRoomCreate = (newRoomTitle) => {
     safeSend({
@@ -79,9 +81,12 @@ const App = () => {
 
   return (
     <>
-      {!storedNickname ? (
-        <AuthForm onLogin={setNickname} />
-      ) : (
+      {!nickname ? (
+          <AuthForm onLogin={(name) => {
+            setNickname(name);
+            localStorage.setItem('nickname', name);
+          }} />
+        ) : (
         <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto px-6 py-4">
           <SidebarRooms
             availableRooms={availableRooms}

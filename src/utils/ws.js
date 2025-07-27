@@ -39,7 +39,7 @@ const joinRoom = async (ws, data) => {
 
   const serialized = chatHistory.map((msg) => ({
     content: msg.content,
-    author: msg.account.nickname,
+    author: msg.Account.nickname,
     sentAt: msg.sentAt,
   }));
 
