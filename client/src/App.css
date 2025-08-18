@@ -1,0 +1,144 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+p{
+  margin: 0;
+}
+.main{
+  flex: 1 1 auto;
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding-block: 15px;
+}
+
+.message{
+  padding: 10px;
+  background-color: hsl(0, 57%, 88%);
+  border-radius: 20px;
+  max-width: max-content;
+}
+
+.message._right{
+  align-self: end;
+  background-color: #f8fbcf;
+}
+.message__name{
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.message__date{
+  color: #7e7d7d;
+  text-align: right;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  background-color: #f9d9d9;
+  padding: 15px;
+  box-shadow: 1px 1px 15px #643232;
+}
+
+.menu__link{
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #643232;
+  font-weight: 700;
+}
+
+.footer{
+  background-color: #643232;
+  padding: 15px;
+  text-align: center;
+}
+
+.form{
+  padding: 15px;
+  box-shadow: 3px 4px 14px #643232;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #643232;
+  gap: 10px;
+}
+
+.input{
+  padding: 5px;
+  border-radius: 20px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button{
+  box-sizing: border-box;
+  background-color: #643232;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  padding-block: 10px;
+  border-radius: 20px;
+}
+
+.section{
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  padding-block: 15px;
+  gap: 10px;
+}
+
+.rooms{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex: 1 1 auto;
+}
+
+.room{
+  box-sizing: border-box;
+  flex: 0 1 calc(33% - 10px);
+  box-shadow: 1px 1px 17px #e1e0e0;
+  padding: 12px;
+  border-radius: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: max-content;
+  justify-content: space-between;
+}
+
+.room .button{
+  flex: 0 1 calc(50% - 4px);
+}
+
+.subtitle{
+  padding: 0;
+  margin: 0;
+  flex: 1 1 100%;
+  text-align: center;
+  text-decoration: none;
+  color:#643232;
+  font-size: 18px;
+}
+
+.miniform{
+  flex: 1 1 100%;
+}
