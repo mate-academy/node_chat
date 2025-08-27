@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Chat App</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            height: 80vh;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 20px;
+        }
+
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .username-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .username-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .rooms-section {
+            margin-bottom: 20px;
+        }
+
+        .room-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .room-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .room-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .room-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .room-actions button {
+            padding: 5px 8px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chat-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 80%;
+        }
+
+        .message.own {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .message-text {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .input-section {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .message-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: none;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .room-form {
+            margin-bottom: 15px;
+        }
+
+        .room-form input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        .notification.info {
+            background: #17a2b8;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .user-info {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="sidebar">
+                <div class="username-section" id="usernameSection">
+                    <h3>Enter Username</h3>
+                    <input type="text" class="username-input" id="usernameInput" placeholder="Your username">
+                    <button class="btn" onclick="setUsername()">Join Chat</button>
+                </div>
+
+                <div class="user-info hidden" id="userInfo">
+                    <span id="currentUsername"></span>
+                </div>
+
+                <div class="rooms-section">
+                    <h3>Rooms</h3>
+                    <div class="room-form">
+                        <input type="text" id="newRoomInput" placeholder="New room name">
+                        <button class="btn" onclick="createRoom()">Create Room</button>
+                    </div>
+                    <div id="roomsList"></div>
+                </div>
+            </div>
+
+            <div class="main-chat">
+                <div class="chat-header">
+                    <h2 id="currentRoomName">Select a room</h2>
+                    <div class="room-actions">
+                        <button class="btn btn-secondary" onclick="showRenameForm()">Rename</button>
+                        <button class="btn btn-danger" onclick="deleteCurrentRoom()">Delete</button>
+                    </div>
+                </div>
+
+                <div class="messages-container" id="messagesContainer">
+                    <div style="text-align: center; color: #6c757d; margin-top: 50px;">
+                        <h3>Welcome to Node.js Chat!</h3>
+                        <p>Enter your username and select a room to start chatting</p>
+                    </div>
+                </div>
+
+                <div class="input-section hidden" id="inputSection">
+                    <div class="message-input-container">
+                        <textarea
+                            class="message-input"
+                            id="messageInput"
+                            placeholder="Type your message..."
+                            rows="3"
+                            onkeypress="handleKeyPress(event)"
+                        ></textarea>
+                        <button class="btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let socket;
+        let currentUsername = '';
+        let currentRoom = '';
+        let rooms = [];
+
+        // Initialize socket connection
+        function initSocket() {
+            socket = io();
+
+            socket.on('connect', () => {
+                console.log('Connected to server');
+            });
+
+            socket.on('roomHistory', (data) => {
+                displayMessages(data.messages);
+            });
+
+            socket.on('newMessage', (message) => {
+                addMessage(message);
+            });
+
+            socket.on('userJoined', (data) => {
+                addSystemMessage(`${data.username} joined the room`);
+            });
+
+            socket.on('userLeft', (data) => {
+                addSystemMessage(`${data.username} left the room`);
+            });
+
+            socket.on('roomCreated', (data) => {
+                showNotification(`Room "${data.roomName}" created successfully!`, 'success');
+                loadRooms();
+            });
+
+            socket.on('roomRenamed', (data) => {
+                showNotification(`Room "${data.oldName}" renamed to "${data.newName}"`, 'success');
+                if (currentRoom === data.oldName) {
+                    currentRoom = data.newName;
+                    document.getElementById('currentRoomName').textContent = currentRoom;
+                }
+                loadRooms();
+            });
+
+            socket.on('roomDeleted', (data) => {
+                showNotification(`Room "${data.roomName}" deleted`, 'info');
+                if (currentRoom === data.roomName) {
+                    leaveRoom();
+                }
+                loadRooms();
+            });
+
+            socket.on('error', (data) => {
+                if (data.code === 'EMPTY_MESSAGE') {
+                    showNotification('Message cannot be empty', 'error');
+                } else {
+                    showNotification(data.message, 'error');
+                }
+            });
+
+            socket.on('roomsList', (roomsList) => {
+                rooms = roomsList;
+                displayRooms();
+            });
+        }
+
+        // Set username and join chat
+        function setUsername() {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username) {
+                showNotification('Please enter a username', 'error');
+                return;
+            }
+
+            currentUsername = username;
+            localStorage.setItem('chatUsername', username);
+
+            document.getElementById('usernameSection').classList.add('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('currentUsername').textContent = username;
+
+            initSocket();
+            loadRooms();
+            joinRoom('general');
+        }
+
+        // Load rooms from server
+        function loadRooms() {
+            if (socket) {
+                socket.emit('getRooms');
+            }
+        }
+
+        // Display rooms list
+        function displayRooms() {
+            const roomsList = document.getElementById('roomsList');
+            roomsList.innerHTML = '';
+
+            rooms.forEach(room => {
+                const roomItem = document.createElement('div');
+                roomItem.className = `room-item ${room.name === currentRoom ? 'active' : ''}`;
+                roomItem.innerHTML = `
+                    <span>${room.name} (${room.userCount} users, ${room.messageCount} messages)</span>
+                `;
+                roomItem.onclick = () => joinRoom(room.name);
+                roomsList.appendChild(roomItem);
+            });
+        }
+
+        // Join a room
+        function joinRoom(roomName) {
+            if (currentRoom === roomName) return;
+
+            currentRoom = roomName;
+            document.getElementById('currentRoomName').textContent = roomName;
+            document.getElementById('inputSection').classList.remove('hidden');
+
+            if (socket) {
+                socket.emit('joinRoom', { roomName, username: currentUsername });
+            }
+
+            displayRooms();
+        }
+
+        // Leave current room
+        function leaveRoom() {
+            currentRoom = '';
+            document.getElementById('currentRoomName').textContent = 'Select a room';
+            document.getElementById('inputSection').classList.add('hidden');
+            document.getElementById('messagesContainer').innerHTML = `
+                <div style="text-align: center; color: #6c757d; margin-top: 50px;">
+                    <h3>Welcome to Node.js Chat!</h3>
+                    <p>Enter your username and select a room to start chatting</p>
+                </div>
+            `;
+            displayRooms();
+        }
+
+        // Create a new room
+        function createRoom() {
+            const roomName = document.getElementById('newRoomInput').value.trim();
+            if (!roomName) {
+                showNotification('Please enter a room name', 'error');
+                return;
+            }
+
+            if (socket) {
+                socket.emit('createRoom', { roomName });
+                document.getElementById('newRoomInput').value = '';
+            }
+        }
+
+        // Rename current room
+        function showRenameForm() {
+            if (!currentRoom || currentRoom === 'general') {
+                showNotification('Cannot rename general room', 'error');
+                return;
+            }
+
+            const newName = prompt('Enter new room name:');
+            if (newName && newName.trim()) {
+                socket.emit('renameRoom', { oldName: currentRoom, newName: newName.trim() });
+            }
+        }
+
+        // Delete current room
+        function deleteCurrentRoom() {
+            if (!currentRoom || currentRoom === 'general') {
+                showNotification('Cannot delete general room', 'error');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete room "${currentRoom}"?`)) {
+                socket.emit('deleteRoom', { roomName: currentRoom });
+            }
+        }
+
+        // Send message
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (!message || !currentRoom) return;
+
+            if (socket) {
+                socket.emit('sendMessage', { message, roomName: currentRoom });
+                messageInput.value = '';
+            }
+        }
+
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Display messages
+        function displayMessages(messages) {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = '';
+
+            messages.forEach(message => {
+                addMessage(message);
+            });
+        }
+
+        // Add a single message
+        function addMessage(message) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            const isOwn = message.author === currentUsername;
+
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            messageDiv.innerHTML = `
+                        <div class="message-header">
+            <span><strong>${message.author}</strong></span>
+            <span>${formatTime(message.time)}</span>
+        </div>
+                <div class="message-text">${message.text}</div>
+            `;
+
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Add system message
+        function addSystemMessage(text) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+
+            messageDiv.className = 'message';
+            messageDiv.style.background = '#e9ecef';
+            messageDiv.style.textAlign = 'center';
+            messageDiv.style.fontStyle = 'italic';
+            messageDiv.innerHTML = `
+                <div class="message-text">${text}</div>
+            `;
+
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Format time
+        function formatTime(time) {
+            const date = new Date(time);
+            return date.toLocaleTimeString();
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Load username from localStorage on page load
+        window.onload = function() {
+            const savedUsername = localStorage.getItem('chatUsername');
+            if (savedUsername) {
+                document.getElementById('usernameInput').value = savedUsername;
+            }
+        };
+    </script>
+</body>
+</html>
