@@ -19,12 +19,16 @@ io.on('connection', (socket) => {
   socket.on('join-room', (data) => {
     const { username, roomName } = data;
 
+    // if (!rooms.has(roomName)) {
+    //   rooms.set(roomName, {
+    //     name: roomName,
+    //     messages: [],
+    //     users: new Set(),
+    //   });
+    // }
+
     if (!rooms.has(roomName)) {
-      rooms.set(roomName, {
-        name: roomName,
-        messages: [],
-        users: new Set(),
-      });
+      return socket.emit('room-error', { message: 'Room does not exist' });
     }
 
     const room = rooms.get(roomName);
@@ -43,11 +47,17 @@ io.on('connection', (socket) => {
     const { message, roomName, username } = data;
     const timestamp = new Date().toISOString();
 
+    if (!username || !roomName || !message || message.trim() === '') {
+      return socket.emit('error', {
+        error: 'Message cannot be empty and all fields are required',
+      });
+    }
+
     const messageData = {
       id: Date.now(),
-      username,
-      message,
-      timestamp,
+      author: username,
+      text: message,
+      time: timestamp,
       roomName,
     };
 
