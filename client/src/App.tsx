@@ -12,40 +12,28 @@ export function App() {
   const [rooms, setRooms] = useState<string[]>([]);
   const [currentRoom, setCurrentRoom] = useState('general');
   const [newRoom, setNewRoom] = useState('');
-  const [socket, setSocket] = useState<WebSocket | null>(null);
 
-  // Load available rooms
   useEffect(() => {
     fetch('http://localhost:3000/rooms')
       .then((res) => res.json())
       .then((data) => setRooms(data));
   }, []);
 
-  // Connect WebSocket whenever room changes
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:3000');
-    setSocket(ws);
+    setMessages([]);
 
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: 'join', room: currentRoom }));
+    const fetchMessages = () => {
+      fetch(`http://localhost:3000/rooms/${currentRoom}/messages`)
+        .then((res) => res.json())
+        .then((data) => setMessages(data));
     };
 
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+    fetchMessages();
+    const timer = setInterval(fetchMessages, 1000);
 
-      if (data.type === 'init') {
-        setMessages(data.messages);
-      }
-
-      if (data.type === 'message') {
-        setMessages((prev) => [...prev, data.message]);
-      }
-    };
-
-    return () => ws.close();
+    return () => clearInterval(timer);
   }, [currentRoom]);
 
-  // Ensure username exists
   useEffect(() => {
     let saved = localStorage.getItem('username');
     if (!saved) {
@@ -54,12 +42,18 @@ export function App() {
     }
   }, []);
 
-  function sendMessage(e: React.FormEvent) {
+  async function sendMessage(e: React.FormEvent) {
     e.preventDefault();
-    if (!socket) return;
-
     const username = localStorage.getItem('username') || 'Anonymous';
-    socket.send(JSON.stringify({ type: 'message', author: username, text }));
+
+    if (!text.trim()) return;
+
+    await fetch(`http://localhost:3000/rooms/${currentRoom}/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ author: username, text }),
+    });
+
     setText('');
   }
 
@@ -75,38 +69,41 @@ export function App() {
 
     if (res.ok) {
       const updatedRooms = await fetch('http://localhost:3000/rooms').then(
-        (res) => res.json(),
+        (r) => r.json(),
       );
       setRooms(updatedRooms);
+
       setCurrentRoom(newRoom);
       setNewRoom('');
     }
   }
 
   return (
-    <section>
-      <h1>Chat Application (WebSocket)</h1>
+    <section className="chat-app">
+      <h1>Chat Application</h1>
       <p>Logged in as: {localStorage.getItem('username')}</p>
 
-      <label>
-        Room:
-        <select
-          value={currentRoom}
-          onChange={(e) => setCurrentRoom(e.target.value)}
-        >
-          {rooms.map((r) => (
-            <option key={r} value={r}>
-              {r}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="room-select">
+        <label>
+          Room:
+          <select
+            value={currentRoom}
+            onChange={(e) => setCurrentRoom(e.target.value)}
+          >
+            {rooms.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
-      <div>
+      <div className="room-actions">
         <button
           onClick={async () => {
             const newName = prompt('Enter new room name:');
-            if (!newName || newName.trim() === '') return;
+            if (!newName || !newName.trim()) return;
 
             const res = await fetch(
               `http://localhost:3000/rooms/${currentRoom}`,
@@ -120,14 +117,14 @@ export function App() {
             if (res.ok) {
               const updatedRooms = await fetch(
                 'http://localhost:3000/rooms',
-              ).then((res) => res.json());
+              ).then((r) => r.json());
               setRooms(updatedRooms);
               setCurrentRoom(newName.trim());
             } else {
-              const error = await res.json();
-              alert(error.error || 'Failed to rename room');
+              alert('Failed to rename room');
             }
           }}
+          className="btn btn-rename"
         >
           Rename Room
         </button>
@@ -147,37 +144,44 @@ export function App() {
             if (res.ok) {
               const updatedRooms = await fetch(
                 'http://localhost:3000/rooms',
-              ).then((res) => res.json());
+              ).then((r) => r.json());
               setRooms(updatedRooms);
               setCurrentRoom('general');
+            } else {
+              alert('Failed to delete room');
             }
           }}
+          className="btn btn-delete"
         >
           Delete Room
         </button>
       </div>
 
-      <form onSubmit={createRoom}>
+      <form onSubmit={createRoom} className="create-room">
         <input
           value={newRoom}
           onChange={(e) => setNewRoom(e.target.value)}
           placeholder="New room name"
         />
-        <button type="submit">Create Room</button>
+        <button type="submit" className="btn btn-create">
+          Create Room
+        </button>
       </form>
 
-      <form onSubmit={sendMessage}>
+      <form onSubmit={sendMessage} className="send-message">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Type a message..."
         />
-        <button type="submit">Send</button>
+        <button type="submit" className="btn btn-send">
+          Send
+        </button>
       </form>
 
       <ul className="messages">
         {messages.map((m, i) => (
-          <li key={i}>
+          <li key={i} className="message">
             <strong>{m.author}:</strong> {m.text}{' '}
             <em>{new Date(m.time).toLocaleTimeString()}</em>
           </li>

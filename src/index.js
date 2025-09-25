@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use strict';
 
 const { WebSocketServer } = require('ws');
@@ -49,22 +48,45 @@ app.put('/rooms/:name', (req, res) => {
   rooms[newName] = { ...rooms[oldName], name: newName };
   delete rooms[oldName];
 
+  app.wss.clients.forEach((client) => {
+    if (client.readyState === 1 && client.room === oldName) {
+      client.room = newName;
+      client.send(JSON.stringify({ type: 'room-renamed', oldName, newName }));
+    }
+  });
+
   res.json({ success: true, room: newName });
 });
 
 app.delete('/rooms/:name', (req, res) => {
-  const roomName = req.params.name;
+  const { name } = req.params;
 
-  if (roomName === 'general') {
+  if (name === 'general') {
     return res.status(400).json({ error: 'Cannot delete default room' });
   }
 
-  if (!rooms[roomName]) {
+  if (!rooms[name]) {
     return res.status(404).json({ error: 'Room not found' });
   }
 
-  delete rooms[roomName];
-  res.json({ success: true });
+  delete rooms[name];
+
+  app.wss.clients.forEach((client) => {
+    if (client.readyState === 1 && client.room === name) {
+      client.room = 'general';
+
+      client.send(
+        JSON.stringify({
+          type: 'room-deleted',
+          room: name,
+          fallback: 'general',
+          messages: rooms.general.messages,
+        }),
+      );
+    }
+  });
+
+  res.json({ success: true, deleted: name });
 });
 
 app.get('/rooms/:name/messages', (req, res) => {
@@ -76,6 +98,14 @@ app.get('/rooms/:name/messages', (req, res) => {
   res.json(room.messages);
 });
 
+function isValidMessage(author, text) {
+  return (
+    typeof author === 'string' &&
+    typeof text === 'string' &&
+    text.trim().length > 0
+  );
+}
+
 app.post('/rooms/:name/messages', (req, res) => {
   const room = rooms[req.params.name];
 
@@ -83,11 +113,13 @@ app.post('/rooms/:name/messages', (req, res) => {
     return res.status(404).json({ error: 'Room not found' });
   }
 
-  const message = {
-    author: req.body.author,
-    text: req.body.text,
-    time: new Date(),
-  };
+  const { author, text } = req.body;
+
+  if (!isValidMessage(author, text)) {
+    return res.status(400).json({ error: 'Invalid message format' });
+  }
+
+  const message = { author, text, time: new Date().toISOString() };
 
   room.messages.push(message);
 
@@ -104,6 +136,7 @@ app.post('/rooms/:name/messages', (req, res) => {
 
 if (require.main === module) {
   const server = app.listen(PORT, () => {
+    // eslint-disable-next-line no-console
     console.log(`Server running at http://localhost:${PORT}/`);
   });
 
@@ -112,21 +145,54 @@ if (require.main === module) {
   app.wss = wss;
 
   wss.on('connection', (ws) => {
-    console.log('New client connected');
-
     ws.on('message', (message) => {
-      const data = JSON.parse(message);
+      let data;
+
+      try {
+        data = JSON.parse(message);
+      } catch {
+        ws.send(JSON.stringify({ type: 'error', error: 'Invalid JSON' }));
+
+        return;
+      }
 
       if (data.type === 'join') {
-        ws.room = data.room || 'general';
+        const roomName = data.room || 'general';
 
-        ws.send(
-          JSON.stringify({ type: 'init', messages: rooms[ws.room].messages }),
-        );
+        if (!rooms[roomName]) {
+          ws.room = 'general';
+
+          ws.send(
+            JSON.stringify({
+              type: 'info',
+              message: `Room "${roomName}" not found. Joined general.`,
+              messages: rooms.general.messages,
+            }),
+          );
+        } else {
+          ws.room = roomName;
+
+          ws.send(
+            JSON.stringify({
+              type: 'init',
+              messages: rooms[roomName].messages,
+            }),
+          );
+        }
       }
 
       if (data.type === 'message') {
-        const msg = { author: data.author, text: data.text, time: new Date() };
+        if (!isValidMessage(data.author, data.text)) {
+          ws.send(JSON.stringify({ type: 'error', error: 'Invalid message' }));
+
+          return;
+        }
+
+        const msg = {
+          author: data.author,
+          text: data.text,
+          time: new Date().toISOString(),
+        };
 
         rooms[ws.room].messages.push(msg);
 
@@ -137,8 +203,6 @@ if (require.main === module) {
         });
       }
     });
-
-    ws.on('close', () => console.log('Client disconnected'));
   });
 }
 
