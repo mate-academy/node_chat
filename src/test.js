@@ -1,18 +1,15 @@
-const axios = require('axios');
+const request = require('supertest');
+const app = require('./index');
 
 describe('Chat API', () => {
   it('should save a message in the general room', async () => {
-    const response = await axios.post(
-      'http://localhost:3000/rooms/general/messages',
-      {
-        author: 'Arber',
-        text: 'Hello from test.js',
-      },
-    );
+    const res = await request(app)
+      .post('/rooms/general/messages')
+      .send({ author: 'Arber', text: 'Hello from test.js' });
 
-    expect(response.status).toBe(201);
-    expect(response.data).toHaveProperty('author', 'Arber');
-    expect(response.data).toHaveProperty('text', 'Hello from test.js');
-    expect(response.data).toHaveProperty('time');
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('author', 'Arber');
+    expect(res.body).toHaveProperty('text', 'Hello from test.js');
+    expect(res.body).toHaveProperty('time');
   });
 });
