@@ -1,13 +1,18 @@
 const axios = require('axios');
 
-async function run() {
-  const response = await axios.post('http://localhost:3000/messages', {
-    author: 'Arber',
-    text: 'Hello from test.js',
+describe('Chat API', () => {
+  it('should save a message in the general room', async () => {
+    const response = await axios.post(
+      'http://localhost:3000/rooms/general/messages',
+      {
+        author: 'Arber',
+        text: 'Hello from test.js',
+      },
+    );
+
+    expect(response.status).toBe(201);
+    expect(response.data).toHaveProperty('author', 'Arber');
+    expect(response.data).toHaveProperty('text', 'Hello from test.js');
+    expect(response.data).toHaveProperty('time');
   });
-
-  // eslint-disable-next-line no-console
-  console.log('Message saved: ', response.data);
-}
-
-run();
+});
