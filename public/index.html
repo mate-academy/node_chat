@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="username">
+          <input id="usernameInput" placeholder="Enter username" />
+          <button id="setUsernameBtn">Set</button>
+        </div>
+        <div class="server-info">Server: <span id="serverHost"></span></div>
+      </header>
+
+      <main>
+        <aside class="rooms">
+          <div class="rooms-header">
+            <h3>Rooms</h3>
+            <button id="createRoomBtn">＋</button>
+          </div>
+          <ul id="roomsList"></ul>
+        </aside>
+
+        <section class="chat">
+          <div class="chat-header">
+            <h2 id="currentRoomName">—</h2>
+          </div>
+
+          <div id="messages" class="messages"></div>
+
+          <div class="composer">
+            <input id="messageInput" placeholder="Type a message..." />
+            <button id="sendBtn">Send</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/main.js"></script>
+  </body>
+</html>

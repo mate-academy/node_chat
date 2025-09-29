@@ -1,0 +1,97 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+}
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+header {
+  background: #222;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.username input {
+  padding: 6px;
+}
+.username button {
+  margin-left: 6px;
+  padding: 6px 10px;
+}
+main {
+  display: flex;
+  flex: 1;
+}
+.rooms {
+  width: 260px;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+}
+.rooms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rooms ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+.rooms li {
+  padding: 8px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rooms li .controls button {
+  margin-left: 6px;
+}
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.chat-header {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+.messages {
+  padding: 12px;
+  overflow: auto;
+  flex: 1;
+  background: #fafafa;
+}
+.message {
+  margin-bottom: 10px;
+}
+.message .meta {
+  font-size: 12px;
+  color: #666;
+}
+.composer {
+  display: flex;
+  padding: 8px;
+  border-top: 1px solid #eee;
+}
+.composer input {
+  flex: 1;
+  padding: 8px;
+}
+.composer button {
+  margin-left: 8px;
+  padding: 8px 12px;
+}
+
+button {
+  cursor: pointer;
+}
