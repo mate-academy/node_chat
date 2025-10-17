@@ -22,10 +22,14 @@ export const Message = client.define(
       allowNull: false,
     },
   },
-  { updatedAt: false },
+  {
+    updatedAt: false,
+    tableName: 'messages',
+  },
 );
 
-Message.belongsTo(User);
-User.hasMany(Message);
-Message.belongsTo(Room);
-Room.hasMany(Message);
+Message.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Message, { foreignKey: 'userId' });
+
+Message.belongsTo(Room, { foreignKey: 'roomId' });
+Room.hasMany(Message, { foreignKey: 'roomId' });
