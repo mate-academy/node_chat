@@ -1,18 +1,34 @@
 import { Room } from '../models/room.js';
 
-const getAllRooms = () => {
-  return Room.findAll();
+const getAllRooms = async () => {
+  return Room.findAll({
+    order: [['createdAt', 'DESC']],
+  });
 };
 
-const createRoom = (title, userId, description = '') => {
+const createRoom = async (title, userId, description = '') => {
+  if (!title || !userId) {
+    throw new Error('Title and userId are required');
+  }
+
   return Room.create({ title, userId, description });
 };
 
-const deleteRoom = (id) => {
-  return Room.destroy({ where: { id } });
+const deleteRoom = async (id) => {
+  if (!id) {
+    throw new Error('Room id is required');
+  }
+
+  const deletedCount = await Room.destroy({ where: { id } });
+
+  if (deletedCount === 0) {
+    throw new Error('Room not found');
+  }
+
+  return deletedCount;
 };
 
-const updateRoom = (id, title, description) => {
+const updateRoom = async (id, title, description) => {
   if (!id) {
     throw new Error('Room id is required');
   }
@@ -31,7 +47,13 @@ const updateRoom = (id, title, description) => {
     throw new Error('At least one field must be provided');
   }
 
-  return Room.update(updatedData, { where: { id } });
+  const [updatedCount] = await Room.update(updatedData, { where: { id } });
+
+  if (updatedCount === 0) {
+    throw new Error('Room not found');
+  }
+
+  return updatedCount;
 };
 
 export const roomsService = {
