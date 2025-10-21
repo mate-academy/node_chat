@@ -4,6 +4,7 @@
 
 # Node
 node_modules
+src/frontend/node_modules
 
 # MacOS
 .DS_Store

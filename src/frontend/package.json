@@ -1,0 +1,15 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm run build && npm run watch:all",
+    "watch:all": "npm run watch:sass & npm run watch:browser",
+    "watch:sass": "node-sass styles.scss styles.css --watch",
+    "watch:browser": "browser-sync start --server --files 'src/frontend/*' '*.css'",
+    "build": "node-sass styles.scss styles.css"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.29.3",
+    "node-sass": "^9.0.0"
+  }
+}
