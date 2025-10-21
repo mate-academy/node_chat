@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "init": "mate-scripts init",
-    "start": "node src/index.js",
+    "start": "nodemon src/index.js",
     "lint": "npm run format && mate-scripts lint",
     "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
     "test:only": "mate-scripts test",
@@ -26,5 +26,12 @@
   },
   "mateAcademy": {
     "projectType": "javascript"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "events": "^3.3.0",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
+    "ws": "^8.18.3"
   }
 }
