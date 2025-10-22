@@ -6,7 +6,7 @@ const create = async (req, res) => {
   const isNameExist = await User.findOne({ where: { name } });
 
   if (!name) {
-    return res.sendStatus(400).json({ message: 'User is required' });
+    return res.status(400).json({ message: 'User is required' });
   }
 
   if (isNameExist) {

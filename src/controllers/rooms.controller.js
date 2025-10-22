@@ -11,7 +11,7 @@ const createRoom = async (req, res) => {
 
   if (!title || !userId) {
     return res
-      .sendStatus(400)
+      .status(400)
       .json({ message: 'Missing required fields: title or userId' });
   }
 

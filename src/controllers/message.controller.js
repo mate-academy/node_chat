@@ -8,7 +8,7 @@ const create = async (req, res) => {
   const { text, userId } = req.body;
 
   if (!roomId || !userId || !text) {
-    return res.sendStatus(400).json({ message: 'Message is required' });
+    return res.status(400).json({ message: 'Message is required' });
   }
 
   const newMessage = await messageService.createMessageInRoom(
