@@ -1,0 +1,19 @@
+.room {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  &__icons {
+    display: flex;
+    gap: 2px;
+
+    span {
+      cursor: pointer;
+    }
+  }
+
+  form {
+    width: 100%;
+  }
+}

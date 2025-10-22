@@ -1,0 +1,28 @@
+@import 'bulma/bulma';
+@import './Dashboard.scss';
+@import './Room.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 1280px;
+  padding-block: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  gap: 40px;
+
+  &__section {
+    width: 40%;
+  }
+}
