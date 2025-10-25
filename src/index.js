@@ -19,6 +19,14 @@ io.on('connection', (socket) => {
   socket.on('join-room', (data) => {
     const { username, roomName } = data;
 
+    // if (!rooms.has(roomName)) {
+    //   rooms.set(roomName, {
+    //     name: roomName,
+    //     messages: [],
+    //     users: new Set(),
+    //   });
+    // }
+
     if (!rooms.has(roomName)) {
       return socket.emit('room-error', { message: 'Room does not exist' });
     }
