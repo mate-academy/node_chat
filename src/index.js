@@ -107,7 +107,7 @@ app.post('/rooms', (req, res) => {
   res.status(201).send({ roomName });
 });
 
-app.patch('/rooms/:oldname', (req, res) => {
+app.patch('/rooms/:oldName', (req, res) => {
   const { oldName } = req.params;
   const { newName } = req.body;
 
@@ -158,12 +158,6 @@ const server = app.listen(PORT, () => {
 });
 
 const wss = new WebSocketServer({ server });
-
-// emmiter.on('message', (message) => {
-//   for (const client of wss.clients) {
-//     client.send(JSON.stringify(message));
-//   }
-// });
 
 wss.on('connection', (ws) => {
   ws.room = 'General';
