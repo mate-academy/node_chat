@@ -1,5 +1,5 @@
 /* global React, ReactDOM */
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 function App() {
   const [username, setUsername] = useState(
@@ -14,6 +14,7 @@ function App() {
   const [rooms, setRooms] = useState(['General']);
   const [messages, setMessages] = useState({ General: [] });
   const [newMessage, setNewMessage] = useState('');
+  const wsRef = useRef(null);
 
   const handleUserName = () => {
     if (username.trim() !== '') {
@@ -27,8 +28,40 @@ function App() {
       return;
     }
 
-    const evtSource = new EventSource(`/messages/stream?room=${currentRoom}`);
+    fetch('/rooms')
+      .then((res) => res.json())
+      .then((roomList) => {
+        setRooms(roomList);
 
+        if (!roomList.includes(currentRoom)) {
+          setCurrentRoom('General');
+        }
+
+        const initialMessages = {};
+
+        roomList.forEach((r) => {
+          initialMessages[r] = [];
+        });
+        setMessages(initialMessages);
+      });
+  }, [username]);
+
+  useEffect(() => {
+    if (!username) {
+      return;
+    }
+
+    if (!currentRoom) {
+      return;
+    }
+
+    fetch(`/messages?room=${currentRoom}`)
+      .then((res) => res.json())
+      .then((msgs) => {
+        setMessages((prev) => ({ ...prev, [currentRoom]: msgs }));
+      });
+
+    const evtSource = new EventSource(`/messages/stream?room=${currentRoom}`);
     const onMessage = (e) => {
       const message = JSON.parse(e.data);
 
@@ -72,57 +105,78 @@ function App() {
         room: currentRoom,
       }),
     });
-
     setNewMessage('');
   };
 
-  const createRoom = () => {
+  const createRoom = async () => {
     const roomName = prompt('Enter new room name:');
 
-    if (roomName && !rooms.includes(roomName)) {
-      setRooms([...rooms, roomName]);
-      setCurrentRoom(roomName);
-      setMessages((prev) => ({ ...prev, [roomName]: [] }));
+    if (!roomName || rooms.includes(roomName)) {
+      return;
     }
+
+    await fetch('/rooms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roomName }),
+    });
+    setRooms((prev) => [...prev, roomName]);
+    setCurrentRoom(roomName);
+    setMessages((prev) => ({ ...prev, [roomName]: [] }));
   };
 
-  const renameRoom = (oldName) => {
+  const renameRoom = async (oldName) => {
     const newName = prompt('Enter new room name:', oldName);
 
-    if (newName && !rooms.includes(newName)) {
-      setRooms(rooms.map((r) => (r === oldName ? newName : r)));
+    if (!newName || rooms.includes(newName)) {
+      return;
+    }
 
-      setMessages((prev) => {
-        const { [oldName]: oldMsgs, ...rest } = prev;
+    await fetch('/rooms', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldName, newName }),
+    });
+    setRooms((prev) => prev.map((r) => (r === oldName ? newName : r)));
 
-        return { ...rest, [newName]: oldMsgs };
-      });
+    setMessages((prev) => {
+      const { [oldName]: oldMsgs, ...rest } = prev;
 
-      if (currentRoom === oldName) {
-        setCurrentRoom(newName);
-      }
+      return { ...rest, [newName]: oldMsgs };
+    });
+
+    if (currentRoom === oldName) {
+      setCurrentRoom(newName);
     }
   };
 
-  const deleteRoom = (roomName) => {
+  const deleteRoom = async (roomName) => {
     if (roomName === 'General') {
-      alert('Cannot delete default room');
+      alert('Cannot delete General');
 
       return;
     }
 
-    if (confirm(`Delete room "${roomName}"?`)) {
-      setRooms(rooms.filter((r) => r !== roomName));
+    if (!confirm(`Delete room "${roomName}"?`)) {
+      return;
+    }
 
-      setMessages((prev) => {
-        const { [roomName]: _, ...rest } = prev;
+    await fetch('/rooms', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roomName }),
+    });
 
-        return rest;
-      });
+    setRooms((prev) => prev.filter((r) => r !== roomName));
 
-      if (currentRoom === roomName) {
-        setCurrentRoom('General');
-      }
+    setMessages((prev) => {
+      const { [roomName]: _, ...rest } = prev;
+
+      return rest;
+    });
+
+    if (currentRoom === roomName) {
+      setCurrentRoom('General');
     }
   };
 

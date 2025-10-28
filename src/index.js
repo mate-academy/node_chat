@@ -45,6 +45,10 @@ app.post('/messages', (req, res) => {
   res.status(201).send(message);
 });
 
+app.get('/rooms', (req, res) => {
+  res.json(Object.keys(rooms));
+});
+
 app.get('/messages', (req, res) => {
   const { room } = req.query;
 
@@ -103,14 +107,82 @@ app.post('/rooms', (req, res) => {
   res.status(201).send({ roomName });
 });
 
+app.patch('/rooms/:oldname', (req, res) => {
+  const { oldName } = req.params;
+  const { newName } = req.body;
+
+  if (!rooms[oldName]) {
+    return res.status(404).send('Room not found');
+  }
+
+  if (!newName) {
+    return res.status(400).send('New room name is required');
+  }
+
+  if (rooms[newName]) {
+    return res.status(400).send('Room with this name already exists');
+  }
+
+  if (!oldName) {
+    return res.status(400).send('Room name is required');
+  }
+
+  rooms[newName] = rooms[oldName];
+  delete rooms[oldName];
+
+  res.status(200).send({ oldName, newName });
+});
+
+app.delete('/rooms/:roomName', (req, res) => {
+  const { roomName } = req.params;
+
+  if (!rooms[roomName]) {
+    return res.status(404).send('Room not found');
+  }
+
+  if (!roomName) {
+    return res.status(400).send('New room name is required');
+  }
+
+  if (roomName === 'General') {
+    return res.status(400).send('Cannot delete default room');
+  }
+
+  delete rooms[roomName];
+
+  res.status(200).send({ deleted: roomName });
+});
+
 const server = app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
 });
 
 const wss = new WebSocketServer({ server });
 
+// emmiter.on('message', (message) => {
+//   for (const client of wss.clients) {
+//     client.send(JSON.stringify(message));
+//   }
+// });
+
+wss.on('connection', (ws) => {
+  ws.room = 'General';
+
+  ws.on('message', (data) => {
+    try {
+      const msg = JSON.parse(data);
+
+      if (msg.type === 'join') {
+        ws.room = msg.room;
+      }
+    } catch (e) {}
+  });
+});
+
 emmiter.on('message', (message) => {
   for (const client of wss.clients) {
-    client.send(JSON.stringify(message));
+    if (client.readyState === 1 && client.room === message.room) {
+      client.send(JSON.stringify(message));
+    }
   }
 });
