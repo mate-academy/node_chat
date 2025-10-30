@@ -1,5 +1,5 @@
 /* global React, ReactDOM */
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect } = React;
 
 function App() {
   const [username, setUsername] = useState(
@@ -14,7 +14,6 @@ function App() {
   const [rooms, setRooms] = useState(['General']);
   const [messages, setMessages] = useState({ General: [] });
   const [newMessage, setNewMessage] = useState('');
-  const wsRef = useRef(null);
 
   const handleUserName = () => {
     if (username.trim() !== '') {
@@ -125,8 +124,8 @@ function App() {
     setMessages((prev) => ({ ...prev, [roomName]: [] }));
   };
 
-  const renameRoom = async (oldName) => {
-    const newName = prompt('Enter new room name:', oldName);
+  const renameRoom = async (roomName) => {
+    const newName = prompt('Enter new room name:', roomName);
 
     if (!newName || rooms.includes(newName)) {
       return;
@@ -135,17 +134,17 @@ function App() {
     await fetch('/rooms', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ oldName, newName }),
+      body: JSON.stringify({ roomName, newName }),
     });
-    setRooms((prev) => prev.map((r) => (r === oldName ? newName : r)));
+    setRooms((prev) => prev.map((r) => (r === roomName ? newName : r)));
 
     setMessages((prev) => {
-      const { [oldName]: oldMsgs, ...rest } = prev;
+      const { [roomName]: oldMsgs, ...rest } = prev;
 
       return { ...rest, [newName]: oldMsgs };
     });
 
-    if (currentRoom === oldName) {
+    if (currentRoom === roomName) {
       setCurrentRoom(newName);
     }
   };

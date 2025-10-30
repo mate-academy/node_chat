@@ -107,11 +107,11 @@ app.post('/rooms', (req, res) => {
   res.status(201).send({ roomName });
 });
 
-app.patch('/rooms/:oldName', (req, res) => {
-  const { oldName } = req.params;
+app.patch('/rooms/:roomName', (req, res) => {
+  const { roomName } = req.params;
   const { newName } = req.body;
 
-  if (!rooms[oldName]) {
+  if (!rooms[roomName]) {
     return res.status(404).send('Room not found');
   }
 
@@ -123,14 +123,14 @@ app.patch('/rooms/:oldName', (req, res) => {
     return res.status(400).send('Room with this name already exists');
   }
 
-  if (!oldName) {
+  if (!roomName) {
     return res.status(400).send('Room name is required');
   }
 
-  rooms[newName] = rooms[oldName];
-  delete rooms[oldName];
+  rooms[newName] = rooms[roomName];
+  delete rooms[roomName];
 
-  res.status(200).send({ oldName, newName });
+  res.status(200).send({ roomName, newName });
 });
 
 app.delete('/rooms/:roomName', (req, res) => {
@@ -141,7 +141,7 @@ app.delete('/rooms/:roomName', (req, res) => {
   }
 
   if (!roomName) {
-    return res.status(400).send('New room name is required');
+    return res.status(400).send('Room name is required');
   }
 
   if (roomName === 'General') {
