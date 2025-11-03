@@ -1,0 +1,52 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Node Chat (Rooms)</title>
+<link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+<div class="wrap">
+<aside class="sidebar">
+<div class="panel">
+<h2>Profile</h2>
+<form id="profileForm">
+<label>Username</label>
+<input id="username" type="text" maxlength="40" required />
+<button type="submit">Save</button>
+</form>
+</div>
+<div class="panel">
+<div class="rooms-header">
+<h2>Rooms</h2>
+<button id="createRoomBtn" title="Create room">＋</button>
+</div>
+<ul id="roomsList" class="rooms"></ul>
+</div>
+</aside>
+
+
+<main class="chat">
+<header class="chat-header">
+<h2 id="roomTitle">Select a room</h2>
+<div class="room-actions">
+<button id="renameRoomBtn" disabled>Rename</button>
+<button id="deleteRoomBtn" disabled>Delete</button>
+</div>
+</header>
+<section id="messages" class="messages"></section>
+<form id="messageForm" class="message-form">
+<input id="messageInput" type="text" placeholder="Type a message"
+maxlength="1000" />
+<button type="submit">Send</button>
+</form>
+</main>
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/app.js" type="module"></script>
+</body>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/app.js" type="module"></script>
+
+</html>
