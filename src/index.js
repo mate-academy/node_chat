@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-const emmiter = new EventEmitter();
+const emmitter = new EventEmitter();
 
 app.use(
   cors({
@@ -41,7 +41,7 @@ app.post('/messages', (req, res) => {
   }
 
   rooms[room].push(message);
-  emmiter.emit('message', message);
+  emmitter.emit('message', message);
   res.status(201).send(message);
 });
 
@@ -56,11 +56,9 @@ app.get('/messages', (req, res) => {
     return res.status(400).send('Room is required');
   }
 
-  if (!rooms[room]) {
-    rooms[room] = [];
-  }
+  const messages = rooms[room] || [];
 
-  res.status(200).json(rooms[room]);
+  res.status(200).json(messages);
 });
 
 app.get('/messages/stream', (req, res) => {
@@ -86,10 +84,10 @@ app.get('/messages/stream', (req, res) => {
     }
   };
 
-  emmiter.on('message', onMessage);
+  emmitter.on('message', onMessage);
 
   req.on('close', () => {
-    emmiter.off('message', onMessage);
+    emmitter.off('message', onMessage);
   });
 });
 
@@ -107,11 +105,11 @@ app.post('/rooms', (req, res) => {
   res.status(201).send({ roomName });
 });
 
-app.patch('/rooms/:oldname', (req, res) => {
-  const { oldName } = req.params;
+app.patch('/rooms/:roomName', (req, res) => {
+  const { roomName } = req.params;
   const { newName } = req.body;
 
-  if (!rooms[oldName]) {
+  if (!rooms[roomName]) {
     return res.status(404).send('Room not found');
   }
 
@@ -123,14 +121,14 @@ app.patch('/rooms/:oldname', (req, res) => {
     return res.status(400).send('Room with this name already exists');
   }
 
-  if (!oldName) {
+  if (!roomName) {
     return res.status(400).send('Room name is required');
   }
 
-  rooms[newName] = rooms[oldName];
-  delete rooms[oldName];
+  rooms[newName] = rooms[roomName];
+  delete rooms[roomName];
 
-  res.status(200).send({ oldName, newName });
+  res.status(200).send({ roomName, newName });
 });
 
 app.delete('/rooms/:roomName', (req, res) => {
@@ -138,10 +136,6 @@ app.delete('/rooms/:roomName', (req, res) => {
 
   if (!rooms[roomName]) {
     return res.status(404).send('Room not found');
-  }
-
-  if (!roomName) {
-    return res.status(400).send('Room name is required');
   }
 
   if (roomName === 'General') {
@@ -179,7 +173,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-emmiter.on('message', (message) => {
+emmitter.on('message', (message) => {
   for (const client of wss.clients) {
     if (client.readyState === 1 && client.room === message.room) {
       client.send(JSON.stringify(message));
