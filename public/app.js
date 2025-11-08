@@ -80,7 +80,7 @@ function App() {
         if (
           roomMessages.some(
             (m) =>
-              m.date === message.date &&
+              m.time === message.time &&
               m.text === message.text &&
               m.author === message.author,
           )
@@ -244,7 +244,7 @@ function App() {
                     <span className="text">{msg.text}</span>
                   </div>
                   <div className="message-time">
-                    {new Date(msg.date).toLocaleTimeString()}
+                    {new Date(msg.time).toLocaleTimeString()}
                   </div>
                 </div>
               ))}

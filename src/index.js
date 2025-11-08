@@ -33,7 +33,7 @@ app.post('/messages', (req, res) => {
     text,
     author,
     room,
-    date: new Date(),
+    time: new Date(),
   };
 
   if (!rooms[room]) {
