@@ -1,0 +1,147 @@
+.chatPage {
+	width: 100vw;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	padding: 20px;
+	background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+	font-family: 'Segoe UI', Arial, sans-serif;
+	padding-top: 40px;
+	background-color: #bed9ef;
+
+	&__messagesContainer {
+		width: 100%;
+		min-width: 300px;
+		max-width: 500px;
+		min-height: 200px;
+		max-height: 350px;
+		padding: 15px;
+
+		background: #fff;
+		border-radius: 16px;
+		box-shadow: 0 2px 12px #e0e7ef;
+		border: 1px solid #cbd5e1;
+	}
+
+	&__messages {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 100%;
+		height: 100%;
+
+		overflow-y: auto;
+	}
+
+	h1 {
+		color: #2d3a4a;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	&__messageContainer {
+		width: fit-content;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+
+		& > span {
+			font-size: 12px;
+			padding: 10px;
+		}
+		&--author {
+			align-self: flex-end;
+			justify-content: center;
+			text-align: end;
+			margin-right: 20px;
+
+			& .chatPage__message {
+				border-radius: 20px 0 20px 20px;
+				align-self: end;
+				text-align: end;
+			}
+		}
+	}
+
+	&__message {
+		width: fit-content;
+		min-width: 100px;
+		max-width: 320px;
+		padding: 5px 15px;
+		border: 1px solid #cbd5e1;
+		border-radius: 0 20px 20px 20px;
+		word-break: break-word;
+		white-space: pre-line;
+		color: #2d3a4a;
+	}
+
+	&__author {
+		font-weight: 600;
+		color: #7b61ff;
+	}
+
+	&__messageInput {
+		width: 100%;
+		max-width: 500px;
+		min-height: 70px;
+		padding: 10px 15px;
+		border: 1px solid #cbd5e1;
+		border-radius: 16px;
+		font-size: 1rem;
+		outline: none;
+		resize: vertical;
+		background: #fff;
+		word-break: break-word;
+		white-space: pre-line;
+
+		&:focus {
+			border-color: #7b61ff;
+		}
+
+		& + button {
+			max-width: 200px;
+		}
+	}
+
+	input[type='text'] {
+		width: 100%;
+		padding: 10px 15px;
+
+		border: 1px solid #cbd5e1;
+		font-size: 1rem;
+		outline: none;
+		background: #fff;
+	}
+
+	button {
+		width: 100%;
+		// max-width: 400px;
+		color: #fff;
+		border: none;
+		border-radius: 20px;
+		padding: 10px 24px;
+		font-size: 1rem;
+		font-weight: 700;
+		background-color: #8ecaff;
+		box-shadow: 0 2px 8px #e0e7ef;
+		transition: background-color 0.2s ease;
+		cursor: pointer;
+
+		&:hover {
+			background: #5a43c2;
+		}
+	}
+
+	&__roomActions {
+		display: flex;
+		width: 100%;
+		max-width: 500px;
+		gap: 10px;
+	}
+
+	&__error {
+		color: #e11d48;
+	}
+}

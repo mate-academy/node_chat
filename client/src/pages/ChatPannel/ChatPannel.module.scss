@@ -1,0 +1,71 @@
+// Стилі для панелі кімнат
+.chatPannel {
+	position: relative;
+	width: 100vw;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #bed9ef;
+	font-family: 'Segoe UI', Arial, sans-serif;
+
+	&__container {
+		width: 100%;
+		max-width: 400px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		gap: 20px;
+	}
+
+	h1,
+	p {
+		color: #2d3a4a;
+		font-weight: 700;
+	}
+
+	select,
+	input[type='text'] {
+		width: 100%;
+		padding: 10px 15px;
+		border: 1px solid #cbd5e1;
+		border-radius: 8px;
+		font-size: 1rem;
+		outline: none;
+		background: #fff;
+	}
+
+	input[type='text']:focus {
+		border-color: #7b61ff;
+	}
+
+	button {
+		width: 80%;
+		color: #fff;
+		border: none;
+		border-radius: 20px;
+		padding: 10px 24px;
+		font-size: 1rem;
+		font-weight: 700;
+		background-color: #8ecaff;
+		box-shadow: 0 2px 8px #e0e7ef;
+		transition: background-color 0.2s ease;
+		cursor: pointer;
+
+		&:hover {
+			background: #5a43c2;
+		}
+	}
+
+	& p.chatPannel__error {
+		color: #e11d48;
+	}
+
+	img {
+		position: absolute;
+		top: 0;
+		width: 150px;
+	}
+}
