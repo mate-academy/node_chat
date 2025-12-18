@@ -1,0 +1,17 @@
+.messageBox{
+ display: flex;
+ flex-direction: column;
+border: 1px solid black;
+border-radius: 4px;
+padding: 10px;
+
+}
+.text{
+  color: black;
+  font-size: small;
+}
+.textMessage{
+ 
+  color:cornflowerblue;
+  font-size: larger;
+}
