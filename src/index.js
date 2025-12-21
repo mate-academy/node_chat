@@ -46,7 +46,8 @@ app.post('/room', (req, res) => {
   const { name, author } = req.body;
 
   if (!name.trim()) {
-    res.status(400).send({ message: 'Room name cannot be empty' })
+    res.status(400).send({ message: 'Room name cannot be empty' });
+    return;
   }
 
   const room = {
@@ -68,7 +69,6 @@ app.post('/room', (req, res) => {
 app.patch('/room-update', (req, res) => {
   const { id, name } = req.body;
   const room = rooms.find((r) => r.id === id);
-
 
   if (!room) {
     return res.status(404).send({ message: 'Room not found' });

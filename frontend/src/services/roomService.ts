@@ -1,8 +1,8 @@
 import { httpClient as client } from '../http/httpClient.ts'
 
 export const roomService = {
-  create: async (name: string, user: string) => {
-    return (await client.post('/room', { name, user })).data;
+  create: async (name: string, author: string) => {
+    return (await client.post('/room', { name, author })).data;
   },
 
   update: async (roomId: string, name: string) => {
