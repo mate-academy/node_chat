@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
@@ -8,12 +10,13 @@ const PORT = process.env.PORT || 3005;
 
 const app = express();
 
-app.use(cors({
-  origin: process.env.CLIENT_HOST,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_HOST,
+    credentials: true,
+  }),
+);
 app.use(express.json());
-
 
 const messages = [];
 const rooms = [];
@@ -42,7 +45,9 @@ app.post('/messages', (req, res) => {
 app.post('/room', (req, res) => {
   const { name, user } = req.body;
 
-  if (!name.trim()) return;
+  if (!name.trim()) {
+    return;
+  }
 
   const room = {
     id: uuidv4(),
@@ -62,11 +67,11 @@ app.post('/room', (req, res) => {
 
 app.patch('/room-update', (req, res) => {
   const { id, name } = req.body;
-  const room = rooms.find(r => r.id === id);
+  const room = rooms.find((r) => r.id === id);
 
   if (room) {
-    room.name = name
-  };
+    room.name = name;
+  }
 
   if (!room) {
     return res.status(404).send({ message: 'Room not found' });
@@ -78,11 +83,11 @@ app.patch('/room-update', (req, res) => {
   });
 
   res.status(200).send(room);
-})
+});
 
 app.get('/delete/:id', (req, res) => {
   const { id } = req.params;
-  const index = rooms.findIndex(room => room.id === id);
+  const index = rooms.findIndex((room) => room.id === id);
 
   if (index === -1) {
     return res.status(404).send({ message: 'Room not found' });
@@ -95,8 +100,8 @@ app.get('/delete/:id', (req, res) => {
     payload: deletedRoom,
   });
 
-  res.sendStatus(200)
-})
+  res.sendStatus(200);
+});
 
 const server = app.listen(PORT, () => {
   console.log(`server is running on ${PORT}`);
@@ -121,14 +126,20 @@ function broadcast(data) {
 wss.on('connection', (ws, req) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const roomId = url.searchParams.get('roomId');
+
   ws.roomId = roomId;
 
-  ws.send(JSON.stringify({
-    type: 'INIT_MESSAGES',
-    payload: messages.filter(msg => msg.roomId === roomId),
-  }));
-  ws.send(JSON.stringify({
-    type: 'INIT_ROOMS',
-    payload: rooms,
-  }))
+  ws.send(
+    JSON.stringify({
+      type: 'INIT_MESSAGES',
+      payload: messages.filter((msg) => msg.roomId === roomId),
+    }),
+  );
+
+  ws.send(
+    JSON.stringify({
+      type: 'INIT_ROOMS',
+      payload: rooms,
+    }),
+  );
 });
