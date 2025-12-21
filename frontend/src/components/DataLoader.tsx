@@ -11,6 +11,8 @@ export const DataLoader: FC<Props> = ({ onMessage, initMessages }) => {
   const { roomId } = useParams();
 
   useEffect(() => {
+    if (!roomId) return initMessages([])
+
     const socket = new WebSocket(`ws://localhost:3005?roomId=${roomId}`);
 
     socket.onmessage = (e) => {

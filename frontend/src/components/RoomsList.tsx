@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 interface Room {
   id: string,
   name: string,
-  user: string,
+  author: string,
 }
 export const RoomsList = () => {
   const [rooms, setRooms] = useState<Room[]>([]);

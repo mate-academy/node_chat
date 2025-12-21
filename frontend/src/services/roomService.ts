@@ -10,6 +10,6 @@ export const roomService = {
   },
 
   delete: async (id: string) => {
-    return (await client.get(`/delete/${id}`)).data;
+    return (await client.delete(`/delete/${id}`)).data;
   }
 }

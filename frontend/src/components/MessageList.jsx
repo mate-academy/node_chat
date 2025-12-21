@@ -8,7 +8,7 @@ export const MessageList = ({ messages }) => {
   return (
     <ul>
       {messages.map(message => (
-        <li key={message.time}>
+        <li key={message.id}>
           {`${normilizeTime(message.time)}: `}
           {message.author}<br />
           {message.text}

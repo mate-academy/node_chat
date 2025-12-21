@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { messageService } from '../services/messageService.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { Outlet, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 function sendMessage(author, text, roomId) {
@@ -15,7 +15,7 @@ export const MessageForm = () => {
 
   return (
     <>
-      <a href="/" className='button mb-3'>Go back</a>
+      <Link to="../" className='button mb-3'>Go back</Link>
       <form
         className="field is-horizontal"
         onSubmit={async (event) => {
@@ -35,7 +35,6 @@ export const MessageForm = () => {
         />
         <button className="button">Send</button>
       </form>
-      <Outlet />
     </>
   );
 };

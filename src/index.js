@@ -43,16 +43,16 @@ app.post('/messages', (req, res) => {
 });
 
 app.post('/room', (req, res) => {
-  const { name, user } = req.body;
+  const { name, author } = req.body;
 
   if (!name.trim()) {
-    return;
+    res.status(400).send({ message: 'Room name cannot be empty' })
   }
 
   const room = {
     id: uuidv4(),
     name,
-    author: user,
+    author,
   };
 
   rooms.push(room);
@@ -69,12 +69,13 @@ app.patch('/room-update', (req, res) => {
   const { id, name } = req.body;
   const room = rooms.find((r) => r.id === id);
 
-  if (room) {
-    room.name = name;
-  }
 
   if (!room) {
     return res.status(404).send({ message: 'Room not found' });
+  }
+
+  if (room) {
+    room.name = name;
   }
 
   broadcast({
@@ -85,7 +86,7 @@ app.patch('/room-update', (req, res) => {
   res.status(200).send(room);
 });
 
-app.get('/delete/:id', (req, res) => {
+app.delete('/delete/:id', (req, res) => {
   const { id } = req.params;
   const index = rooms.findIndex((room) => room.id === id);
 
