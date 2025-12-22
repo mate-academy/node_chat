@@ -1,5 +1,5 @@
-import { Message } from '../models/Message.model';
-import { User } from '../models/User.model';
+const { Message } = require('../models/Message.model');
+const { User } = require('../models/User.model');
 
 const getAll = async (req, res) => {
   const { roomId } = req.query;
@@ -14,7 +14,7 @@ const getAll = async (req, res) => {
       {
         model: User,
         as: 'author',
-        attributes: ['id', 'name'],
+        attributes: ['id', 'username'],
       },
     ],
     order: [['createdAt', 'ASC']],
@@ -90,10 +90,12 @@ const update = async (req, res) => {
   res.status(200).json(message);
 };
 
-export const messagesController = {
+const messagesController = {
   getAll,
   create,
   getById,
   remove,
   update,
 };
+
+module.exports = { messagesController };

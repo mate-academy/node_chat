@@ -1,4 +1,4 @@
-import { Room } from '../models/Room.model';
+const { Room } = require('../models/Room.model');
 
 const getAll = async (req, res) => {
   const rooms = await Room.findAll();
@@ -13,7 +13,7 @@ const create = async (req, res) => {
     return res.status(400).json({ error: 'Bad request' });
   }
 
-  const room = await Room.create(req.body);
+  const room = await Room.create({ name });
 
   res.status(201).json(room);
 };
@@ -54,14 +54,16 @@ const update = async (req, res) => {
     return res.status(400).json({ error: 'Bad request' });
   }
 
-  await room.update(req.body);
+  await room.update({name});
   res.status(200).json(room);
 };
 
-export const roomsController = {
+const roomsController = {
   getAll,
   create,
   getById,
   remove,
   update,
 };
+
+module.exports = { roomsController };

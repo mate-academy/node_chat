@@ -1,6 +1,6 @@
-const { User } = require('./User');
-const { Room } = require('./Room');
-const { Message } = require('./Message');
+const { User } = require('./User.model');
+const { Room } = require('./Room.model');
+const { Message } = require('./Message'.model);
 
 User.hasMany(Message, {
   foreignKey: 'authorId',

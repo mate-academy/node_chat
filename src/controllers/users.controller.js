@@ -1,4 +1,4 @@
-import { User } from '../models/User.model';
+const { User } = require('../models/User.model');
 
 const getAll = async (req, res) => {
   const users = await User.findAll();
@@ -7,13 +7,13 @@ const getAll = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { name } = req.body;
+  const { username } = req.body;
 
-  if (!name) {
+  if (!username) {
     return res.status(400).json({ error: 'Bad request' });
   }
 
-  const user = await User.create(req.body);
+  const user = await User.create({username});
 
   res.status(201).json(user);
 };
@@ -44,26 +44,28 @@ const remove = async (req, res) => {
 
 const update = async (req, res) => {
   const id = +req.params.id;
-  const name = req.body.name;
+  const username = req.body.username;
   const user = await User.findByPk(id);
 
   if (!user) {
     return res.status(404).json({ error: 'Not found' });
   }
 
-  if (!name) {
+  if (!username) {
     return res.status(400).json({ error: 'Bad request' });
   }
 
-  await user.update(req.body);
+  await user.update({username});
 
   res.status(200).json(user);
 };
 
-export const usersController = {
+const usersController = {
   getAll,
   create,
   getById,
   remove,
   update,
 };
+
+module.exports = { usersController };

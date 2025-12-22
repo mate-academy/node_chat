@@ -1,12 +1,13 @@
 'use strict';
-import cors from 'cors';
-import express from 'express';
-import { WebSocketServer } from 'ws';
+const cors = require('cors');
+const express = require('express');
+const { WebSocketServer } = require('ws');
 
-import { router as messagesRouter } from './routes/messages.route.js';
-import { router as usersRouter } from './routes/users.route.js';
-import { router as roomsRouter } from './routes/rooms.route.js';
-import { Message } from './models/Message.model.js';
+const messagesRouter = require('./routes/messages.route');
+const usersRouter = require('./routes/users.route');
+const roomsRouter = require('./routes/rooms.route');
+const { Message } = require('./models/Message.model');
+const { User } = require('./models/User.model');
 
 const app = express();
 
@@ -41,7 +42,17 @@ wss.on('connection', socket => {
 
     socket.roomId = roomId;
 
-    const message = await Message.create({ roomId, authorId, text });
+    const created = await Message.create({ roomId, authorId, text });
+
+    const message = await Message.findByPk(created.id, {
+      include: [
+        {
+          model: User,
+          as: 'author',
+          attributes: ['id', 'username'],
+        },
+      ],
+    });
 
     const payload = JSON.stringify(message);
 
