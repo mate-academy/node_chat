@@ -15,6 +15,11 @@ const Room = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    members: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: false,
+      defaultValue: [],
+    },
   },
   {
     tableName: 'rooms',

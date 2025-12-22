@@ -1,18 +1,23 @@
 'use strict';
+
+const path = require('path');
 const cors = require('cors');
 const express = require('express');
 const { WebSocketServer } = require('ws');
 
+const { Message } = require('./models/Message.model');
+const { User } = require('./models/User.model');
+
 const messagesRouter = require('./routes/messages.route');
 const usersRouter = require('./routes/users.route');
 const roomsRouter = require('./routes/rooms.route');
-const { Message } = require('./models/Message.model');
-const { User } = require('./models/User.model');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, '../client')));
 
 app.use('/users', usersRouter);
 app.use('/messages', messagesRouter);

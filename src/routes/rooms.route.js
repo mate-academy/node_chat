@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.get('/', roomsController.getAll);
 router.post('/', roomsController.create);
+router.post('/:id/join', roomsController.join);
 
 router.get('/:id', roomsController.getById);
 router.delete('/:id', roomsController.remove);

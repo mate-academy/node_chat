@@ -30,7 +30,18 @@ const create = async (req, res) => {
     return res.status(400).json({ error: 'Bad request' });
   }
 
-  const message = await Message.create({ roomId, authorId, text });
+  const created = await Message.create({ roomId, authorId, text });
+
+  // re-fetch with associated author to include username
+  const message = await Message.findByPk(created.id, {
+    include: [
+      {
+        model: User,
+        as: 'author',
+        attributes: ['id', 'username'],
+      },
+    ],
+  });
 
   res.status(201).json(message);
 };

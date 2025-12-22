@@ -13,7 +13,7 @@ const create = async (req, res) => {
     return res.status(400).json({ error: 'Bad request' });
   }
 
-  const user = await User.create({username});
+  const user = await User.create({ username });
 
   res.status(201).json(user);
 };
@@ -55,7 +55,7 @@ const update = async (req, res) => {
     return res.status(400).json({ error: 'Bad request' });
   }
 
-  await user.update({username});
+  await user.update({ username });
 
   res.status(200).json(user);
 };
