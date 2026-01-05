@@ -1,29 +1,12 @@
 {
-  "name": "chat-app",
-  "type": "module",
-  "version": "0.1.0",
+  "name": "7-chat-app",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "private": true,
-  "dependencies": {
-    "axios": "^1.8.4",
-    "bad-words": "^3.0.4",
-    "classnames": "^2.3.1",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "moment": "^2.29.4",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-scripts": "^5.0.1",
-    "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3",
-    "ws": "^8.18.1"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
@@ -31,16 +14,17 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bad-words": "^3.0.4",
+    "dotenv": "^17.2.3",
+    "eslint": "^8.57.1",
+    "express": "^4.22.1",
+    "moment": "^2.29.4",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }

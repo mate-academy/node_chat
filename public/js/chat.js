@@ -14,10 +14,13 @@ const $statusText = document.querySelector('.status-text');
 const messageTemplate = document.querySelector('#message-template').innerHTML;
 const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
 
+
+const { username, room } = getQueryParams()
 // Options
-const { username, room } = Qs.parse(location.search, {
+ /* const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
-});
+}); */
+
 
 // Connection status management
 let isConnected = true;
@@ -234,3 +237,83 @@ $messageFormInput.addEventListener('keydown', (e) => {
     e.target.selectionStart = e.target.selectionEnd = start + 1;
   }
 });
+
+// Parse a query string into an object
+function parseQuery(queryString) {
+    if (typeof queryString !== 'string') {
+        throw new TypeError('Query string must be a string');
+    }
+
+    // Remove leading '?' if present
+    queryString = queryString.replace(/^\?/, '');
+
+    const params = new URLSearchParams(queryString);
+    const result = {};
+
+    for (const [key, value] of params.entries()) {
+        // Handle multiple values for the same key
+        if (result[key]) {
+            if (Array.isArray(result[key])) {
+                result[key].push(value);
+            } else {
+                result[key] = [result[key], value];
+            }
+        } else {
+            result[key] = value;
+        }
+    }
+
+    return result;
+}
+
+// Convert an object into a query string
+function stringifyQuery(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+        throw new TypeError('Input must be a non-null object');
+    }
+
+    const params = new URLSearchParams();
+
+    for (const key in obj) {
+        if (Array.isArray(obj[key])) {
+            obj[key].forEach(val => params.append(key, val));
+        } else {
+            params.append(key, obj[key]);
+        }
+    }
+
+    return params.toString(); // Returns without leading '?'
+}
+
+// Function to safely parse query parameters from location.search
+function getQueryParams() {
+    // Get the query string from the URL (includes the leading '?')
+    const queryString = window.location.search;
+
+    // If there's no query string, return an empty object
+    if (!queryString) {
+        return {};
+    }
+
+    // Use URLSearchParams for easy parsing
+    const params = new URLSearchParams(queryString);
+
+    // Convert parameters to a plain object
+    const queryObject = {};
+    for (const [key, value] of params.entries()) {
+        // Handle multiple values for the same key
+        if (queryObject[key]) {
+            if (Array.isArray(queryObject[key])) {
+                queryObject[key].push(value);
+            } else {
+                queryObject[key] = [queryObject[key], value];
+            }
+        } else {
+            queryObject[key] = value;
+        }
+    }
+
+    return queryObject;
+}
+
+
