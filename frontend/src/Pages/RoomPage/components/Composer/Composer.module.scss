@@ -1,0 +1,46 @@
+.composer {
+  min-height: 54px;
+  padding: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.textarea {
+  flex: 1;
+  border: 1px solid var(--text-muted);
+  border-radius: 16px;
+  padding: 12px 16px;
+  resize: none;
+  background-color: var(--color-border);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border: 1px solid var(--primary);
+  }
+}
+
+.button {
+  cursor: pointer;
+  align-self: stretch;
+  width: 60px;
+  border: none;
+  border-radius: 16px;
+  background-color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-bg-card);
+  transition: all 0.2s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

@@ -1,0 +1,84 @@
+.chat {
+  flex-grow: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background-color: var(--color-bg-main);
+}
+
+.messageItem {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.itemLeft {
+  align-items: start;
+}
+
+.itemRight {
+  align-items: end;
+}
+
+.userName {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.time {
+  font-size: 10px;
+  color: var(--text-light);
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.message {
+  max-width: 50%;
+  padding: 10px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    .deleteIcon {
+      width: 20px;
+      margin-left: 10px;
+      opacity: 1;
+    }
+  }
+}
+
+.messageLeft {
+  background-color: var(--color-bg-card);
+  border-top-left-radius: 0;
+}
+
+.messageRight {
+  background-color: var(--primary);
+  color: var(--color-bg-card);
+  border-top-right-radius: 0;
+}
+
+.deleteIcon {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: width 0.3s ease, opacity 0.3s ease, margin 0.3s ease,
+    color 0.2s ease;
+
+  &:hover {
+    color: var(--error);
+  }
+}

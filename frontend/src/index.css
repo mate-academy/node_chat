@@ -1,0 +1,66 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* --- Основные цвета (Slate/Сланцевый) --- */
+  --color-bg-main: #f8fafc; /* slate-50 */
+  --color-bg-card: #ffffff; /* white */
+  --color-bg-dark: #0f172a; /* slate-900 */
+  --color-border: #e2e8f0; /* slate-200 */
+  --color-border-light: #f1f5f9; /* slate-100 */
+
+  /* --- Текст --- */
+  --text-main: #0f172a; /* slate-900 */
+  --text-muted: #64748b; /* slate-500 */
+  --text-light: #94a3b8; /* slate-400 */
+  --text-white: #ffffff;
+
+  /* --- Акцентный цвет (Blue/Синий) --- */
+  --primary: #2563eb; /* blue-600 */
+  --primary-hover: #1d4ed8; /* blue-700 */
+  --primary-light: #dbeafe; /* blue-100 */
+  --primary-shadow: rgba(37, 99, 235, 0.2);
+
+  /* --- Статусы и действия --- */
+  --success: #22c55e; /* green-500 */
+  --success-dark: #16a34a; /* green-600 */
+  --error: #ef4444; /* red-500 */
+  --error-light: #fef2f2; /* red-50 */
+  --error-hover: #dc2626; /* red-600 */
+
+  /* --- Размеры и отступы --- */
+  --header-height: 64px; /* h-16 */
+  --radius-xl: 12px; /* rounded-xl */
+  --radius-2xl: 16px; /* rounded-2xl */
+  --radius-3xl: 24px; /* rounded-3xl */
+
+  --space-xs: 8px; /* gap-2 */
+  --space-sm: 12px; /* gap-3 */
+  --space-md: 16px; /* p-4 */
+  --space-lg: 24px; /* p-6 */
+  --space-xl: 32px; /* p-8 */
+
+  /* --- Тени --- */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* index.css */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* Наследовать шрифт от родителя */
+  font-size: 100%; /* Чтобы размер тоже не скакал */
+  margin: 0; /* Убирает лишние отступы в Firefox/Safari */
+}
