@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app">
+        <h1>chat</h1>
+
+        <div id="auth-container">
+            <input type="text" id="username" placeholder="ім'я">
+            <input type="text" id="room-name" placeholder="кімната">
+            <button id="create-room-btn">Створити кімнату</button>
+        </div>
+
+        <hr>
+
+        <div id="rooms-container">
+            <h3>Доступні кімнати:</h3>
+            <ul id="rooms-list">
+                </ul>
+        </div>
+
+        <div id="chat-window" style="display: none;">
+            <h2 id="current-room-title">Кімната: <span></span></h2>
+            <div id="messages-log">
+                </div>
+            <div id="message-input-area">
+                <input type="text" id="message-text" placeholder="Напишіть повідомлення...">
+                <button id="send-btn">Надіслати</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/shared/constants.js"></script>
+
+    <script src="api/api.js"></script>
+</body>
+</html>
