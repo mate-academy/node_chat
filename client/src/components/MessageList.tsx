@@ -1,4 +1,10 @@
-import type { Message } from '../types/message.ts';
+import type { Message } from '../types/message';
+
+function formatTime(iso: string) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString();
+}
 
 export const MessageList = ({ messages }: { messages: Message[] }) => (
   <div className="content">
@@ -7,12 +13,12 @@ export const MessageList = ({ messages }: { messages: Message[] }) => (
     )}
 
     {messages.map((message) => (
-      <article className="media box" key={message.time} style={{ marginBottom: '0.75rem' }}>
+      <article className="media box" key={message.id} style={{ marginBottom: '0.75rem' }}>
         <div className="media-content">
           <div className="content">
             <p>
               <strong>{message.author}</strong>{' '}
-              <small className="has-text-grey">{message.time}</small>
+              <small className="has-text-grey">{formatTime(message.time)}</small>
               <br />
               {message.text}
             </p>
@@ -21,4 +27,5 @@ export const MessageList = ({ messages }: { messages: Message[] }) => (
       </article>
     ))}
   </div>
-)
+);
+

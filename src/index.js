@@ -30,7 +30,6 @@ function ensureDefaultRoom() {
 ensureDefaultRoom();
 
 function roomsList() {
-  // eslint-disable-next-line max-len
   return Array.from(rooms.entries()).map(([id, room]) => ({
     id,
     name: room.name,
@@ -38,10 +37,51 @@ function roomsList() {
 }
 
 function makeMessage(author, text) {
-  return { author, time: new Date().toISOString(), text };
+  return {
+    id: `m_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+    author,
+    time: new Date().toISOString(),
+    text,
+  };
 }
 
 app.get('/health', (req, res) => res.json({ ok: true }));
+
+// HTTP API (optional, but keeps api.ts and socket flow consistent)
+app.get('/rooms', (req, res) => res.json(roomsList()));
+
+app.get('/rooms/:roomId/messages', (req, res) => {
+  const { roomId } = req.params;
+
+  if (!rooms.has(roomId)) {
+    return res.status(404).json({ error: 'Room not found' });
+  }
+
+  return res.json(rooms.get(roomId).messages);
+});
+
+app.post('/rooms/:roomId/messages', (req, res) => {
+  const { roomId } = req.params;
+  const { text, author } = req.body || {};
+
+  if (!rooms.has(roomId)) {
+    return res.status(404).json({ error: 'Room not found' });
+  }
+
+  if (typeof text !== 'string' || !text.trim()) {
+    return res.status(400).json({ error: 'Invalid text' });
+  }
+
+  const safeAuthor =
+    typeof author === 'string' && author.trim() ? author.trim() : 'Anonymous';
+
+  const message = makeMessage(safeAuthor, text.trim());
+
+  rooms.get(roomId).messages.push(message);
+  io.to(roomId).emit('message:new', message);
+
+  return res.status(201).json(message);
+});
 
 io.on('connection', (socket) => {
   socket.data.username = null;
@@ -49,13 +89,14 @@ io.on('connection', (socket) => {
 
   socket.emit('room:list', roomsList());
 
+  // Default join to "general" so the client has something usable immediately.
   socket.join('general');
-  socket.emit('room:history', rooms.get('general').messages);
 
   socket.emit('room:joined', {
     roomId: 'general',
     roomName: rooms.get('general').name,
   });
+  socket.emit('room:history', rooms.get('general').messages);
 
   socket.on('user:set', (username) => {
     if (typeof username !== 'string' || username.trim() === '') {
@@ -74,7 +115,7 @@ io.on('connection', (socket) => {
     const id = `room_${Date.now()}_${Math.random().toString(16).slice(2)}`;
 
     rooms.set(id, { name: roomName.trim(), messages: [] });
-    io.emit('rooms:list', roomsList());
+    io.emit('room:list', roomsList());
   });
 
   socket.on('room:rename', ({ roomId, roomName }) => {
@@ -85,8 +126,9 @@ io.on('connection', (socket) => {
     if (typeof roomName !== 'string' || !roomName.trim()) {
       return;
     }
+
     rooms.get(roomId).name = roomName.trim();
-    io.emit('rooms:list', roomsList());
+    io.emit('room:list', roomsList());
 
     io.to(roomId).emit('room:renamed', {
       roomId,
@@ -105,13 +147,32 @@ io.on('connection', (socket) => {
 
     rooms.delete(roomId);
     io.in(roomId).socketsLeave(roomId);
-    io.emit('rooms:list', roomsList());
+    io.emit('room:list', roomsList());
+
+    // If someone was in the deleted room, send them to general
+    io.fetchSockets()
+      .then((sockets) => {
+        sockets
+          .filter((s) => s.data.roomId === roomId)
+          .forEach((s) => {
+            s.data.roomId = 'general';
+            s.join('general');
+
+            s.emit('room:joined', {
+              roomId: 'general',
+              roomName: rooms.get('general').name,
+            });
+            s.emit('room:history', rooms.get('general').messages);
+          });
+      })
+      .catch(() => {});
   });
 
   socket.on('room:join', (roomId) => {
     if (!rooms.has(roomId)) {
       return;
     }
+
     socket.leave(socket.data.roomId);
     socket.data.roomId = roomId;
     socket.join(roomId);
