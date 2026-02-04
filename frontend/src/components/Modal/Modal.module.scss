@@ -1,0 +1,32 @@
+.overlay {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.4);
+	z-index: 10;
+}
+
+.content {
+	width: min(90vw, 420px);
+	background: #fff;
+	border-radius: 12px;
+	padding: 20px 20px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	position: relative;
+}
+
+.close {
+	position: absolute;
+	top: 8px;
+	right: 10px;
+	border: none;
+	background: transparent;
+	font-size: 24px;
+	line-height: 1;
+	cursor: pointer;
+}

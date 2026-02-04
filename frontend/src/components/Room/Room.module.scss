@@ -1,0 +1,36 @@
+.room {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-block: 10px;
+  border-radius: 5px;
+  background-color: #d99c9c;
+  width: fit-content;
+  max-width: 100%;
+  word-wrap: break-word;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &__selected {
+    background-color: #77b37e;
+  }
+
+  &__name {
+    margin: 0;
+    font-weight: bold;
+  }
+
+  &__button {
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+  }
+}

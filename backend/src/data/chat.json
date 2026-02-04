@@ -1,0 +1,51 @@
+{
+  "rooms": [
+    {
+      "id": "9c28bcbe-e3c7-44f4-9355-5e9cabc54149",
+      "messages": [
+        {
+          "author": "admin",
+          "text": "Hello",
+          "time": "2026-02-04T13:03:03.863Z"
+        },
+        {
+          "author": "s-stanishevska",
+          "text": "hello",
+          "time": "2026-02-04T13:02:12.498Z"
+        },
+        {
+          "author": "s-stanishevska",
+          "text": "Hello",
+          "time": "2026-02-04T12:52:06.206Z"
+        }
+      ],
+      "name": "new romm"
+    },
+    {
+      "id": "006d2545-996e-42f2-8090-e70fc9dee6a8",
+      "name": "New",
+      "messages": [
+        {
+          "author": "s-stanishevska",
+          "text": "hello",
+          "time": "2026-02-04T13:54:11.295Z"
+        },
+        {
+          "author": "s-stanishevska",
+          "text": "Руддщ",
+          "time": "2026-02-04T13:54:06.775Z"
+        },
+        {
+          "author": "admin",
+          "text": "fbrheu",
+          "time": "2026-02-04T13:52:24.751Z"
+        },
+        {
+          "author": "admin",
+          "text": "Hello",
+          "time": "2026-02-04T13:52:20.085Z"
+        }
+      ]
+    }
+  ]
+}
