@@ -21,13 +21,12 @@ function broadcastRoomList() {
   const list = Object.keys(rooms);
   const message = JSON.stringify({ type: 'rooms', list });
 
-  wss.clients.forEach((c) => c.send(message));
+  wss.clients.forEach((client) => {
+    client.send(message);
+  });
 }
 
 wss.on('connection', (ws) => {
-  // eslint-disable-next-line no-console
-  console.log('Cliente conectado!');
-
   ws.on('message', (raw) => {
     const data = JSON.parse(raw);
 
@@ -47,43 +46,42 @@ wss.on('connection', (ws) => {
     }
 
     if (data.type === 'join_room') {
-  joinRoom(data.name, ws);
+      joinRoom(data.name, ws);
 
-  ws.send(
-    JSON.stringify({
-      type: 'history',
-      messages: rooms[data.name].messages,
-    }),
-  );
+      ws.send(
+        JSON.stringify({
+          type: 'history',
+          messages: rooms[data.name]?.messages || [],
+        }),
+      );
+    }
 
-  ws.send(JSON.stringify({ type: 'joined', room: data.name }));
-}
+    if (data.type === 'message') {
+      const msg = {
+        id: Date.now(),
+        author: data.author,
+        text: data.text,
+        time: new Date().toISOString(),
+      };
 
-if (data.type === 'message') {
-  const msg = {
-    author: data.author,
-    text: data.text,
-    time: new Date().toISOString(),
-  };
-
-      for (const room of Object.values(rooms)) {
+      Object.values(rooms).forEach((room) => {
         if (room.users.has(ws)) {
-          room.messages.push(msg); // 👈 salva history
+          room.messages.push(msg);
 
-          for (const client of room.users) {
+          room.users.forEach((client) => {
             client.send(
               JSON.stringify({
                 type: 'message',
                 message: msg,
               }),
             );
-          }
+          });
         }
-      }
+      });
     }
   });
 
   broadcastRoomList();
 });
 
-export { server, wss };
+export { server };

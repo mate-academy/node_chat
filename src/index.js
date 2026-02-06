@@ -1,6 +1,6 @@
 'use strict';
 
-import { server } from './server.js';
+import { server } from './db.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -8,6 +8,5 @@ dotenv.config();
 const PORT = process.env.PORT || 3232;
 
 server.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });

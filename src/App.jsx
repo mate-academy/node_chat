@@ -6,47 +6,66 @@ const socket = new WebSocket("ws://localhost:3232");
 
 export const App = () => {
   const [name, setName] = useState(localStorage.getItem("Name") || "");
+  const [room, setRoom] = useState("");
+  const [rooms, setRooms] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [room, setRoom] = useState("");
 
   useEffect(() => {
-    socket.onopen = () => {
-      console.log("Connected to server");
-    };
-
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === "message") {
-        setMessages((prev) => [...prev, data.message]);
+      if (data.type === "rooms") {
+        setRooms(data.list);
       }
 
       if (data.type === "history") {
         setMessages(data.messages);
       }
+
+      if (data.type === "message") {
+        setMessages((prev) => [...prev, data.message]);
+      }
     };
   }, []);
 
   function saveName() {
-    if (!name.trim()) {
-      alert("Name is required");
-      return;
-    }
-
+    if (!name.trim()) return;
     localStorage.setItem("Name", name);
   }
 
-  function joinRoom() {
-    if (!room.trim()) return;
+  function joinRoom(r) {
+    setRoom(r);
+    setMessages([]);
 
     socket.send(
       JSON.stringify({
         type: "join_room",
+        name: r,
+      }),
+    );
+  }
+
+  function createRoom() {
+    if (!room.trim()) return;
+
+    socket.send(
+      JSON.stringify({
+        type: "create_room",
+        name: room,
+      }),
+    );
+  }
+
+  function deleteRoom() {
+    socket.send(
+      JSON.stringify({
+        type: "delete_room",
         name: room,
       }),
     );
 
+    setRoom("");
     setMessages([]);
   }
 
@@ -73,22 +92,30 @@ export const App = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <button onClick={saveName}>Save name</button>
+          <button onClick={saveName}>Save</button>
         </div>
       )}
 
-      {name && !room && (
+      {name && (
         <div>
+          <h3>Rooms</h3>
+          {rooms.map((r) => (
+            <button key={r} onClick={() => joinRoom(r)}>
+              {r}
+            </button>
+          ))}
+
           <input
             placeholder="Room name"
             value={room}
             onChange={(e) => setRoom(e.target.value)}
           />
-          <button onClick={joinRoom}>Join room</button>
+          <button onClick={createRoom}>Create</button>
+          <button onClick={deleteRoom}>Delete</button>
         </div>
       )}
 
-      {name && room && (
+      {room && (
         <div>
           <input
             placeholder="Message"
