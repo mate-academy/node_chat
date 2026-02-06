@@ -7,6 +7,7 @@ const socket = new WebSocket("ws://localhost:3232");
 export const App = () => {
   const [name, setName] = useState(localStorage.getItem("Name") || "");
   const [room, setRoom] = useState("");
+  const [newRoomName, setNewRoomName] = useState("");
   const [rooms, setRooms] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -58,6 +59,8 @@ export const App = () => {
   }
 
   function deleteRoom() {
+    if (!room) return;
+
     socket.send(
       JSON.stringify({
         type: "delete_room",
@@ -67,6 +70,21 @@ export const App = () => {
 
     setRoom("");
     setMessages([]);
+  }
+
+  function renameRoom() {
+    if (!room || !newRoomName.trim()) return;
+
+    socket.send(
+      JSON.stringify({
+        type: "rename_room",
+        oldName: room,
+        newName: newRoomName,
+      }),
+    );
+
+    setRoom(newRoomName);
+    setNewRoomName("");
   }
 
   function sendMessage() {
@@ -105,13 +123,26 @@ export const App = () => {
             </button>
           ))}
 
-          <input
-            placeholder="Room name"
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-          />
-          <button onClick={createRoom}>Create</button>
-          <button onClick={deleteRoom}>Delete</button>
+          <div>
+            <input
+              placeholder="Room name"
+              value={room}
+              onChange={(e) => setRoom(e.target.value)}
+            />
+            <button onClick={createRoom}>Create</button>
+            <button onClick={deleteRoom}>Delete</button>
+          </div>
+
+          {room && (
+            <div>
+              <input
+                placeholder="New room name"
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+              />
+              <button onClick={renameRoom}>Rename</button>
+            </div>
+          )}
         </div>
       )}
 
