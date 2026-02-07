@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; display: flex; height: 100vh; }
+
+    .sidebar {
+      width: 250px;
+      background: #f0f0f0;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-right: 1px solid #ddd;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 16px;
+      background: #333;
+      color: white;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .message {
+      background: #e8e8e8;
+      padding: 8px 12px;
+      border-radius: 8px;
+      max-width: 70%;
+    }
+
+    .message .meta {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .input-area {
+      padding: 16px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 8px 16px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #444; }
+    button:disabled { background: #999; cursor: not-allowed; }
+
+    .room-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .room-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .room-item:hover { background: #e0e0e0; }
+    .room-item.active { background: #333; color: white; }
+    .room-item .name { flex: 1; }
+
+    .room-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .room-actions button {
+      padding: 2px 6px;
+      font-size: 12px;
+      background: #666;
+    }
+
+    .login-form, .create-room-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    .login-form input, .create-room-form input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .hidden { display: none !important; }
+
+    .user-info {
+      padding: 8px;
+      background: #333;
+      color: white;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div id="login-section">
+      <form class="login-form" id="login-form">
+        <input type="text" id="username-input" placeholder="Username" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <div id="user-section" class="hidden">
+      <div class="user-info" id="user-info"></div>
+    </div>
+
+    <div id="rooms-section" class="hidden">
+      <form class="create-room-form" id="create-room-form">
+        <input type="text" id="room-name-input" placeholder="New room name">
+        <button type="submit">+</button>
+      </form>
+      <div class="room-list" id="room-list"></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="header" id="room-header">Select a room</div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area" id="input-area">
+      <input type="text" id="message-input" placeholder="Type a message..." disabled>
+      <button id="send-btn" disabled>Send</button>
+    </div>
+  </div>
+
+  <div class="error hidden" id="error"></div>
+
+  <script>
+    const ws = new WebSocket(`ws://${location.host}`);
+
+    let username = localStorage.getItem('chat_username');
+    let currentRoomId = null;
+    let rooms = [];
+
+    const loginSection = document.getElementById('login-section');
+    const userSection = document.getElementById('user-section');
+    const roomsSection = document.getElementById('rooms-section');
+    const userInfo = document.getElementById('user-info');
+    const loginForm = document.getElementById('login-form');
+    const usernameInput = document.getElementById('username-input');
+    const createRoomForm = document.getElementById('create-room-form');
+    const roomNameInput = document.getElementById('room-name-input');
+    const roomList = document.getElementById('room-list');
+    const roomHeader = document.getElementById('room-header');
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const errorDiv = document.getElementById('error');
+
+    function send(type, payload) {
+      ws.send(JSON.stringify({ type, payload }));
+    }
+
+    function showError(msg) {
+      errorDiv.textContent = msg;
+      errorDiv.classList.remove('hidden');
+      setTimeout(() => errorDiv.classList.add('hidden'), 3000);
+    }
+
+    function renderRooms() {
+      roomList.innerHTML = rooms.map(r => `
+        <div class="room-item ${r.id === currentRoomId ? 'active' : ''}" data-id="${r.id}">
+          <span class="name">${escapeHtml(r.name)}</span>
+          <div class="room-actions">
+            <button class="rename-btn" data-id="${r.id}">R</button>
+            <button class="delete-btn" data-id="${r.id}">X</button>
+          </div>
+        </div>
+      `).join('');
+
+      roomList.querySelectorAll('.room-item').forEach(el => {
+        el.addEventListener('click', (e) => {
+          if (e.target.classList.contains('rename-btn') || e.target.classList.contains('delete-btn')) return;
+          send('joinRoom', { roomId: el.dataset.id });
+        });
+      });
+
+      roomList.querySelectorAll('.rename-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const newName = prompt('New room name:');
+          if (newName) send('renameRoom', { roomId: btn.dataset.id, name: newName });
+        });
+      });
+
+      roomList.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (confirm('Delete this room?')) {
+            send('deleteRoom', { roomId: btn.dataset.id });
+          }
+        });
+      });
+    }
+
+    function addMessage(msg) {
+      const div = document.createElement('div');
+      div.className = 'message';
+      const time = new Date(msg.time).toLocaleTimeString();
+      div.innerHTML = `<div class="meta">${escapeHtml(msg.author)} - ${time}</div>${escapeHtml(msg.text)}`;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function addSystemMessage(text) {
+      const div = document.createElement('div');
+      div.className = 'message';
+      div.style.background = '#fff3cd';
+      div.style.fontStyle = 'italic';
+      div.textContent = text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function setLoggedIn(name) {
+      username = name;
+      localStorage.setItem('chat_username', name);
+      loginSection.classList.add('hidden');
+      userSection.classList.remove('hidden');
+      roomsSection.classList.remove('hidden');
+      userInfo.textContent = `Logged in as ${name}`;
+    }
+
+    ws.onopen = () => {
+      if (username) {
+        send('login', { username });
+      }
+    };
+
+    ws.onmessage = (e) => {
+      const { type, payload } = JSON.parse(e.data);
+
+      switch (type) {
+        case 'loginOk':
+          setLoggedIn(payload.username);
+          break;
+
+        case 'error':
+          showError(payload.message);
+          break;
+
+        case 'roomList':
+          rooms = payload.rooms;
+          renderRooms();
+          break;
+
+        case 'roomCreated':
+          rooms.push({ id: payload.roomId, name: payload.name });
+          renderRooms();
+          break;
+
+        case 'roomRenamed':
+          const renamedRoom = rooms.find(r => r.id === payload.roomId);
+          if (renamedRoom) renamedRoom.name = payload.name;
+          renderRooms();
+          if (currentRoomId === payload.roomId) {
+            roomHeader.textContent = payload.name;
+          }
+          break;
+
+        case 'roomDeleted':
+          rooms = rooms.filter(r => r.id !== payload.roomId);
+          renderRooms();
+          if (currentRoomId === payload.roomId) {
+            currentRoomId = null;
+            roomHeader.textContent = 'Room deleted';
+            messagesDiv.innerHTML = '';
+            messageInput.disabled = true;
+            sendBtn.disabled = true;
+          }
+          break;
+
+        case 'joined':
+          currentRoomId = payload.roomId;
+          roomHeader.textContent = payload.name;
+          messagesDiv.innerHTML = '';
+          payload.messages.forEach(addMessage);
+          messageInput.disabled = false;
+          sendBtn.disabled = false;
+          messageInput.focus();
+          renderRooms();
+          break;
+
+        case 'userJoined':
+          addSystemMessage(`${payload.username} joined the room`);
+          break;
+
+        case 'userLeft':
+          addSystemMessage(`${payload.username} left the room`);
+          break;
+
+        case 'message':
+          addMessage(payload);
+          break;
+      }
+    };
+
+    ws.onclose = () => {
+      showError('Connection lost. Refresh the page.');
+    };
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = usernameInput.value.trim();
+      if (name) send('login', { username: name });
+    });
+
+    createRoomForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = roomNameInput.value.trim();
+      if (name) {
+        send('createRoom', { name });
+        roomNameInput.value = '';
+      }
+    });
+
+    function sendMessage() {
+      const text = messageInput.value.trim();
+      if (text && currentRoomId) {
+        send('message', { text });
+        messageInput.value = '';
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>

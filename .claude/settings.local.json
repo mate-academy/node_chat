@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(export PATH=\"$HOME/.nvm/versions/node/v24.13.0/bin:$PATH\")",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint:*)"
+    ]
+  }
+}
