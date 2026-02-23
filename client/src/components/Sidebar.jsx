@@ -20,14 +20,19 @@ function Sidebar({ rooms, currentRoom, onSelectRoom, onCreateRoom, onLogout, use
               borderRadius: '4px'
             }} onClick={() => onSelectRoom(room)}>
               # {room}
-              {/* <div style={{ float: 'right', fontSize: '12px' }}>✏️ ❌</div> */}
 
-            {room !== 'General' && (
+              {room !== 'General' && (
                 <div style={{ float: 'right', fontSize: '12px' }}>
-                  <button onClick={() => onRenameRoom(room)}>✏️</button>
-                  <button onClick={() => onDeleteRoom(room)}>❌</button>
-              </div>
-            )}
+                  <button onClick={(e) => {
+                    e.stopPropagation();
+                    onRenameRoom(room);
+                  }}>✏️</button>
+                  <button onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteRoom(room);
+                  }}>❌</button>
+                </div>
+              )}
             </li>
           ))}
         </ul>

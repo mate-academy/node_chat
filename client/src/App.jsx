@@ -68,11 +68,11 @@ function App() {
     }
 
     if (window.confirm(`Are you sure you want to delete ${roomToDelete}?`)) {
-      socket.emit('delete_room', roomToDelete)
-    }
+      socket.emit('delete_room', roomToDelete);
 
-    if (currentRoom === roomToDelete) {
-      setCurrentRoom('General');
+      if (currentRoom === roomToDelete) {
+        setCurrentRoom('General');
+      }
     }
   }
 
@@ -96,6 +96,10 @@ function App() {
       socket.off('update_rooms');
     };
   }, []);
+
+  useEffect(() => {
+    socket.emit('join_room', currentRoom);
+  }, [currentRoom]);
 
   if (!username) {
     return (

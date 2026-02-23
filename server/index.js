@@ -26,9 +26,18 @@ io.on('connection', (socket) => {
 
   socket.emit('init_data', chatData);
 
+  socket.on('join_room', (roomName) => {
+    socket.rooms.forEach(room => {
+      if (room !== socket.id) socket.leave(room);
+    });
+
+    socket.join(roomName);
+    console.log(`User ${socket.id} joined room: ${roomName}.`);
+  })
+
   socket.on('send_message', (msg) => {
     chatData.messages.push(msg);
-    io.emit('receive_message', msg);
+    io.to(msg.room).emit('receive_message', msg);
   });
 
   socket.on('create_room', (roomName) => {
