@@ -26,8 +26,15 @@ io.on('connection', (socket) => {
 
   socket.emit('init_data', chatData);
 
+  socket.on('set_username', (name) => {
+    socket.username = name;
+    console.log(`Socket ${socket.id} is now known as ${name}.`)
+  })
+
   socket.on('join_room', (roomName) => {
-    socket.rooms.forEach(room => {
+    const currentRooms = Array.from(socket.rooms);
+
+    currentRooms.forEach(room => {
       if (room !== socket.id) socket.leave(room);
     });
 

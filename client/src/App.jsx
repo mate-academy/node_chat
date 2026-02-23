@@ -24,6 +24,8 @@ function App() {
     if (tempName.trim()) {
       localStorage.setItem('username', tempName);
       setUserName(tempName);
+
+      socket.emit('set_username', tempName);
     }
   };
 
@@ -51,6 +53,7 @@ function App() {
     const roomName = prompt('Enter new room name:');
     if (roomName && !rooms.includes(roomName)) {
       socket.emit('create_room', roomName);
+      setCurrentRoom(roomName);
     }
   };
 
@@ -98,8 +101,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    socket.emit('join_room', currentRoom);
-  }, [currentRoom]);
+    if (username) {
+      socket.emit('set_username', username);
+      socket.emit('join_room', currentRoom);
+    }
+  }, [username, currentRoom]);
 
   if (!username) {
     return (
