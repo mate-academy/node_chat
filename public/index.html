@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <!-- Username Modal -->
+    <div id="usernameModal" class="modal">
+      <div class="modal-content">
+        <h2>Welcome to Node Chat</h2>
+        <p>Enter your username to start chatting</p>
+        <form id="usernameForm">
+          <input
+            type="text"
+            id="usernameInput"
+            placeholder="Your username..."
+            autocomplete="off"
+            required
+            minlength="2"
+            maxlength="20"
+          />
+          <button type="submit">Join Chat</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Chat Layout -->
+    <div id="chatApp" class="chat-app hidden">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>Rooms</h2>
+          <button id="createRoomBtn" class="btn-icon" title="Create Room">
+            +
+          </button>
+        </div>
+        <ul id="roomList" class="room-list"></ul>
+        <div class="sidebar-footer">
+          <span id="currentUser" class="current-user"></span>
+        </div>
+      </aside>
+
+      <!-- Chat Area -->
+      <main class="chat-main">
+        <header class="chat-header">
+          <h3 id="roomName">Select a room</h3>
+          <div class="room-actions">
+            <button
+              id="renameRoomBtn"
+              class="btn-small hidden"
+              title="Rename Room"
+            >
+              ✏️
+            </button>
+            <button
+              id="deleteRoomBtn"
+              class="btn-small hidden"
+              title="Delete Room"
+            >
+              🗑️
+            </button>
+          </div>
+        </header>
+
+        <div id="messagesContainer" class="messages-container">
+          <div id="messagesList" class="messages-list"></div>
+        </div>
+
+        <form id="messageForm" class="message-form hidden">
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Type a message..."
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+      </main>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/client.js"></script>
+  </body>
+</html>
