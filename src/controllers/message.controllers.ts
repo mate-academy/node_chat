@@ -69,24 +69,8 @@ const deleteMessage = async (req: Request, res: Response) => {
   res.sendStatus(204);
 };
 
-// const getUpdates = async (req: Request, res: Response) => {
-//   res.setHeader('content-type', 'text/event-stream');
-//   res.setHeader('connection', 'keep-alive');
-//   res.setHeader('cache-control', 'no-store');
-//   // const cb = (update: Update) => {
-//   //   res.write(`data: ${JSON.stringify(update)}\n\n`);
-//   // };
-
-//   // emitter.on('message', cb);
-
-//   // res.on('close', () => {
-//   //   emitter.off('message', cb);
-//   // });
-// };
-
 export default {
   getMessages,
   create,
   deleteMessage,
-  // getUpdates,
 };

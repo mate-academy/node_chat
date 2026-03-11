@@ -7,4 +7,3 @@ export const router = Router();
 router.get('/', catchAsync(messageControllers.getMessages));
 router.post('/', catchAsync(messageControllers.create));
 router.delete('/', catchAsync(messageControllers.deleteMessage));
-// router.get('/updates', catchAsync(messageControllers.getUpdates));
