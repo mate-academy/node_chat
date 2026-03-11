@@ -5,7 +5,7 @@ Implemented advanced fullstack chat application.
 - Express
 - Prisma
 - Postgres
-- 
+  
 # Approaches used: 
 - Middleware for error handling
 - Custom error class, to improve detalization of errors
