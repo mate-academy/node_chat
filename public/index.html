@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chat</title>
+
+<style>
+
+body {
+  font-family: Arial;
+  max-width: 700px;
+  margin: auto;
+}
+
+#messages {
+  list-style: none;
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  margin-top: 15px;
+}
+
+.message {
+  padding: 6px 10px;
+  margin: 6px;
+  border-radius: 10px;
+  background: #f2f2f2;
+}
+
+.author {
+  font-weight: bold;
+}
+
+.time {
+  font-size: 12px;
+  color: gray;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Simple Chat</h2>
+
+<input id="username" placeholder="Enter username">
+<button onclick="setUsername()">Save</button>
+
+<br><br>
+
+Room:
+<select id="roomSelect" onchange="changeRoom()">
+<option value="general">general</option>
+</select>
+
+<input id="newRoom" placeholder="New room">
+<button onclick="createRoom()">Create</button>
+
+<br><br>
+
+<b>Users online:</b>
+<ul id="users"></ul>
+
+<br>
+
+<input id="message" placeholder="Message">
+<button onclick="sendMessage()">Send</button>
+
+<ul id="messages"></ul>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+const socket = io();
+
+let username = localStorage.getItem('username') || '';
+let currentRoom = 'general';
+
+const usernameInput = document.getElementById('username');
+const messageInput = document.getElementById('message');
+const messagesList = document.getElementById('messages');
+const roomSelect = document.getElementById('roomSelect');
+const usersList = document.getElementById('users');
+
+if (username) {
+  usernameInput.value = username;
+}
+
+function setUsername() {
+  username = usernameInput.value;
+  localStorage.setItem('username', username);
+  socket.emit('setUsername', username);
+}
+
+function createRoom() {
+  const room = document.getElementById('newRoom').value;
+
+  if (!room) return;
+
+  socket.emit('createRoom', room);
+
+  document.getElementById('newRoom').value = '';
+}
+
+socket.on('roomCreated', (room) => {
+
+  const option = document.createElement('option');
+
+  option.value = room;
+  option.textContent = room;
+
+  roomSelect.appendChild(option);
+
+});
+
+function changeRoom() {
+
+  currentRoom = roomSelect.value;
+
+  socket.emit('joinRoom', currentRoom);
+
+}
+
+function sendMessage() {
+
+  const text = messageInput.value;
+
+  if (!username || !text) return;
+
+  socket.emit('message', {
+    author: username,
+    text: text
+  });
+
+  messageInput.value = '';
+
+}
+
+messageInput.addEventListener('keypress', (event) => {
+
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
+
+});
+
+function addMessage(msg) {
+
+  const li = document.createElement('li');
+
+  li.className = 'message';
+
+  li.innerHTML = `
+    <span class="author">${msg.author}</span>
+    <span class="time">(${msg.time})</span>
+    <div>${msg.text}</div>
+  `;
+
+  messagesList.appendChild(li);
+
+  messagesList.scrollTop = messagesList.scrollHeight;
+
+}
+
+socket.on('message', (msg) => {
+
+  addMessage(msg);
+
+});
+
+socket.on('history', (messages) => {
+
+  messagesList.innerHTML = '';
+
+  messages.forEach((msg) => {
+    addMessage(msg);
+  });
+
+});
+
+socket.on('users', (users) => {
+
+  usersList.innerHTML = '';
+
+  users.forEach((u) => {
+
+    const li = document.createElement('li');
+
+    li.textContent = u;
+
+    usersList.appendChild(li);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
