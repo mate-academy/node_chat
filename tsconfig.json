@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2022",        // Modern JS features supported by current Node versions
+    "lib": ["ES2022"],
+
+    /* Modules */
+    "module": "CommonJS",      // Standard Node.js module system
+    "rootDir": "./src",        // Assuming your code is in a 'src' folder
+    "outDir": "./dist",        // Where compiled JS will go (if you build for production)
+    "esModuleInterop": true,   // Helps import standard CommonJS packages smoothly
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "./src/types/index.d.ts"],
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+
+    /* Type Checking */
+    "strict": true,            // Enables all strict type-checking options
+    "skipLibCheck": true       // Speeds up compilation by skipping types in node_modules
+  },
+  "ts-node": {
+    // These options are specifically for ts-node
+    "require": ["tsconfig-paths/register"], // Optional: helps if you use absolute path aliases
+    "transpileOnly": true                   // Speeds up execution by skipping type checking on run
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
