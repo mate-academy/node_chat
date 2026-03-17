@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls C:/Users/Hanna/projects/node/node_chat/.eslint* 2>/dev/null; ls C:/Users/Hanna/projects/node/node_chat/src/public/.eslint* 2>/dev/null; cat C:/Users/Hanna/projects/node/node_chat/package.json | grep -A 20 eslint)",
+      "Bash(cd C:/Users/Hanna/projects/node/node_chat && node -e \"\nconst WebSocket = require\\('ws'\\);\n\nprocess.env.PORT = 3002;\nrequire\\('./src/index.js'\\);\n\nsetTimeout\\(\\(\\) => {\n  const ws = new WebSocket\\('ws://localhost:3002'\\);\n  let step = 0;\n  ws.on\\('open', \\(\\) => {\n    ws.send\\(JSON.stringify\\({ type: 'set_username', username: 'testuser' }\\)\\);\n  }\\);\n  ws.on\\('message', \\(data\\) => {\n    const msg = JSON.parse\\(data\\);\n    console.log\\('MSG:', JSON.stringify\\(msg\\)\\);\n    if \\(msg.type === 'username_confirmed'\\) {\n      // Test: send create_room with empty name \\(simulate the bug\\)\n      ws.send\\(JSON.stringify\\({ type: 'create_room', name: '' }\\)\\);\n    }\n    if \\(msg.type === 'error' || \\(msg.type === 'room_created' && step === 0\\)\\) {\n      step++;\n      // Now test with actual name\n      ws.send\\(JSON.stringify\\({ type: 'create_room', name: 'test' }\\)\\);\n    }\n    if \\(msg.type === 'room_created' && step === 1\\) {\n      setTimeout\\(\\(\\) => process.exit\\(0\\), 100\\);\n    }\n  }\\);\n}, 200\\);\n\" 2>&1)"
+    ]
+  }
+}

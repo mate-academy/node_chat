@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Node Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Login screen ── -->
+<div id="login-screen">
+  <h1>💬 Node Chat</h1>
+  <p>Enter a username to start chatting</p>
+  <input id="username-input" type="text" placeholder="Your username…" maxlength="30" autocomplete="off" />
+  <button class="primary" id="login-btn">Enter Chat</button>
+</div>
+
+<!-- ── Main app ── -->
+<div id="app">
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <div id="user-avatar">?</div>
+      <span id="username-display">—</span>
+    </div>
+    <div id="rooms-section">
+      <div id="rooms-title">
+        <span>Rooms</span>
+      </div>
+      <ul id="rooms-list"></ul>
+      <button id="create-room-btn">＋ New room</button>
+    </div>
+  </aside>
+
+  <section id="chat-panel">
+    <div id="chat-header">
+      <h2 id="room-title">Select a room</h2>
+      <div id="connection-dot" class="disconnected"></div>
+    </div>
+
+    <div id="no-room">
+      <span class="big">💬</span>
+      <p>Join a room to start chatting</p>
+    </div>
+
+    <div id="messages" style="display:none"></div>
+
+    <form id="message-form" style="display:none" onsubmit="return false">
+      <input id="message-input" type="text" placeholder="Message…" maxlength="2000" autocomplete="off" />
+      <button class="primary" id="send-btn">Send</button>
+    </form>
+  </section>
+</div>
+
+<!-- ── Modal ── -->
+<div id="modal-overlay">
+  <div id="modal">
+    <h3 id="modal-title">Room name</h3>
+    <input id="modal-input" type="text" placeholder="Room name…" maxlength="40" />
+    <div class="modal-actions">
+      <button class="cancel-btn" id="modal-cancel">Cancel</button>
+      <button class="primary" id="modal-ok">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ── -->
+<div id="toast"></div>
+
+<script src="client.js"></script>
+</body>
+</html>
