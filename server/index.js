@@ -18,8 +18,20 @@ async function start() {
     general: [],
   };
 
+  const broadcastRooms = () => {
+    const roomList = Object.keys(rooms);
+
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: 'rooms', rooms: roomList }));
+      }
+    });
+  };
+
   wss.on('connection', (ws) => {
     console.log('User connected');
+
+    ws.send(JSON.stringify({ type: 'rooms', rooms: Object.keys(rooms) }));
 
     ws.on('message', (data) => {
       const message = JSON.parse(data);
@@ -30,15 +42,10 @@ async function start() {
           ws.username = message.username;
           ws.room = message.room || 'general';
 
-          if (!rooms[ws.room]) {
-            rooms[ws.room] = [];
-          }
+          if (!rooms[ws.room]) rooms[ws.room] = [];
 
           ws.send(
-            JSON.stringify({
-              type: 'history',
-              messages: rooms[ws.room],
-            }),
+            JSON.stringify({ type: 'history', messages: rooms[ws.room] }),
           );
           break;
 
@@ -51,9 +58,7 @@ async function start() {
             time: new Date().toISOString(),
           };
 
-          if (!rooms[ws.room]) {
-            rooms[ws.room] = [];
-          }
+          if (!rooms[ws.room]) rooms[ws.room] = [];
 
           rooms[ws.room].push(msg);
 
@@ -62,42 +67,33 @@ async function start() {
               client.readyState === WebSocket.OPEN &&
               client.room === ws.room
             ) {
-              client.send(
-                JSON.stringify({
-                  type: 'message',
-                  message: msg,
-                }),
-              );
+              client.send(JSON.stringify({ type: 'message', message: msg }));
             }
           });
           break;
 
         case 'create_room':
-          if (!rooms[message.name]) {
-            rooms[message.name] = [];
-          }
+          if (!rooms[message.name]) rooms[message.name] = [];
+          broadcastRooms();
           break;
 
         case 'delete_room':
           delete rooms[message.name];
+          broadcastRooms();
           break;
 
         case 'rename_room': {
           const { oldName, newName } = message;
-
-          if (!rooms[oldName]) return;
-
-          if (rooms[newName]) return;
+          if (!rooms[oldName] || rooms[newName]) return;
 
           rooms[newName] = rooms[oldName];
           delete rooms[oldName];
 
           wss.clients.forEach((client) => {
-            if (client.room === oldName) {
-              client.room = newName;
-            }
+            if (client.room === oldName) client.room = newName;
           });
 
+          broadcastRooms();
           break;
         }
       }
