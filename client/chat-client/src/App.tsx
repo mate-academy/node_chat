@@ -8,6 +8,11 @@ type Message = {
   time: string;
 };
 
+type WSMessage =
+  | { type: 'message'; message: Message }
+  | { type: 'history'; messages: Message[] }
+  | { type: 'rooms'; rooms: string[] };
+
 export default function App() {
   const [username, setUsername] = useState(
     localStorage.getItem('username') || '',
@@ -22,7 +27,7 @@ export default function App() {
 
   useEffect(() => {
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      const data: WSMessage = JSON.parse(event.data);
 
       if (data.type === 'message') {
         setMessages((prev) => [...prev, data.message]);
@@ -31,23 +36,35 @@ export default function App() {
       if (data.type === 'history') {
         setMessages(data.messages);
       }
+
+      if (data.type === 'rooms') {
+        setRooms(data.rooms);
+      }
     };
   }, []);
 
+  useEffect(() => {
+    if (username) {
+      ws.send(
+        JSON.stringify({
+          type: 'join',
+          username,
+          room,
+        }),
+      );
+    }
+  }, [username, room]);
+
   const saveUsername = () => {
+    if (!inputName) return;
+
     localStorage.setItem('username', inputName);
     setUsername(inputName);
-
-    ws.send(
-      JSON.stringify({
-        type: 'join',
-        username: inputName,
-        room,
-      }),
-    );
   };
 
   const sendMessage = () => {
+    if (!message || !username) return;
+
     ws.send(
       JSON.stringify({
         type: 'message',
@@ -60,21 +77,12 @@ export default function App() {
 
   const joinRoom = (roomName: string) => {
     setRoom(roomName);
-
-    ws.send(
-      JSON.stringify({
-        type: 'join',
-        username,
-        room: roomName,
-      }),
-    );
+    setMessages([]);
   };
 
   const createRoom = () => {
     const name = prompt('Room name');
     if (!name) return;
-
-    setRooms((prev) => [...prev, name]);
 
     ws.send(
       JSON.stringify({
@@ -85,25 +93,45 @@ export default function App() {
   };
 
   const deleteRoom = (roomName: string) => {
-    setRooms((prev) => prev.filter((r) => r !== roomName));
-
     ws.send(
       JSON.stringify({
         type: 'delete_room',
         name: roomName,
       }),
     );
+
+    if (room === roomName) {
+      setRoom('general');
+    }
+  };
+
+  const renameRoom = (oldName: string) => {
+    const newName = prompt('New room name');
+    if (!newName) return;
+
+    ws.send(
+      JSON.stringify({
+        type: 'rename_room',
+        oldName,
+        newName,
+      }),
+    );
+
+    if (room === oldName) {
+      setRoom(newName);
+    }
   };
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <div style={{ width: 200, borderRight: '1px solid gray' }}>
+      <div style={{ width: 220, borderRight: '1px solid gray', padding: 10 }}>
         <h3>Rooms</h3>
 
         {rooms.map((r) => (
-          <div key={r}>
+          <div key={r} style={{ marginBottom: 5 }}>
             <button onClick={() => joinRoom(r)}>{r}</button>
-            <button onClick={() => deleteRoom(r)}>x</button>
+            <button onClick={() => renameRoom(r)}>✏️</button>
+            <button onClick={() => deleteRoom(r)}>❌</button>
           </div>
         ))}
 
@@ -113,8 +141,9 @@ export default function App() {
       <div style={{ flex: 1, padding: 10 }}>
         {!username ? (
           <>
+            <h3>Enter username</h3>
             <input
-              placeholder="Enter username"
+              placeholder="Username"
               value={inputName}
               onChange={(e) => setInputName(e.target.value)}
             />
@@ -124,11 +153,19 @@ export default function App() {
           <>
             <h3>Room: {room}</h3>
 
-            <div style={{ height: 400, overflowY: 'auto' }}>
+            <div
+              style={{
+                height: 400,
+                overflowY: 'auto',
+                border: '1px solid #ccc',
+                padding: 10,
+                marginBottom: 10,
+              }}
+            >
               {messages.map((msg, i) => (
-                <div key={i}>
+                <div key={i} style={{ marginBottom: 5 }}>
                   <b>{msg.author}</b>: {msg.text}
-                  <div style={{ fontSize: 10 }}>
+                  <div style={{ fontSize: 10, color: 'gray' }}>
                     {new Date(msg.time).toLocaleTimeString()}
                   </div>
                 </div>
@@ -138,6 +175,7 @@ export default function App() {
             <input
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              placeholder="Type message..."
             />
             <button onClick={sendMessage}>Send</button>
           </>

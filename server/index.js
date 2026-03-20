@@ -81,6 +81,25 @@ async function start() {
         case 'delete_room':
           delete rooms[message.name];
           break;
+
+        case 'rename_room': {
+          const { oldName, newName } = message;
+
+          if (!rooms[oldName]) return;
+
+          if (rooms[newName]) return;
+
+          rooms[newName] = rooms[oldName];
+          delete rooms[oldName];
+
+          wss.clients.forEach((client) => {
+            if (client.room === oldName) {
+              client.room = newName;
+            }
+          });
+
+          break;
+        }
       }
     });
 
