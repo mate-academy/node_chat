@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
 interface Message {
+  id: string;
   author: string;
   text: string;
+  time?: string;
 }
 
 interface ChatProps {
@@ -54,8 +56,10 @@ export function Chat({ roomId }: ChatProps) {
     <section id="center" className="mt">
       <div>
         {messages.map((msg, index) => (
-          <div key={index}>
-            <b>{msg.author}:</b> {msg.text}
+          <div key={msg.id || index}>
+            <b>{msg.author}:</b>
+            <p>{msg.text}</p>
+            <p className="ml time">{msg.time}</p>
           </div>
         ))}
         {messages.length === 0

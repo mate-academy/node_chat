@@ -43,6 +43,32 @@ app.post('/rooms', (req, res) => {
   res.json(newRoom);
 });
 
+app.delete('/rooms/:id', (req, res) => {
+  const roomId = req.params.id;
+  const roomIndex = rooms.findIndex((room) => room.id === roomId);
+
+  if (roomIndex !== -1) {
+    rooms.splice(roomIndex, 1);
+    delete messagesHistory[roomId];
+    res.json({ success: true, id: roomId });
+  } else {
+    res.status(404).json({ error: 'Room not found' });
+  }
+});
+
+app.patch('/rooms/:id', (req, res) => {
+  const roomId = req.params.id;
+  const newName = req.body.name;
+  const room = rooms.find((r) => r.id === roomId);
+
+  if (room) {
+    room.name = newName;
+    res.json({ success: true, room });
+  } else {
+    res.status(404).json({ error: 'Кімнату не знайдено' });
+  }
+});
+
 const server = app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
@@ -54,6 +80,14 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (rowData) => {
     const parsedData = JSON.parse(rowData);
+
+    parsedData.time = new Date().toLocaleTimeString('uk-UA', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    parsedData.id =
+      Date.now().toString() + Math.random().toString(36).substring(2, 9);
 
     console.log('ОТРИМАЛИ ПОВІДОМЛЕННЯ:', parsedData);
 

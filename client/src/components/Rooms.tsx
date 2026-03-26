@@ -25,7 +25,7 @@ export function Rooms() {
   const handleCreateRoom = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newRoomName.trim().length < 3) {
-          return alert("Room name must be at least 3 characters long");
+          return alert("Назва кімнати повинна містити не менше 3 символів");
     }
     
     const isExist = rooms.find(r => r.name === newRoomName);
@@ -42,6 +42,49 @@ export function Rooms() {
       .then(savedRoom => {
         setRooms([...rooms, savedRoom]);
         setNewRoomName('');
+      });
+  }
+
+  const handleDeleteRoom = (id: string) => {
+    if (!confirm("Ви впевнені, що хочете видалити кімнату?")) {
+      return;
+    }
+    
+    fetch(`http://localhost:5000/rooms/${id}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setRooms(rooms.filter(room => room.id !== id));
+        }
+      });
+  }
+
+  const handleRenameRoom = (id: string, currentName: string) => {
+    const newName = window
+      .prompt("Введіть нову назву кімнати:", currentName);
+
+    if (!newName || newName.trim().length < 3) {
+      return alert("Назва кімнати повинна містити не менше 3 символів");
+    }
+
+    fetch(`http://localhost:5000/rooms/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: newName.trim() }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setRooms(rooms.map(room =>
+            room.id === id
+              ? { ...room, name: newName.trim() }
+              : room
+          ));
+        }
       });
   }
 
@@ -90,6 +133,20 @@ export function Rooms() {
                       onClick={() => joinRoom(room.id)}
                     >
                       Увійти
+                    </button>
+                    <button
+                      type="button"
+                      className="counter-red ml"
+                      onClick={() => handleDeleteRoom(room.id)}
+                    >
+                      Видалити
+                    </button>
+                    <button
+                      type="button"
+                      className="counter-pink ml"
+                      onClick={() => handleRenameRoom(room.id, room.name)}
+                    >
+                      Перейменувати
                     </button>
                   </li>
                 ))}
