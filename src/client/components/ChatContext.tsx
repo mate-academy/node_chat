@@ -73,7 +73,19 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     socketRef.current = socket;
 
     socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      let data;
+
+      try {
+        data = JSON.parse(event.data.toString());
+      } catch (error) {
+        console.error('Invalid JSON received:', event.data.toString());
+
+        sendMessage({
+          type: 'error',
+        });
+
+        return;
+      }
 
       switch (data.type) {
         case 'message':
@@ -115,6 +127,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             return prev;
           });
           break;
+          
+        default:
+          console.warn('Unknown message type:', data.type);
       }
     };
 

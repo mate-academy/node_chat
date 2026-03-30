@@ -94,17 +94,6 @@ const renamed = async (id: string, name: string) => {
   });
 };
 
-const addMessage = async (id: string, messageId: number) => {
-  return db.room.update({
-    where: { id },
-    data: {
-      messages: {
-        connect: { id: messageId },
-      },
-    },
-  });
-};
-
 const deleteOne = async (id: string) => {
   return db.room.delete({
     where: { id },
@@ -116,7 +105,6 @@ export const roomsRepository = {
   getAllByUserId,
   create,
   addUser,
-  addMessage,
   deleteOne,
   renamed,
   removeUser,

@@ -1,4 +1,5 @@
-.message_list, .empty_box {
+.message_list,
+.empty_box {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -6,6 +7,12 @@
   padding-right: 10px;
   gap: 15px;
   height: fit-content;
+
+  .messages {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 
   &_box {
     display: flex;
@@ -23,10 +30,35 @@
     flex-direction: column;
     padding: 10px;
     border-radius: 10px 10px 10px 0;
-    gap: 5px;
+    justify-content: space-between;
     min-width: 200px;
     width: fit-content;
     max-width: 47%;
+
+    &_text_box {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: end;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+
+    &_date {
+      margin: 0 auto;
+    }
+    &_time {
+      white-space: nowrap;
+    }
+
+    &_header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
 
     &_current_user {
       align-self: end;
