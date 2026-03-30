@@ -1,0 +1,53 @@
+.rooms_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.room {
+  &_item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--color-elements);
+    border-radius: 5px;
+    overflow: hidden;
+    padding-right: 5px;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.005);
+      box-shadow: 0 3px 13px 0 var(--color-shadow);
+      background-color: var(--color-selected-room);
+    }
+  }
+
+  &_name {
+    color: white;
+    padding: 10px;
+    font-weight: 700;
+  }
+
+  &_name_text,
+  &_members {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    display: block;
+    width: 100px;
+  }
+
+  &_members {
+    margin-left: 10px;
+    color: rgb(15, 15, 15);
+    font-weight: 500;
+    width: 100%;
+  }
+}
+
+.is_active {
+  box-shadow: 0 3px 13px 0 var(--color-shadow);
+  background-color: var(--color-selected-room);
+}

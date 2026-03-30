@@ -1,0 +1,42 @@
+.rooms {
+  position: relative;
+  height: 100vh;
+  background-color: var(--color-primary);
+
+  &_header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    padding-left: 20px;
+    align-items: center;
+    background-color: var(--color-secondary);
+  }
+
+  &_footer {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+    padding-left: 20px;
+    align-items: center;
+    background-color: var(--color-secondary);
+  }
+}
+
+.add_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  aspect-ratio: 1/1;
+  cursor: pointer;
+
+  &:hover i {
+    color: white;
+  }
+}
