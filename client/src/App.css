@@ -1,0 +1,164 @@
+.app-layout {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.auth-card {
+  border: 1px solid black;
+  padding: 20px;
+  text-align: center;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  width: 300px;
+  background-color: black;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.sidebar h3 {
+  margin: 0 0 10px 0;
+}
+
+.room-list-container {
+  flex-grow: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.create-room-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.room-item {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+}
+
+.room-item.active {
+  font-weight: bold;
+  background-color: #eee;
+}
+
+.room-actions button {
+  margin-left: 5px;
+}
+
+.chat-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 10px;
+  border-bottom: 1px solid black;
+  margin: 0;
+}
+
+.messages-container {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.message-bubble {
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+.message-meta {
+  margin-bottom: 5px;
+}
+
+.message-author {
+  font-weight: bold;
+}
+
+.message-time {
+  font-size: 12px;
+  color: gray;
+  margin-left: 10px;
+}
+
+.message-text {
+  margin: 0;
+}
+
+.chat-form {
+  padding: 10px;
+  border-top: 1px solid black;
+  display: flex;
+  gap: 5px;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 5px;
+}
+
+button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.user-controls {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background-color: #ff7875;
+}
