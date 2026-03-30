@@ -79,13 +79,13 @@ export const MessageList = () => {
       {messages.length > 0 ? (
         <>
           <div className={styles.message_list}>
-            {Object.entries(grouped).map(([date, messages]) => (
+            {Object.entries(grouped).map(([date, msgs]) => (
               <div className={styles.messages} key={date}>
                 <p className={cn('subtitle', 'is-7', styles.message_date)}>
                   {date}
                 </p>
 
-                {messages.map((message) => (
+                {msgs.map((message) => (
                   <div
                     key={message.id}
                     className={cn(
@@ -98,7 +98,7 @@ export const MessageList = () => {
                     )}
                   >
                     <p className="title is-6">{message.author.username}</p>
-                    
+
                     <div className={styles.message_text_box}>
                       <p className="subtitle is-6">{message.text}</p>
                       <p

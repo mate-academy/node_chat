@@ -44,7 +44,15 @@ wss.on('connection', (ws: CustomWebSocket) => {
   ws.rooms = new Set();
 
   ws.on('message', (message) => {
-    const data = JSON.parse(message.toString());
+    let data;
+
+    try {
+      data = JSON.parse(message.toString());
+    } catch (error) {
+      console.log(error);
+
+      return;
+    }
 
     switch (data.type) {
       case 'subscribe':

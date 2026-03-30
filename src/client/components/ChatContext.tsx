@@ -78,8 +78,6 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         data = JSON.parse(event.data.toString());
       } catch (error) {
-        console.error('Invalid JSON received:', event.data.toString());
-
         sendMessage({
           type: 'error',
         });
@@ -127,9 +125,6 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             return prev;
           });
           break;
-          
-        default:
-          console.warn('Unknown message type:', data.type);
       }
     };
 
