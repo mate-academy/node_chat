@@ -5,9 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "init": "mate-scripts init",
-    "start": "node src/index.js",
-    "lint": "npm run format && mate-scripts lint",
-    "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
+    "start": "node --watch server/index.js",
+    "lint": "npm run format && mate-scripts lint ./server",
+    "format": "prettier --ignore-path .prettierignore --write ./server/**/*.{js,ts}",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
     "postinstall": "npm run update",
@@ -17,7 +17,7 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "@mate-academy/eslint-config": "latest",
-    "@mate-academy/scripts": "^1.8.6",
+    "@mate-academy/scripts": "^2.1.3",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-node": "^11.1.0",
@@ -26,5 +26,10 @@
   },
   "mateAcademy": {
     "projectType": "javascript"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "ws": "^8.20.0"
   }
 }
