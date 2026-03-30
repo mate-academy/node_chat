@@ -31,8 +31,4 @@ export const roomService = {
   deleteRoom: (roomId: string) => {
     return authClient.delete(`/rooms/room/${roomId}`);
   },
-
-  addMessage: (id: number, messageId: number) => {
-    return authClient.patch(`/rooms/${id}/add-message`, { messageId });
-  },
 };

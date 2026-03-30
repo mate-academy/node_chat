@@ -31,9 +31,8 @@ export const LoginPage = () => {
         setCurrentUser({ id: user.id, username: user.username });
         navigate('/rooms');
       })
-      .catch((e) => catchError(e, setError));
-
-    formikHelpers.setSubmitting(false);
+      .catch((e) => catchError(e, setError))
+      .finally(() => formikHelpers.setSubmitting(false));
   };
 
   return (

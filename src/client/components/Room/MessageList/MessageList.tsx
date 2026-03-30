@@ -53,9 +53,9 @@ export const MessageList = () => {
       {messages.length > 0 ? (
         <>
           <div className={styles.message_list}>
-            {messages.map((message, index) => (
+            {messages.map((message) => (
               <div
-                key={index}
+                key={message.id}
                 className={cn(
                   styles.message,
                   `room_name_color_${+(message.userId || 0) % 5}`,

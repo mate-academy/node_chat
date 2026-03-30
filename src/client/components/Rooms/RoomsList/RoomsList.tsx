@@ -28,7 +28,7 @@ export const RoomsList = () => {
           <NavLink
             to={`/rooms/${room.id}`}
             className={getLinkClass}
-            key={index}
+            key={room.id}
           >
             <div
               className={cn(styles.room_name, `room_name_color_${index % 5}`)}
