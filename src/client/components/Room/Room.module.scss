@@ -1,0 +1,29 @@
+.room {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100vh;
+
+  &_header {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+    background-color: var(--color-primary);
+  }
+}
+
+.change_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  aspect-ratio: 1/1;
+  cursor: pointer;
+
+  &:hover i {
+    color: white;
+  }
+}
