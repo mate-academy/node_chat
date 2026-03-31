@@ -1,18 +1,12 @@
-import {
-  Request as ExpressRequest,
-  Response as ExpressResponse,
-  NextFunction,
-} from 'express';
-
 import { ApiError } from '../exeptions/api.error.js';
 
 export const errorMiddleware = (
-  error: Error,
-  req: ExpressRequest,
-  res: ExpressResponse,
+  error,
+  req,
+  res,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next: NextFunction,
-): void => {
+  next,
+) => {
   if (error instanceof ApiError) {
     res.status(error.status).json({
       message: error.message,

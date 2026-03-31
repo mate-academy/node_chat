@@ -3,18 +3,13 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
-import { type WebSocket, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 import EventEmitter from 'node:events';
 
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { usersRouter } from './routes/users.router.js';
 import { roomsRouter } from './routes/rooms.router.js';
 import { messagesRouter } from './routes/messages.router.js';
-
-interface CustomWebSocket extends WebSocket {
-  rooms?: Set<string>;
-  userId: number;
-}
 
 const app = express();
 
@@ -40,7 +35,7 @@ const wss = new WebSocketServer({ server });
 
 export const messageEmitter = new EventEmitter();
 
-wss.on('connection', (ws: CustomWebSocket) => {
+wss.on('connection', (ws) => {
   ws.rooms = new Set();
 
   ws.on('message', (message) => {
@@ -69,7 +64,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
 
 messageEmitter.on('message', (data) => {
   for (const client of wss.clients) {
-    const ws = client as CustomWebSocket;
+    const ws = client;
 
     if (ws.rooms?.has(String(data.roomId))) {
       ws.send(JSON.stringify({ type: 'message', payload: data }));
@@ -79,7 +74,7 @@ messageEmitter.on('message', (data) => {
 
 messageEmitter.on('room_leaved', (data) => {
   for (const client of wss.clients) {
-    const ws = client as CustomWebSocket;
+    const ws = client;
 
     if (String(ws.userId) === String(data.userId)) {
       ws.send(

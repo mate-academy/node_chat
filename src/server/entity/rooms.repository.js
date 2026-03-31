@@ -1,6 +1,6 @@
 import { db } from '../utils/db.js';
 
-const getById = async (id: string) => {
+const getById = async (id) => {
   return db.room.findUnique({
     where: { id },
     include: {
@@ -14,7 +14,7 @@ const getById = async (id: string) => {
   });
 };
 
-const getAllByUserId = async (userId: number) => {
+const getAllByUserId = async (userId) => {
   return db.room.findMany({
     where: {
       users: {
@@ -27,7 +27,7 @@ const getAllByUserId = async (userId: number) => {
   });
 };
 
-const create = async (name: string, userId: number) => {
+const create = async (name, userId) => {
   return db.room.create({
     data: {
       name,
@@ -44,7 +44,7 @@ const create = async (name: string, userId: number) => {
   });
 };
 
-const addUser = async (id: string, userId: number) => {
+const addUser = async (id, userId) => {
   return db.room.update({
     where: { id },
     data: {
@@ -63,7 +63,7 @@ const addUser = async (id: string, userId: number) => {
   });
 };
 
-const removeUser = async (id: string, userId: number) => {
+const removeUser = async (id, userId) => {
   return db.room.update({
     where: { id },
     data: {
@@ -77,7 +77,7 @@ const removeUser = async (id: string, userId: number) => {
   });
 };
 
-const renamed = async (id: string, name: string) => {
+const renamed = async (id, name) => {
   return db.room.update({
     where: { id },
     data: {
@@ -94,7 +94,7 @@ const renamed = async (id: string, name: string) => {
   });
 };
 
-const deleteOne = async (id: string) => {
+const deleteOne = async (id) => {
   return db.room.delete({
     where: { id },
   });

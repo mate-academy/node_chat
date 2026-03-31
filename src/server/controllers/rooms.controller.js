@@ -1,12 +1,10 @@
-import { RequestHandler } from 'express';
-
 import { roomsRepository } from '../entity/rooms.repository.js';
 import { ApiError } from '../exeptions/api.error.js';
 import { validateRoomname } from '../../utils/validators.js';
 import { usersRepository } from '../entity/users.repository.js';
 import { messageEmitter } from '../app.js';
 
-const createRoom: RequestHandler = async (req, res) => {
+const createRoom = async (req, res) => {
   const { name, userId } = req.body;
 
   const error = validateRoomname(name);
@@ -22,7 +20,7 @@ const createRoom: RequestHandler = async (req, res) => {
   res.json(createdRoom);
 };
 
-const joinToRoom: RequestHandler = async (req, res) => {
+const joinToRoom = async (req, res) => {
   let { id } = req.params;
 
   id = Array.isArray(id) ? id[0] : id;
@@ -52,7 +50,7 @@ const joinToRoom: RequestHandler = async (req, res) => {
   res.json(addedRoom);
 };
 
-const leaveTheRoom: RequestHandler = async (req, res) => {
+const leaveTheRoom = async (req, res) => {
   let { id } = req.params;
 
   id = Array.isArray(id) ? id[0] : id;
@@ -86,7 +84,7 @@ const leaveTheRoom: RequestHandler = async (req, res) => {
   res.sendStatus(204);
 };
 
-const getAllRooms: RequestHandler = async (req, res) => {
+const getAllRooms = async (req, res) => {
   let { userId } = req.params;
 
   userId = Array.isArray(userId) ? userId[0] : userId;
@@ -102,7 +100,7 @@ const getAllRooms: RequestHandler = async (req, res) => {
   res.json(rooms);
 };
 
-const getRoom: RequestHandler = async (req, res) => {
+const getRoom = async (req, res) => {
   let { id } = req.params;
 
   id = Array.isArray(id) ? id[0] : id;
@@ -116,7 +114,7 @@ const getRoom: RequestHandler = async (req, res) => {
   res.json(room);
 };
 
-const deleteRoom: RequestHandler = async (req, res) => {
+const deleteRoom = async (req, res) => {
   let { id } = req.params;
 
   id = Array.isArray(id) ? id[0] : id;
@@ -134,7 +132,7 @@ const deleteRoom: RequestHandler = async (req, res) => {
   res.sendStatus(204);
 };
 
-const renameRoom: RequestHandler = async (req, res) => {
+const renameRoom = async (req, res) => {
   let { id } = req.params;
 
   id = Array.isArray(id) ? id[0] : id;

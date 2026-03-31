@@ -1,12 +1,12 @@
 import { db } from '../utils/db.js';
 
-const getById = async (id: number) => {
+const getById = async (id) => {
   return db.message.findUnique({
     where: { id },
   });
 };
 
-const create = async (userId: number, text: string, roomId: string) => {
+const create = async (userId, text, roomId) => {
   return db.message.create({
     data: {
       text,

@@ -1,4 +1,4 @@
-export const validateUsername = (value: string) => {
+export const validateUsername = (value) => {
   const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,20}$/;
 
   if (!value) {
@@ -10,7 +10,7 @@ export const validateUsername = (value: string) => {
   }
 };
 
-export const validateRoomname = (value: string) => {
+export const validateRoomname = (value) => {
   const USERNAME_PATTERN = /^[a-zA-Z0-9]+(?:[ _-][a-zA-Z0-9]+)*$/;
 
   if (!value) {
@@ -22,7 +22,7 @@ export const validateRoomname = (value: string) => {
   }
 };
 
-export const validateRoomId = (value: string) => {
+export const validateRoomId = (value) => {
   const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -35,7 +35,7 @@ export const validateRoomId = (value: string) => {
   }
 };
 
-export const validateMessage = (value: string) => {
+export const validateMessage = (value) => {
   if (!value || value.trim() === '') {
     return 'Write a message to send';
   }

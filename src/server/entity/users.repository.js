@@ -1,18 +1,18 @@
 import { db } from '../utils/db.js';
 
-const getById = async (id: number) => {
+const getById = async (id) => {
   return db.user.findUnique({
     where: { id },
   });
 };
 
-const getByUsername = async (username: string) => {
+const getByUsername = async (username) => {
   return db.user.findUnique({
     where: { username },
   });
 };
 
-const create = async (username: string) => {
+const create = async (username) => {
   return db.user.create({
     data: {
       username,
@@ -20,7 +20,7 @@ const create = async (username: string) => {
   });
 };
 
-const update = async (id: number, username: string) => {
+const update = async (id, username) => {
   return db.user.update({
     where: { id },
     data: {

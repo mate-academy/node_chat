@@ -2,8 +2,8 @@
   "name": "node_chat",
   "version": "1.0.0",
   "description": "Chat using Node.js",
-  "main": "src/index.js",
   "type": "module",
+  "main": "src/index.js",
   "scripts": {
     "init": "mate-scripts init",
     "start": "npm run dev",
@@ -14,7 +14,7 @@
     "postinstall": "npm run update",
     "test": "npm run lint && npm run test:only",
     "dev": "concurrently \"vite\" \"nodemon\"",
-    "build": "vite build && tsc",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "author": "Mate academy",
@@ -37,6 +37,7 @@
     "nodemon": "^3.1.14",
     "prettier": "^3.3.2",
     "prisma": "^7.5.0",
+    "sass": "^1.98.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.0"
   },
@@ -58,7 +59,6 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1",
-    "sass": "^1.98.0",
     "sqlite3": "^6.0.1",
     "ws": "^8.20.0"
   }

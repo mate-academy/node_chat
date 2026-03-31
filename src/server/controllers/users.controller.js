@@ -1,10 +1,8 @@
-import { RequestHandler } from 'express';
-
 import { usersRepository } from '../entity/users.repository.js';
 import { ApiError } from '../exeptions/api.error.js';
 import { validateUsername } from '../../utils/validators.js';
 
-const createUser: RequestHandler = async (req, res) => {
+const createUser = async (req, res) => {
   const { username } = req.body;
 
   const error = validateUsername(username);

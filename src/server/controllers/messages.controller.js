@@ -1,12 +1,10 @@
-import { RequestHandler } from 'express';
-
 import { usersRepository } from '../entity/users.repository.js';
 import { ApiError } from '../exeptions/api.error.js';
 import { roomsRepository } from '../entity/rooms.repository.js';
 import { messagesRepository } from '../entity/messages.repository.js';
 import { messageEmitter } from '../app.js';
 
-const createMessage: RequestHandler = async (req, res) => {
+const createMessage = async (req, res) => {
   let { roomId } = req.params;
 
   roomId = Array.isArray(roomId) ? roomId[0] : roomId;
