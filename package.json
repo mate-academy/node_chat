@@ -10,7 +10,7 @@
     "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
-    "postinstall": "npm run update",
+    "postinstall": "",
     "test": "npm run lint && npm run test:only",
     "dev": "concurrently \"vite\" \"nodemon\"",
     "build": "vite build",
@@ -43,6 +43,37 @@
   },
   "mateAcademy": {
     "projectType": "javascript"
+  },
+  "eslintConfig": {
+    "extends": "@mate-academy/eslint-config",
+    "env": {
+      "jest": true
+    },
+    "rules": {
+      "no-proto": 0
+    },
+    "plugins": ["jest"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "overrides": [
+      {
+        "files": ["**/*.ts", "**/*.tsx"],
+        "extends": [
+          "@mate-academy/eslint-config",
+          "plugin:@typescript-eslint/recommended"
+        ],
+        "rules": {
+          "no-proto": 0,
+          "@typescript-eslint/no-unused-vars": "error"
+        }
+      }
+    ]
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
