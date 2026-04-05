@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+#app {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+#user-block,
+#room-form,
+#message-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+input,
+button {
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+#rooms-list,
+#messages-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#messages-list li {
+  margin-bottom: 8px;
+}
+
+#room-input,
+#message-input {
+  flex: 1;
+}
+
+.room-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.room-join-btn {
+  flex: 1;
+  text-align: left;
+}
+
+.room-action-btn {
+  white-space: nowrap;
+}
+
+.message-item {
+  padding: 10px 12px;
+  background: #f1f1f1;
+  border-radius: 8px;
+}
