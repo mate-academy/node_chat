@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat App</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="panel">
+          <h1>Chat App</h1>
+          <p class="muted">Node.js + Socket.IO</p>
+        </div>
+
+        <form id="username-form" class="panel stack">
+          <label for="username-input">Username</label>
+          <div class="inline-form">
+            <input
+              id="username-input"
+              name="username"
+              type="text"
+              placeholder="Enter your name"
+              maxlength="32"
+              required
+            />
+            <button type="submit">Save</button>
+          </div>
+          <p id="username-status" class="muted"></p>
+        </form>
+
+        <section class="panel stack">
+          <div class="room-header">
+            <h2>Rooms</h2>
+            <form id="room-form" class="inline-form">
+              <input
+                id="room-input"
+                name="room"
+                type="text"
+                placeholder="New room"
+                maxlength="40"
+                required
+              />
+              <button type="submit">Create</button>
+            </form>
+          </div>
+
+          <ul id="room-list" class="room-list"></ul>
+        </section>
+      </aside>
+
+      <main class="chat">
+        <header class="panel room-banner">
+          <div>
+            <p class="muted">Current room</p>
+            <h2 id="current-room-name">General</h2>
+          </div>
+        </header>
+
+        <section id="messages" class="panel messages"></section>
+
+        <form id="message-form" class="panel message-form">
+          <textarea
+            id="message-input"
+            name="message"
+            rows="3"
+            placeholder="Write a message"
+            maxlength="500"
+            required
+          ></textarea>
+          <div class="message-actions">
+            <p id="feedback" class="muted"></p>
+            <button type="submit">Send</button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
