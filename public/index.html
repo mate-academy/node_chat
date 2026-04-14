@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Node.js Chat</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div class="app">
+    <h1>Node.js Chat</h1>
+    <div class="username-block">
+      <input id="username-input" type="text" placeholder="Enter username" />
+      <button id="save-username-btn">Save username</button>
+    </div>
+    <div class="chat-block">
+      <input id="message-input" type="text" placeholder="Enter message" />
+      <button id="send-btn">Send</button>
+      <div id="messages"></div>
+    </div>
+    <div class="rooms-block">
+      <h2>Rooms</h2>
+
+      <input id="room-name-input" type="text" placeholder="Enter room name" />
+      <button id="create-room-btn">Create room</button>
+
+      <div id="rooms-list"></div>
+      <input id="rename-room-input" type="text" placeholder="Enter new room name" />
+      <button id="rename-room-btn">Rename room</button>
+
+      <button id="delete-room-btn">Delete room</button>
+    </div>
+  </div>
+
+
+  <script src="/client.js"></script>
+</body>
+
+</html>
