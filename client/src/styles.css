@@ -1,0 +1,200 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  color: #19223a;
+  background: #f3f6fd;
+}
+
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #19223a;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  font-size: 14px;
+  z-index: 1000;
+}
+
+.toast-success {
+  background: #1f8f4a;
+}
+
+.toast-info {
+  background: #2f6bdb;
+}
+
+.toast-warning {
+  background: #b26a00;
+}
+
+.toast-error {
+  background: #d14b4b;
+}
+
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  background: #fff;
+  border: 1px solid #dbe5f4;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-card h1 {
+  margin: 0;
+}
+
+.auth-card p {
+  margin: 0 0 8px;
+  color: #516080;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid #dbe5f4;
+  background: #fff;
+  padding: 20px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+input,
+button {
+  border: 1px solid #cad8ee;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+button {
+  background: #3e63dd;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.room-button {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 8px;
+  background: #fff;
+  color: #19223a;
+}
+
+.room-button.active {
+  background: #3e63dd;
+  color: #fff;
+}
+
+.chat {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  padding: 20px;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.chat-header h1 {
+  margin: 0;
+}
+
+.chat-header p {
+  margin: 6px 0 0;
+  color: #516080;
+}
+
+.room-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.room-actions form {
+  display: flex;
+  gap: 8px;
+}
+
+.danger {
+  background: #d14b4b;
+}
+
+.error {
+  margin: 0;
+  color: #b90000;
+}
+
+.messages {
+  overflow: auto;
+  border: 1px solid #dbe5f4;
+  border-radius: 10px;
+  background: #fff;
+  padding: 12px;
+}
+
+.message {
+  border-bottom: 1px solid #edf2fb;
+  padding: 8px 0;
+}
+
+.message:last-child {
+  border-bottom: 0;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #5f6f90;
+}
+
+.message p {
+  margin: 6px 0 0;
+}
+
+.send-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
