@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 const http = require('http');
-const { setupWebSocket } = require('./src/websocket');
+const { setupWebSocket } = require('./websocket');
 
 const server = http.createServer();
 

@@ -2,9 +2,9 @@ const WebSocket = require('ws');
 const { rooms } = require('./store');
 
 function broadcastRooms(wss) {
-  const roomList = Object.values(rooms).map((room) => ({
-    id: room.id,
-    name: room.name,
+  const roomList = Object.values(rooms).map((r) => ({
+    id: r.id,
+    name: r.name,
   }));
   const message = JSON.stringify({ type: 'ROOMS_LIST', rooms: roomList });
 

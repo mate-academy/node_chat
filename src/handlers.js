@@ -2,7 +2,13 @@ const { rooms } = require('./store');
 const { broadcastRooms, broadcastToRoom } = require('./utils');
 
 function handleMessage(ws, wss, messageAsString) {
-  const data = JSON.parse(messageAsString);
+  let data;
+
+  try {
+    data = JSON.parse(messageAsString);
+  } catch (e) {
+    return;
+  }
 
   switch (data.type) {
     case 'JOIN_ROOM':
@@ -67,6 +73,14 @@ function handleMessage(ws, wss, messageAsString) {
           if (client.roomId === data.roomId) {
             client.roomId = 'general';
             client.send(JSON.stringify({ type: 'ROOM_DELETED' }));
+
+            client.send(
+              JSON.stringify({
+                type: 'ROOM_HISTORY',
+                roomId: 'general',
+                messages: rooms['general'].messages,
+              }),
+            );
           }
         });
         broadcastRooms(wss);
