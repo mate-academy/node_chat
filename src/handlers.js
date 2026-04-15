@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { rooms } = require('./store');
 const { broadcastRooms, broadcastToRoom } = require('./utils');
 
@@ -7,33 +8,43 @@ function handleMessage(ws, wss, messageAsString) {
   try {
     data = JSON.parse(messageAsString);
   } catch (e) {
+    console.error('Malformed JSON received');
+
     return;
   }
 
   switch (data.type) {
     case 'JOIN_ROOM':
-      ws.roomId = data.roomId;
-      ws.username = data.username;
+      if (!data.username) {
+        return;
+      }
 
-      if (!rooms[data.roomId]) {
-        rooms[data.roomId] = {
-          id: data.roomId,
-          name: data.roomId,
-          messages: [],
-        };
+      ws.username = data.username;
+      ws.roomId = data.roomId || 'general';
+
+      let isNewRoom = false;
+
+      if (!rooms[ws.roomId]) {
+        rooms[ws.roomId] = { id: ws.roomId, name: ws.roomId, messages: [] };
+        isNewRoom = true;
       }
 
       ws.send(
         JSON.stringify({
           type: 'ROOM_HISTORY',
-          roomId: data.roomId,
-          messages: rooms[data.roomId].messages,
+          roomId: ws.roomId,
+          messages: rooms[ws.roomId].messages,
         }),
       );
+
+      if (isNewRoom) {
+        broadcastRooms(wss);
+      }
+
       break;
 
     case 'NEW_MESSAGE':
-      if (ws.roomId && rooms[ws.roomId]) {
+      if (ws.username && ws.roomId && rooms[ws.roomId]) {
         const newMessage = {
           id: Date.now().toString(),
           author: ws.username,

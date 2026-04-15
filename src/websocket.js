@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const WebSocket = require('ws');
 const { rooms } = require('./store');
 const { handleMessage } = require('./handlers');
@@ -16,10 +17,6 @@ function setupWebSocket(server) {
     });
   }, 30000);
 
-  wss.on('close', function close() {
-    clearInterval(interval);
-  });
-
   wss.on('connection', (ws) => {
     ws.isAlive = true;
 
@@ -34,12 +31,20 @@ function setupWebSocket(server) {
       }),
     );
 
-    ws.on('message', (message) => handleMessage(ws, wss, message));
+    ws.on('message', (msg) => {
+      try {
+        handleMessage(ws, wss, msg);
+      } catch (err) {
+        console.error('Error handling message:', err);
+      }
+    });
 
     ws.on('close', () => {
       ws.roomId = null;
     });
   });
+
+  wss.on('close', () => clearInterval(interval));
 
   return wss;
 }
