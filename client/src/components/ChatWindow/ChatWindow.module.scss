@@ -1,0 +1,125 @@
+.chat_window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ecf0f1;
+}
+
+.chat_header {
+  display: flex;
+  flex-direction: column;
+  background-color: #acdce8;
+  border-radius: 8px;
+}
+
+.messages_list {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message {
+  background: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  max-width: 70%;
+  align-self: flex-start;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.own {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+}
+
+.author {
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: #2980b9;
+  display: block;
+}
+
+.text_message {
+  margin: 0;
+}
+
+.time {
+  font-size: 0.7rem;
+  color: #95a5a6;
+  text-align: right;
+  display: block;
+  margin-top: 5px;
+}
+
+/* Input Area */
+.input_area {
+  padding: 20px;
+  background: white;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.input_area input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+}
+
+button {
+  padding: 10px 20px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.join_overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.admin_controls {
+  display: flex;
+  gap: 16px;
+}
+
+.admin_button {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User Area */
+.user_area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edit_area {
+  display: flex;
+  gap: 16px;
+}
+
+.deleted_overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #666;
+  font-style: italic;
+  height: 100%;
+  text-align: center;
+}

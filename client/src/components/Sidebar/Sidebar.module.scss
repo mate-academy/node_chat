@@ -1,0 +1,52 @@
+.sidebar {
+  width: 220px;
+  background-color: #2c3e50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+  border-bottom: 1px solid #34495e;
+  padding-bottom: 10px;
+}
+
+.room_list {
+  list-style: none;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.room_item {
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+  margin-bottom: 5px;
+}
+
+.room_item:hover {
+  background-color: #34495e;
+}
+
+.active {
+  background-color: #3498db;
+}
+
+/* Створення кімнати */
+.create_room_form {
+  margin-top: 15px;
+  display: flex;
+  gap: 5px;
+}
+
+.create_room_form input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+}
