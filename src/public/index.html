@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section id="authSection" class="auth-section">
+        <h1>Node Chat</h1>
+        <p>Enter your username to start chatting.</p>
+        <form id="usernameForm" class="inline-form">
+          <label for="usernameInput" class="sr-only">Username</label>
+          <input
+            id="usernameInput"
+            type="text"
+            maxlength="24"
+            placeholder="Your username"
+            required
+            aria-label="Username"
+          />
+          <button type="submit" aria-label="Save username">Save</button>
+        </form>
+      </section>
+
+      <section id="chatSection" class="chat-section hidden">
+        <aside class="rooms-panel">
+          <div class="rooms-header">
+            <h2>Rooms</h2>
+            <button
+              id="createRoomButton"
+              type="button"
+              aria-label="Create room"
+            >
+              Create
+            </button>
+          </div>
+          <ul id="roomsList" class="rooms-list"></ul>
+          <div class="room-actions">
+            <button id="renameRoomButton" type="button" aria-label="Rename room">
+              Rename
+            </button>
+            <button id="deleteRoomButton" type="button" aria-label="Delete room">
+              Delete
+            </button>
+          </div>
+        </aside>
+
+        <section class="messages-panel">
+          <header class="messages-header">
+            <h2 id="currentRoomTitle">Room</h2>
+            <span id="currentUserLabel"></span>
+          </header>
+
+          <ul id="messagesList" class="messages-list"></ul>
+
+          <form id="messageForm" class="inline-form">
+            <label for="messageInput" class="sr-only">Message</label>
+            <input
+              id="messageInput"
+              type="text"
+              maxlength="300"
+              placeholder="Type your message"
+              required
+              aria-label="Message text"
+            />
+            <button type="submit" aria-label="Send message">Send</button>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
