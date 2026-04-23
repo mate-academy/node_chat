@@ -1,0 +1,166 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #202020;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.hidden {
+  display: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.auth-section {
+  max-width: 420px;
+  margin: 100px auto 0;
+  text-align: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.chat-section {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 16px;
+  min-height: calc(100vh - 48px);
+}
+
+.rooms-panel,
+.messages-panel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+}
+
+.rooms-header,
+.messages-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.rooms-list,
+.messages-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rooms-list {
+  max-height: calc(100vh - 240px);
+  overflow: auto;
+  border: 1px solid #dde3f3;
+  border-radius: 8px;
+}
+
+.room-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.room-item:hover {
+  background: #f1f5ff;
+}
+
+.room-item.active {
+  background: #e3ecff;
+  font-weight: 700;
+}
+
+.room-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.messages-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-list {
+  flex: 1;
+  min-height: 280px;
+  max-height: calc(100vh - 200px);
+  overflow: auto;
+  border: 1px solid #dde3f3;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.message {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #edf1fb;
+}
+
+.message:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.message-meta {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.inline-form {
+  display: flex;
+  gap: 8px;
+}
+
+input,
+button {
+  border: 1px solid #ccd4eb;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 10px 12px;
+}
+
+input {
+  flex: 1;
+}
+
+button {
+  background: #275efe;
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4cd9;
+}
