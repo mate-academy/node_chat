@@ -1,0 +1,40 @@
+{
+  "name": "chat-api",
+  "version": "1.0.0",
+  "keywords": [],
+  "author": "Mate academy",
+  "license": "ISC",
+  "main": "src/index.js",
+  "type": "module",
+  "lint-staged": {
+    "*.ts": [
+      "npm run format",
+      "npm run lint"
+    ]
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node --env-file=.env dist/index.js",
+    "dev": "tsx --watch --env-file=.env --inspect=0.0.0.0 src/index.ts",
+    "lint": "eslint --fix src",
+    "format": "prettier ./src --write"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "ws": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.2",
+    "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.2",
+    "tsx": "^4.15.5",
+    "typescript": "^5.4.5"
+  }
+}
