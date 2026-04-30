@@ -1,0 +1,124 @@
+.chat-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.chat-modal-content {
+  font-weight: 400;
+  color: #6b6375;
+  background-color: #16171d;
+  padding: 10px 30px;
+  border-radius: 15px;
+  width: 500px;
+  height: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.button-close {
+  width: 30px;
+  height: 30px;
+  background-color: #16171d;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  color: #6b6375;
+  font-weight: 600;
+  font-size: 20px;
+  &:hover {
+    background-color: #40384a;
+    color: #16171d;
+  }
+}
+
+.section-name {
+  display: flex;
+  align-items: center;
+}
+
+.input-block {
+  margin-top: 10px;
+  align-items: center;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+}
+
+.item {
+  padding: 10px;
+}
+.chat-name {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.section-members {
+  border: 2px solid #37303f;
+  width: 300px;
+}
+
+.item-input {
+  background-color: #252027;
+  border: none;
+  border-radius: 3px;
+  width: 120px;
+  color: #6b6375;
+  font-size: 14px;
+  padding: 5px;
+  margin-right: 7px;
+  margin-left: 9px;
+  margin-bottom: 10px;
+  &:focus {
+    outline: none;
+  }
+}
+
+.input-button {
+  background-color: #585160;
+  color: #16171d;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #312839;
+    color: #564a60;
+  }
+}
+
+.delete-btn {
+  margin-top: 10px;
+  background-color: #16171d;
+  border: 3px solid #4c4158;
+  padding: 5px;
+  color: #6b6375;
+  font-size: 12px;
+  width: 100px;
+  height: 35px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #4c4158;
+    color: #16171d;
+  }
+}
