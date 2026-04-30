@@ -5,6 +5,11 @@ function CreateChatModal({ onClose, onChatCreated, currentUser }) {
   const [userNumber, setUserNumber] = useState("");
 
   const handleCreate = async () => {
+    if (!chatName.trim()) {
+      alert("Chat name cannot be empty");
+      return;
+    }
+
     try {
       const chatData = { name: chatName, creatorId: currentUser.id };
 
@@ -18,6 +23,11 @@ function CreateChatModal({ onClose, onChatCreated, currentUser }) {
         body: JSON.stringify(chatData),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create chat");
+      }
+      
       const newChat = await response.json();
       onChatCreated(newChat);
       onClose();

@@ -37,7 +37,7 @@
   max-width: 400px;
   &:hover {
     background-color: #2d2835;
-   
+
   }
 }
 
@@ -54,4 +54,13 @@
     background-color: #4c4158;
     color: #16171d;
   }
+}
+
+.link-button {
+  font-weight: 500;
+  font-size: 14px;
+  color: #6b6375;
+  background-color: #16171d;
+  border: none;
+  padding-top: 10px;
 }

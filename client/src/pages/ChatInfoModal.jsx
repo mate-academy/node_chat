@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import "./ChatInfoModal.scss";
+import { useCallback, useEffect, useState } from 'react';
+import './ChatInfoModal.scss';
 
 function ChatInfoModal({
   onClose,
@@ -9,10 +9,18 @@ function ChatInfoModal({
   currentUserId,
 }) {
   const [members, setMembers] = useState([]);
-  const [newName, setNewName] = useState(chat.name || "");
-  const [newMemberPhone, setNewMemberPhone] = useState("");
+  const [newName, setNewName] = useState(chat.name || '');
+  const [newMemberPhone, setNewMemberPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isEditChatName, setIsEditChatName] = useState(false);
+  const [prevvChatId, setPrevvChatId] = useState(chat.id);
+
+  useEffect(() => {
+    if (chat.id !== prevvChatId) {
+      setPrevvChatId(chat.id);
+      setNewName(chat.name || '');
+    }
+  }, [chat.id, chat.name, prevvChatId, setNewName]);
 
   const fetchMembers = useCallback(async () => {
     if (!chat.id) return;
@@ -20,14 +28,14 @@ function ChatInfoModal({
     setIsLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5000/api/chats/${chat.id}/members`
+        `http://localhost:5000/api/chats/${chat.id}/members`,
       );
       if (res.ok) {
         const data = await res.json();
         setMembers(data);
       }
     } catch (err) {
-      console.error("Loading error:", err);
+      console.error('Loading error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -40,25 +48,25 @@ function ChatInfoModal({
   const [prevChatId, setPrevChatId] = useState(chat.id);
   if (chat.id !== prevChatId) {
     setPrevChatId(chat.id);
-    setNewName(chat.name || "");
+    setNewName(chat.name || '');
   }
   const handleUpdateName = async () => {
     try {
       const res = await fetch(`http://localhost:5000/api/chats/${chat.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newName }),
       });
       if (res.ok) onChatUpdated(chat.id, newName);
     } catch (err) {
-      console.error("Update error:", err);
+      console.error('Update error:', err);
     }
   };
 
   const handleDeleteChat = async () => {
-    if (window.confirm("Delete this chat for everyone?")) {
+    if (window.confirm('Delete this chat for everyone?')) {
       const res = await fetch(`http://localhost:5000/api/chats/${chat.id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
       if (res.ok) onChatDeleted(chat.id);
     }
@@ -70,18 +78,18 @@ function ChatInfoModal({
       const res = await fetch(
         `http://localhost:5000/api/chats/${chat.id}/members`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ phone: newMemberPhone }),
-        }
+        },
       );
 
       if (res.ok) {
-        setNewMemberPhone("");
+        setNewMemberPhone('');
         fetchMembers();
       }
     } catch (err) {
-      console.error("Add member error:", err);
+      console.error('Add member error:', err);
     }
   };
 
@@ -90,15 +98,15 @@ function ChatInfoModal({
       const res = await fetch(
         `http://localhost:5000/api/chats/${chat.id}/members/${userId}`,
         {
-          method: "DELETE",
-        }
+          method: 'DELETE',
+        },
       );
 
       if (res.ok) {
         await fetchMembers();
       }
     } catch (err) {
-      console.error("Error removing member:", err);
+      console.error('Error removing member:', err);
     }
   };
 
@@ -128,7 +136,7 @@ function ChatInfoModal({
             </div>
             {isEditChatName && (
               <div className="input-block">
-                {" "}
+                {' '}
                 <input
                   className="item-input"
                   value={newName}

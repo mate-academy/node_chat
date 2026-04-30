@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef } from "react";
-import "../App.scss";
-import CreateChatModal from "./CreateChatModal";
-import { io } from "socket.io-client";
-import LogoutIcon from "@mui/icons-material/Logout";
-import UserInfoModal from "./UserInfoModal";
-import ChatInfoModal from "./ChatInfoModal";
+import { useEffect, useState, useRef } from 'react';
+import '../App.scss';
+import CreateChatModal from './CreateChatModal';
+import { io } from 'socket.io-client';
+import LogoutIcon from '@mui/icons-material/Logout';
+import UserInfoModal from './UserInfoModal';
+import ChatInfoModal from './ChatInfoModal';
 import userPhoto from '../img/user-photo.jpg';
 
-const socket = io("http://localhost:5000");
+const socket = io('http://localhost:5000');
 
 function MainPage({ currentUser, onLogout }) {
   const [isCreateChatModalOpen, setIsCreateChatModalOpen] = useState(false);
@@ -15,7 +15,7 @@ function MainPage({ currentUser, onLogout }) {
   const [isChatInfoModalOpen, setIsChatInfoModalOpen] = useState(false);
   const [chats, setChats] = useState([]);
   const [user, setUser] = useState(null);
-  const [messageText, setMessageText] = useState("");
+  const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const messagesEndRef = useRef(null);
@@ -23,7 +23,7 @@ function MainPage({ currentUser, onLogout }) {
   const MY_ID = currentUser?.id;
 
   useEffect(() => {
-    socket.on("update_chat_list", (data) => {
+    socket.on('update_chat_list', (data) => {
       setChats((prevChats) => {
         const isExist = prevChats.some((chat) => chat.id === data.chat_id);
 
@@ -42,20 +42,20 @@ function MainPage({ currentUser, onLogout }) {
                     ? Number(chat.unread_count || 0) + 1
                     : 0,
               }
-            : chat
+            : chat,
         );
 
         return [...updated].sort(
           (a, b) =>
             new Date(b.last_message_time || b.created_at) -
-            new Date(a.last_message_time || a.created_at)
+            new Date(a.last_message_time || a.created_at),
         );
       });
     });
 
     if (selectedChat) {
-      socket.emit("join_chat", selectedChat.id);
-      socket.on("receive_message", (newMessage) => {
+      socket.emit('join_chat', selectedChat.id);
+      socket.on('receive_message', (newMessage) => {
         if (newMessage.chat_id === selectedChat.id) {
           setMessages((prev) => {
             if (prev.find((m) => m.id === newMessage.id)) return prev;
@@ -66,19 +66,31 @@ function MainPage({ currentUser, onLogout }) {
     }
 
     return () => {
-      socket.off("receive_message");
-      socket.off("update_chat_list");
+      socket.off('receive_message');
+      socket.off('update_chat_list');
     };
   }, [selectedChat, MY_ID]);
 
   useEffect(() => {
     if (MY_ID) {
-      fetch(`http://localhost:5000/api/chats/${MY_ID}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setChats(data);
-        })
-        .catch((err) => console.log("Error loading chats:", err));
+      const loadChats = async () => {
+        try {
+          const res = await fetch(`http://localhost:5000/api/chats/${MY_ID}`);
+
+          if (!res.ok) {
+            console.error('Server returned an error:', res.status);
+            return;
+          }
+
+          const data = await res.json();
+
+          setChats(Array.isArray(data) ? data : []);
+        } catch (err) {
+          console.error('Error loading chats:', err);
+        }
+      };
+
+      loadChats();
     }
   }, [MY_ID]);
 
@@ -89,7 +101,7 @@ function MainPage({ currentUser, onLogout }) {
         .then((data) => {
           setUser(data);
         })
-        .catch((err) => console.log("Error loading user data:", err));
+        .catch((err) => console.log('Error loading user data:', err));
     }
   }, [MY_ID]);
 
@@ -101,9 +113,9 @@ function MainPage({ currentUser, onLogout }) {
     if (!messageText.trim() || !selectedChat) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('http://localhost:5000/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: selectedChat.id,
           sender_id: MY_ID,
@@ -112,10 +124,10 @@ function MainPage({ currentUser, onLogout }) {
       });
 
       if (response.ok) {
-        setMessageText("");
+        setMessageText('');
       }
     } catch (err) {
-      console.error("Error sending:", err);
+      console.error('Error sending:', err);
     }
   };
   const handleChatClick = async (chat) => {
@@ -123,29 +135,29 @@ function MainPage({ currentUser, onLogout }) {
 
     try {
       await fetch(`http://localhost:5000/api/messages/read/${chat.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: MY_ID }),
       });
 
       setChats((prev) =>
-        prev.map((c) => (c.id === chat.id ? { ...c, unread_count: 0 } : c))
+        prev.map((c) => (c.id === chat.id ? { ...c, unread_count: 0 } : c)),
       );
 
       const response = await fetch(
-        `http://localhost:5000/api/messages/${chat.id}`
+        `http://localhost:5000/api/messages/${chat.id}`,
       );
       if (response.ok) {
         const data = await response.json();
         setMessages(data);
       }
     } catch (err) {
-      console.error("Error handling chat click:", err);
+      console.error('Error handling chat click:', err);
     }
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -160,7 +172,7 @@ function MainPage({ currentUser, onLogout }) {
 
   const handleChatUpdated = (chatId, newName) => {
     setChats((prev) =>
-      prev.map((c) => (c.id === chatId ? { ...c, name: newName } : c))
+      prev.map((c) => (c.id === chatId ? { ...c, name: newName } : c)),
     );
     setSelectedChat((prev) => ({ ...prev, name: newName }));
   };
@@ -214,46 +226,46 @@ function MainPage({ currentUser, onLogout }) {
       <div className="main">
         <div className="chats-block">
           <>
-            {chats.map((chat) => (
-              <div
-                className={`chat-block-info ${
-                  selectedChat?.id === chat.id ? "active" : ""
-                }`}
-                key={chat.id}
-                onClick={() => handleChatClick(chat)}
-              >
-                <div className="chat-block-left-data">
-                  <img
-                    className="chat-photo"
-                    src={userPhoto}
-                    alt="chat"
-                  />
-                  <div className="text-info">
-                    <div className="chat-name">
-                      {chat.name || chat.recipient_name || "Unnamed Chat"}
-                    </div>
-                    <div className="chat-message">
-                      {chat.last_message || "No messages yet"}
+            {chats?.length > 0 ? (
+              chats.map((chat) => (
+                <div
+                  className={`chat-block-info ${
+                    selectedChat?.id === chat.id ? 'active' : ''
+                  }`}
+                  key={chat.id}
+                  onClick={() => handleChatClick(chat)}
+                >
+                  <div className="chat-block-left-data">
+                    <img className="chat-photo" src={userPhoto} alt="chat" />
+                    <div className="text-info">
+                      <div className="chat-name">
+                        {chat.name || chat.recipient_name || 'Unnamed Chat'}
+                      </div>
+                      <div className="chat-message">
+                        {chat.last_message || 'No messages yet'}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="chat-block-right-data">
-                  <div className="message-time">
-                    {chat.last_message_time || chat.created_at
-                      ? new Date(
-                          chat.last_message_time || chat.created_at
-                        ).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : ""}
+                  <div className="chat-block-right-data">
+                    <div className="message-time">
+                      {chat.last_message_time || chat.created_at
+                        ? new Date(
+                            chat.last_message_time || chat.created_at,
+                          ).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })
+                        : ''}
+                    </div>
+                    {parseInt(chat.unread_count) > 0 && (
+                      <div className="message-count">{chat.unread_count} </div>
+                    )}
                   </div>
-                  {parseInt(chat.unread_count) > 0 && (
-                    <div className="message-count">{chat.unread_count} </div>
-                  )}
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>Loading chats or no chats found...</p>
+            )}
           </>
         </div>
         <div className="open-chat">
@@ -270,7 +282,7 @@ function MainPage({ currentUser, onLogout }) {
                   className="header-chat-name"
                   onClick={() => setIsChatInfoModalOpen(true)}
                 >
-                  {selectedChat.name || selectedChat.recipient_name || "Chat"}
+                  {selectedChat.name || selectedChat.recipient_name || 'Chat'}
                 </div>
               </div>
 
@@ -279,7 +291,7 @@ function MainPage({ currentUser, onLogout }) {
                   <div
                     key={msg.id}
                     className={`chat-message ${
-                      msg.sender_id === MY_ID ? "sent" : "received"
+                      msg.sender_id === MY_ID ? 'sent' : 'received'
                     }`}
                   >
                     {msg.sender_id !== MY_ID && (
@@ -289,8 +301,8 @@ function MainPage({ currentUser, onLogout }) {
                       <div className="user-message">{msg.content}</div>
                       <div className="message-time">
                         {new Date(msg.created_at).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
+                          hour: '2-digit',
+                          minute: '2-digit',
                         })}
                       </div>
                     </div>
@@ -306,7 +318,7 @@ function MainPage({ currentUser, onLogout }) {
                   placeholder="Write a message..."
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                  onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                 />
                 <div className="send-message-button" onClick={sendMessage}>
                   &#10148;

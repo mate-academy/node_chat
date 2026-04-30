@@ -18,7 +18,7 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
   socket.on('join_chat', (chatId) => {
-    socket.join(chatId);
+    socket.join(chatId.toString());
   });
 
   socket.on('disconnect', () => {});
@@ -287,8 +287,10 @@ app.get('/api/messages/:chatId', async (req, res) => {
 });
 
 app.delete('/api/chats/:id', async (req, res) => {
-  await pool.query('DELETE FROM chats WHERE id = $1', [req.params.id]);
-  res.json({ message: 'Chat deleted' });
+  const { id } = req.params;
+  await pool.query('DELETE FROM messages WHERE chat_id = $1', [id]);
+  await pool.query('DELETE FROM chats WHERE id = $1', [id]);
+  res.sendStatus(204);
 });
 
 app.put('/api/chats/:id', async (req, res) => {

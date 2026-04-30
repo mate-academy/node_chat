@@ -1,42 +1,47 @@
-import { useState } from "react";
-import "./AuthPage.scss";
+import { useState } from 'react';
+import './AuthPage.scss';
 
 function AuthPage({ onLoginSuccess }) {
   const [isRegister, setIsRegister] = useState(true);
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    password: "",
+    name: '',
+    phone: '',
+    email: '',
+    password: '',
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const endpoint = isRegister ? "/api/register" : "/api/login";
+    const endpoint = isRegister ? '/api/register' : '/api/login';
+
+    const payload = { username: formData.username };
 
     try {
       const response = await fetch(`http://localhost:5000${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem("chat_user", JSON.stringify(data));
-        onLoginSuccess(data);
-      } else {
-        alert(data.error || "Authorization error");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Authorization error');
       }
+
+      const data = await response.json();
+
+      localStorage.setItem('chat_user', JSON.stringify(data));
+      onLoginSuccess(data);
     } catch (err) {
-      console.error("Error:", err);
+      console.error('Error:', err);
+      alert(err.message);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <h2>{isRegister ? "Create an account" : "Log in to chat"}</h2>
+        <h2>{isRegister ? 'Create an account' : 'Log in to chat'}</h2>
         <form className="form" onSubmit={handleSubmit}>
           {isRegister && (
             <>
@@ -77,19 +82,25 @@ function AuthPage({ onLoginSuccess }) {
             }
             required
           />
-          <button className="button" type="submit">{isRegister ? "Register" : "Login"}</button>
+          <button className="button" type="submit">
+            {isRegister ? 'Register' : 'Login'}
+          </button>
         </form>
-        <p onClick={() => setIsRegister(!isRegister)}>
+        <button
+          type="button"
+          className="link-button"
+          onClick={() => setIsRegister(!isRegister)}
+        >
           {isRegister ? (
             <>
-              Already have an account? <b>Log in</b>
+              Already have an account? <b>Login</b>
             </>
           ) : (
             <>
-              No account? <b>Register</b>
+              Don't have an account? <b>Register</b>
             </>
           )}
-        </p>
+        </button>
       </div>
     </div>
   );
