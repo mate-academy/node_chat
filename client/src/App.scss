@@ -6,7 +6,7 @@ body {
   margin: 0;
 }
 .main-layout {
-  font-family: system-ui, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: system-ui, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 400;
   color: #6b6375;
   background-color: #16171d;
@@ -30,6 +30,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-right: 10px;
   }
   .title {
     font-weight: 700;
@@ -38,11 +39,12 @@ body {
   .user-photo {
     width: 30px;
     border-radius: 50%;
+    padding-top: 2px;
   }
   .add-chat {
     font-weight: bold;
     font-size: 35px;
-    padding-bottom: 6px;
+    padding-bottom: 8px;
   }
   .logout-button {
     background-color: #222329;
@@ -131,7 +133,7 @@ body {
   }
 }
 
-.active{
+.active {
   background-color: #252327;
 }
 
@@ -269,10 +271,19 @@ body {
       padding: 10px;
       margin: 10px 0;
       border: none;
+      &:focus {
+        outline: none;
+      }
     }
 
-    &-button {
-      font-size: 20px;
-    }
   }
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  color: #6b6375;
+  font-size: 18px;
+  padding-right: 0;
+
 }

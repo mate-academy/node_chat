@@ -14,7 +14,18 @@ function AuthPage({ onLoginSuccess }) {
     e.preventDefault();
     const endpoint = isRegister ? '/api/register' : '/api/login';
 
-    const payload = { username: formData.username };
+    // Формуємо корисне навантаження залежно від режиму
+    const payload = isRegister
+      ? {
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          password: formData.password,
+        }
+      : {
+          email: formData.email,
+          password: formData.password,
+        };
 
     try {
       const response = await fetch(`http://localhost:5000${endpoint}`, {
@@ -25,15 +36,13 @@ function AuthPage({ onLoginSuccess }) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Authorization error');
+        throw new Error(errorData.error || 'Auth failed');
       }
 
       const data = await response.json();
-
       localStorage.setItem('chat_user', JSON.stringify(data));
       onLoginSuccess(data);
     } catch (err) {
-      console.error('Error:', err);
       alert(err.message);
     }
   };

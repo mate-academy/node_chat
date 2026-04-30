@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST','PUT', 'DELETE'],
   },
 });
 
@@ -259,7 +259,7 @@ app.post('/api/messages', async (req, res) => {
     const messageData = newMessage.rows[0];
 
     io.to(chatId.toString()).emit('receive_message', messageData);
-    io.emit('update_chat_list', messageData);
+    io.to(chatId.toString()).emit('update_chat_list', messageData);
 
     res.json(messageData);
   } catch (err) {

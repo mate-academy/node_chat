@@ -45,11 +45,6 @@ function ChatInfoModal({
     fetchMembers();
   }, [fetchMembers]);
 
-  const [prevChatId, setPrevChatId] = useState(chat.id);
-  if (chat.id !== prevChatId) {
-    setPrevChatId(chat.id);
-    setNewName(chat.name || '');
-  }
   const handleUpdateName = async () => {
     try {
       const res = await fetch(`http://localhost:5000/api/chats/${chat.id}`, {

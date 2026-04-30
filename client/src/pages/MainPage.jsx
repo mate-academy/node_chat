@@ -23,13 +23,35 @@ function MainPage({ currentUser, onLogout }) {
   const MY_ID = currentUser?.id;
 
   useEffect(() => {
-    socket.on('update_chat_list', (data) => {
+    if (MY_ID) {
+      const loadChats = async () => {
+        try {
+          const res = await fetch(`http://localhost:5000/api/chats/${MY_ID}`);
+          if (!res.ok) throw new Error('Failed to fetch chats');
+          const data = await res.json();
+          setChats(Array.isArray(data) ? data : []);
+        } catch (err) {
+          console.error('Error loading chats:', err);
+        }
+      };
+      loadChats();
+    }
+  }, [MY_ID]);
+
+  useEffect(() => {
+    if (MY_ID) {
+      fetch(`http://localhost:5000/api/users/${MY_ID}`)
+        .then((res) => res.json())
+        .then((data) => setUser(data))
+        .catch((err) => console.log('Error loading user data:', err));
+    }
+  }, [MY_ID]);
+
+  useEffect(() => {
+    const handleUpdateChatList = (data) => {
       setChats((prevChats) => {
         const isExist = prevChats.some((chat) => chat.id === data.chat_id);
-
-        if (!isExist) {
-          return prevChats;
-        }
+        if (!isExist) return prevChats;
 
         const updated = prevChats.map((chat) =>
           chat.id === data.chat_id
@@ -51,63 +73,37 @@ function MainPage({ currentUser, onLogout }) {
             new Date(a.last_message_time || a.created_at),
         );
       });
-    });
+    };
 
-    if (selectedChat) {
-      socket.emit('join_chat', selectedChat.id);
-      socket.on('receive_message', (newMessage) => {
-        if (newMessage.chat_id === selectedChat.id) {
-          setMessages((prev) => {
-            if (prev.find((m) => m.id === newMessage.id)) return prev;
-            return [...prev, newMessage];
-          });
-        }
-      });
-    }
+    socket.on('update_chat_list', handleUpdateChatList);
+    return () => socket.off('update_chat_list', handleUpdateChatList);
+  }, [selectedChat?.id]);
+
+  useEffect(() => {
+    if (!selectedChat?.id) return;
+
+    socket.emit('join_chat', selectedChat.id);
+
+    const handleReceiveMessage = (newMessage) => {
+      if (newMessage.chat_id === selectedChat.id) {
+        setMessages((prev) => {
+          if (prev.find((m) => m.id === newMessage.id)) return prev;
+          return [...prev, newMessage];
+        });
+      }
+    };
+
+    socket.on('receive_message', handleReceiveMessage);
 
     return () => {
-      socket.off('receive_message');
-      socket.off('update_chat_list');
+      socket.off('receive_message', handleReceiveMessage);
+      socket.emit('leave_chat', selectedChat.id);
     };
-  }, [selectedChat, MY_ID]);
+  }, [selectedChat?.id]);
 
   useEffect(() => {
-    if (MY_ID) {
-      const loadChats = async () => {
-        try {
-          const res = await fetch(`http://localhost:5000/api/chats/${MY_ID}`);
-
-          if (!res.ok) {
-            console.error('Server returned an error:', res.status);
-            return;
-          }
-
-          const data = await res.json();
-
-          setChats(Array.isArray(data) ? data : []);
-        } catch (err) {
-          console.error('Error loading chats:', err);
-        }
-      };
-
-      loadChats();
-    }
-  }, [MY_ID]);
-
-  useEffect(() => {
-    if (MY_ID) {
-      fetch(`http://localhost:5000/api/users/${MY_ID}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setUser(data);
-        })
-        .catch((err) => console.log('Error loading user data:', err));
-    }
-  }, [MY_ID]);
-
-  const handleChatCreated = (newChat) => {
-    setChats((prevChats) => [newChat, ...prevChats]);
-  };
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!messageText.trim() || !selectedChat) return;
@@ -127,9 +123,10 @@ function MainPage({ currentUser, onLogout }) {
         setMessageText('');
       }
     } catch (err) {
-      console.error('Error sending:', err);
+      console.error('Error sending message:', err);
     }
   };
+
   const handleChatClick = async (chat) => {
     setSelectedChat(chat);
 
@@ -156,13 +153,9 @@ function MainPage({ currentUser, onLogout }) {
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleChatCreated = (newChat) => {
+    setChats((prevChats) => [newChat, ...prevChats]);
   };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const handleChatDeleted = (chatId) => {
     setChats((prev) => prev.filter((c) => c.id !== chatId));
@@ -174,9 +167,10 @@ function MainPage({ currentUser, onLogout }) {
     setChats((prev) =>
       prev.map((c) => (c.id === chatId ? { ...c, name: newName } : c)),
     );
-    setSelectedChat((prev) => ({ ...prev, name: newName }));
+    setSelectedChat((prev) =>
+      prev?.id === chatId ? { ...prev, name: newName } : prev,
+    );
   };
-
   return (
     <div className="main-layout">
       {isCreateChatModalOpen && (
@@ -212,12 +206,14 @@ function MainPage({ currentUser, onLogout }) {
           >
             +
           </div>
-          <img
-            onClick={() => setIsUserInfoModalOpen(true)}
-            className="user-photo"
-            src={userPhoto}
-            alt="user_photo"
-          />
+          <button>
+            <img
+              onClick={() => setIsUserInfoModalOpen(true)}
+              className="user-photo"
+              src={userPhoto}
+              alt="user_photo"
+            />
+          </button>
           <button className="logout-button" onClick={onLogout}>
             <LogoutIcon />
           </button>
@@ -272,18 +268,21 @@ function MainPage({ currentUser, onLogout }) {
           {selectedChat ? (
             <>
               <div className="chat-header">
-                <img
-                  onClick={() => setIsChatInfoModalOpen(true)}
-                  className="chat-photo"
-                  src={userPhoto}
-                  alt="chat_img"
-                />
-                <div
+                <button>
+                  {' '}
+                  <img
+                    onClick={() => setIsChatInfoModalOpen(true)}
+                    className="chat-photo"
+                    src={userPhoto}
+                    alt="chat_img"
+                  />
+                </button>
+                <button
                   className="header-chat-name"
                   onClick={() => setIsChatInfoModalOpen(true)}
                 >
                   {selectedChat.name || selectedChat.recipient_name || 'Chat'}
-                </div>
+                </button>
               </div>
 
               <div className="messages-block">
@@ -320,9 +319,9 @@ function MainPage({ currentUser, onLogout }) {
                   onChange={(e) => setMessageText(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                 />
-                <div className="send-message-button" onClick={sendMessage}>
+                <button className="send-message-button" onClick={sendMessage}>
                   &#10148;
-                </div>
+                </button>
               </div>
             </>
           ) : (
