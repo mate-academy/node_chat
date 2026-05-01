@@ -4,6 +4,7 @@ function UserInfoModal({ onClose, user }) {
   if (!user) {
     return null;
   }
+
   return (
     <div className="user-modal-overlay" onClick={onClose}>
       <div className="user-modal-content" onClick={(e) => e.stopPropagation()}>

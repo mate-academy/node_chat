@@ -12,6 +12,7 @@ function AuthPage({ onLoginSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const endpoint = isRegister ? '/api/register' : '/api/login';
 
     // Формуємо корисне навантаження залежно від режиму
@@ -36,10 +37,12 @@ function AuthPage({ onLoginSuccess }) {
 
       if (!response.ok) {
         const errorData = await response.json();
+
         throw new Error(errorData.error || 'Auth failed');
       }
 
       const data = await response.json();
+
       localStorage.setItem('chat_user', JSON.stringify(data));
       onLoginSuccess(data);
     } catch (err) {
@@ -106,7 +109,7 @@ function AuthPage({ onLoginSuccess }) {
             </>
           ) : (
             <>
-              Don't have an account? <b>Register</b>
+              Don&apos;t have an account? <b>Register</b>
             </>
           )}
         </button>

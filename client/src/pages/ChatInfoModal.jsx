@@ -23,19 +23,23 @@ function ChatInfoModal({
   }, [chat.id, chat.name, prevvChatId, setNewName]);
 
   const fetchMembers = useCallback(async () => {
-    if (!chat.id) return;
+    if (!chat.id) {
+      return;
+    }
 
     setIsLoading(true);
+
     try {
       const res = await fetch(
         `http://localhost:5000/api/chats/${chat.id}/members`,
       );
+
       if (res.ok) {
         const data = await res.json();
+
         setMembers(data);
       }
     } catch (err) {
-      console.error('Loading error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -52,10 +56,11 @@ function ChatInfoModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newName }),
       });
-      if (res.ok) onChatUpdated(chat.id, newName);
-    } catch (err) {
-      console.error('Update error:', err);
-    }
+
+      if (res.ok) {
+        onChatUpdated(chat.id, newName);
+      }
+    } catch (err) {}
   };
 
   const handleDeleteChat = async () => {
@@ -63,12 +68,18 @@ function ChatInfoModal({
       const res = await fetch(`http://localhost:5000/api/chats/${chat.id}`, {
         method: 'DELETE',
       });
-      if (res.ok) onChatDeleted(chat.id);
+
+      if (res.ok) {
+        onChatDeleted(chat.id);
+      }
     }
   };
 
   const addMember = async () => {
-    if (!newMemberPhone.trim()) return;
+    if (!newMemberPhone.trim()) {
+      return;
+    }
+
     try {
       const res = await fetch(
         `http://localhost:5000/api/chats/${chat.id}/members`,
@@ -83,9 +94,7 @@ function ChatInfoModal({
         setNewMemberPhone('');
         fetchMembers();
       }
-    } catch (err) {
-      console.error('Add member error:', err);
-    }
+    } catch (err) {}
   };
 
   const removeMember = async (userId) => {
@@ -100,9 +109,7 @@ function ChatInfoModal({
       if (res.ok) {
         await fetchMembers();
       }
-    } catch (err) {
-      console.error('Error removing member:', err);
-    }
+    } catch (err) {}
   };
 
   return (
@@ -169,7 +176,7 @@ function ChatInfoModal({
                       &times;
                     </button>
                   )}
-                  {String(m.id) == String(currentUserId) && <div>- you</div>}
+                  {String(m.id) === String(currentUserId) && <div>- you</div>}
                 </div>
               ))
             )}

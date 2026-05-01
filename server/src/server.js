@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const pool = require('./db');
 const bcrypt = require('bcrypt');
 const { Server } = require('socket.io');
 const http = require('http');
+const pool = require('./db');
 
 const app = express();
 
@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST','PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
 });
 
@@ -35,7 +35,7 @@ app.use(
 app.use(express.json());
 
 app.post('/api/register', async (req, res) => {
-  const { name, phone, email, password } = req.body;
+  const { name: userName, phone, email, password } = req.body;
 
   try {
     const saltRounds = 10;
@@ -47,7 +47,7 @@ app.post('/api/register', async (req, res) => {
       RETURNING id, name, email
     `;
 
-    const values = [name, email, hashedPassword, phone];
+    const values = [userName, email, hashedPassword, phone];
 
     const newUser = await pool.query(query, values);
 
@@ -141,14 +141,14 @@ ORDER BY COALESCE(
 });
 
 app.post('/api/chats', async (req, res) => {
-  const { name, number, creatorId } = req.body;
+  const { name: chatName, number, creatorId } = req.body;
 
   try {
     await pool.query('BEGIN');
 
     const newChat = await pool.query(
       'INSERT INTO chats (name) VALUES ($1) RETURNING *',
-      [name || null],
+      [chatName || null],
     );
     const chatId = newChat.rows[0].id;
 
@@ -288,16 +288,17 @@ app.get('/api/messages/:chatId', async (req, res) => {
 
 app.delete('/api/chats/:id', async (req, res) => {
   const { id } = req.params;
+
   await pool.query('DELETE FROM messages WHERE chat_id = $1', [id]);
   await pool.query('DELETE FROM chats WHERE id = $1', [id]);
   res.sendStatus(204);
 });
 
 app.put('/api/chats/:id', async (req, res) => {
-  const { name } = req.body;
+  const { name: chatName } = req.body;
 
   await pool.query('UPDATE chats SET name = $1 WHERE id = $2', [
-    name,
+    chatName,
     req.params.id,
   ]);
   res.json({ message: 'Chat name changed' });
@@ -320,3 +321,5 @@ app.put('/api/messages/read/:chatId', async (req, res) => {
 });
 // eslint-disable-next-line no-console
 server.listen(5000, () => console.log('Server running on port 5000'));
+
+module.exports = server;

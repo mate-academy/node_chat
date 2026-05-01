@@ -1,0 +1,9 @@
+node_modules
+dist
+client/src/assets
+client/src/img
+**/*.js
+**/*.jsx
+**/*.png
+**/*.jpg
+**/*.svg

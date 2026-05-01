@@ -27,13 +27,17 @@ function MainPage({ currentUser, onLogout }) {
       const loadChats = async () => {
         try {
           const res = await fetch(`http://localhost:5000/api/chats/${MY_ID}`);
-          if (!res.ok) throw new Error('Failed to fetch chats');
+
+          if (!res.ok) {
+            throw new Error('Failed to fetch chats');
+          }
+
           const data = await res.json();
+
           setChats(Array.isArray(data) ? data : []);
-        } catch (err) {
-          console.error('Error loading chats:', err);
-        }
+        } catch (err) {}
       };
+
       loadChats();
     }
   }, [MY_ID]);
@@ -43,7 +47,10 @@ function MainPage({ currentUser, onLogout }) {
       fetch(`http://localhost:5000/api/users/${MY_ID}`)
         .then((res) => res.json())
         .then((data) => setUser(data))
-        .catch((err) => console.log('Error loading user data:', err));
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        });
     }
   }, [MY_ID]);
 
@@ -51,7 +58,10 @@ function MainPage({ currentUser, onLogout }) {
     const handleUpdateChatList = (data) => {
       setChats((prevChats) => {
         const isExist = prevChats.some((chat) => chat.id === data.chat_id);
-        if (!isExist) return prevChats;
+
+        if (!isExist) {
+          return prevChats;
+        }
 
         const updated = prevChats.map((chat) =>
           chat.id === data.chat_id
@@ -76,18 +86,24 @@ function MainPage({ currentUser, onLogout }) {
     };
 
     socket.on('update_chat_list', handleUpdateChatList);
+
     return () => socket.off('update_chat_list', handleUpdateChatList);
   }, [selectedChat?.id]);
 
   useEffect(() => {
-    if (!selectedChat?.id) return;
+    if (!selectedChat?.id) {
+      return;
+    }
 
     socket.emit('join_chat', selectedChat.id);
 
     const handleReceiveMessage = (newMessage) => {
       if (newMessage.chat_id === selectedChat.id) {
         setMessages((prev) => {
-          if (prev.find((m) => m.id === newMessage.id)) return prev;
+          if (prev.find((m) => m.id === newMessage.id)) {
+            return prev;
+          }
+
           return [...prev, newMessage];
         });
       }
@@ -106,7 +122,9 @@ function MainPage({ currentUser, onLogout }) {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!messageText.trim() || !selectedChat) return;
+    if (!messageText.trim() || !selectedChat) {
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:5000/api/messages', {
@@ -122,9 +140,7 @@ function MainPage({ currentUser, onLogout }) {
       if (response.ok) {
         setMessageText('');
       }
-    } catch (err) {
-      console.error('Error sending message:', err);
-    }
+    } catch (err) {}
   };
 
   const handleChatClick = async (chat) => {
@@ -144,13 +160,13 @@ function MainPage({ currentUser, onLogout }) {
       const response = await fetch(
         `http://localhost:5000/api/messages/${chat.id}`,
       );
+
       if (response.ok) {
         const data = await response.json();
+
         setMessages(data);
       }
-    } catch (err) {
-      console.error('Error handling chat click:', err);
-    }
+    } catch (err) {}
   };
 
   const handleChatCreated = (newChat) => {
@@ -167,10 +183,12 @@ function MainPage({ currentUser, onLogout }) {
     setChats((prev) =>
       prev.map((c) => (c.id === chatId ? { ...c, name: newName } : c)),
     );
+
     setSelectedChat((prev) =>
       prev?.id === chatId ? { ...prev, name: newName } : prev,
     );
   };
+
   return (
     <div className="main-layout">
       {isCreateChatModalOpen && (

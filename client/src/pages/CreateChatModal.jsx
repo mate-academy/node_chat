@@ -1,39 +1,41 @@
-import { useState } from "react";
-import "./CreateChatModal.scss";
+import { useState } from 'react';
+import './CreateChatModal.scss';
+
 function CreateChatModal({ onClose, onChatCreated, currentUser }) {
-  const [chatName, setChatName] = useState("");
-  const [userNumber, setUserNumber] = useState("");
+  const [chatName, setChatName] = useState('');
+  const [userNumber, setUserNumber] = useState('');
 
   const handleCreate = async () => {
     if (!chatName.trim()) {
-      alert("Chat name cannot be empty");
+      alert('Chat name cannot be empty');
+
       return;
     }
 
     try {
       const chatData = { name: chatName, creatorId: currentUser.id };
 
-      if (userNumber.trim() !== "") {
+      if (userNumber.trim() !== '') {
         chatData.number = userNumber;
       }
 
-      const response = await fetch("http://localhost:5000/api/chats", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('http://localhost:5000/api/chats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(chatData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create chat");
+
+        throw new Error(errorData.error || 'Failed to create chat');
       }
-      
+
       const newChat = await response.json();
+
       onChatCreated(newChat);
       onClose();
-    } catch (err) {
-      console.error("Error creating chat:", err.message);
-    }
+    } catch (err) {}
   };
 
   return (
