@@ -7,16 +7,16 @@
     "client",
     "server"
   ],
-  "scripts": {
-    "init": "mate-scripts init",
-    "start": "node server/src/index.js",
-    "lint": "npm run format && mate-scripts lint client/src server/src",
-    "format": "prettier --ignore-path .prettierignore --write './**/src/**/*.{js,ts}'",
-    "test:only": "mate-scripts test",
-    "update": "mate-scripts update",
-    "postinstall": "npm run update",
-    "test": "npm run lint && npm run test:only"
-  },
+"scripts": {
+  "init": "mate-scripts init",
+  "start": "node server/src/index.js",
+  "lint": "mate-scripts lint client server",
+  "format": "prettier --write \"client/src/**/*.{js,jsx,ts,tsx}\" \"server/src/**/*.{js,ts}\"",
+  "test:only": "mate-scripts test",
+  "update": "mate-scripts update",
+  "postinstall": "npm run update",
+  "test": "npm run lint && npm run test:only"
+},
   "author": "Mate academy",
   "license": "GPL-3.0",
   "devDependencies": {
