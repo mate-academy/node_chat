@@ -7,6 +7,7 @@ function CreateChatModal({ onClose, onChatCreated, currentUser }) {
 
   const handleCreate = async () => {
     if (!chatName.trim()) {
+      // eslint-disable-next-line no-alert
       alert('Chat name cannot be empty');
 
       return;
@@ -35,15 +36,34 @@ function CreateChatModal({ onClose, onChatCreated, currentUser }) {
 
       onChatCreated(newChat);
       onClose();
-    } catch (err) {}
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err.message);
+    }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="modal-overlay"
+      role="button"
+      tabIndex="0"
+      onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') onClose();
+      }}
+    >
+      <div
+        className="modal-content"
+        role="button"
+        tabIndex="-1"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') e.stopPropagation();
+        }}
+      >
         <div className="modal-header">
           <h2>New Chat</h2>
-          <button className="close-btn" onClick={onClose}>
+          <button type="button" className="close-btn" onClick={onClose}>
             &times;
           </button>
         </div>
@@ -62,7 +82,7 @@ function CreateChatModal({ onClose, onChatCreated, currentUser }) {
             value={userNumber}
             onChange={(e) => setUserNumber(e.target.value)}
           />
-          <button className="create-btn" onClick={handleCreate}>
+          <button type="button" className="create-btn" onClick={handleCreate}>
             Create
           </button>
         </div>

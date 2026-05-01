@@ -40,6 +40,8 @@ function ChatInfoModal({
         setMembers(data);
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -60,10 +62,14 @@ function ChatInfoModal({
       if (res.ok) {
         onChatUpdated(chat.id, newName);
       }
-    } catch (err) {}
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err.message);
+    }
   };
 
   const handleDeleteChat = async () => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Delete this chat for everyone?')) {
       const res = await fetch(`http://localhost:5000/api/chats/${chat.id}`, {
         method: 'DELETE',
@@ -94,7 +100,10 @@ function ChatInfoModal({
         setNewMemberPhone('');
         fetchMembers();
       }
-    } catch (err) {}
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err.message);
+    }
   };
 
   const removeMember = async (userId) => {
@@ -109,29 +118,48 @@ function ChatInfoModal({
       if (res.ok) {
         await fetchMembers();
       }
-    } catch (err) {}
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err.message);
+    }
   };
 
   return (
-    <div className="chat-modal-overlay" onClick={onClose}>
+    <div
+      className="chat-modal-overlay"
+      role="button"
+      tabIndex="0"
+      onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') onClose();
+      }}
+    >
       <div
+        role="button"
+        tabIndex="-1"
         className="chat-modal-content"
         onClick={(e) => {
           e.stopPropagation();
         }}
+        onKeyDown={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
           <h2>Chat info</h2>
-          <button className="button-close" onClick={onClose}>
+          <button type="button" className="button-close" onClick={onClose}>
             &times;
           </button>
         </div>
         <div className="items-block">
           <div className="section-name">
             <div
+              role="button"
+              tabIndex="0"
               className="item chat-name"
               onClick={() => {
                 setIsEditChatName(true);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') setIsEditChatName(true);
               }}
             >
               Chat name: {!isEditChatName && (chat.name || chat.recipient_name)}
@@ -146,6 +174,7 @@ function ChatInfoModal({
                   placeholder="Chat Name"
                 />
                 <button
+                  type="button"
                   className="input-button"
                   onClick={() => {
                     handleUpdateName();
@@ -170,6 +199,7 @@ function ChatInfoModal({
                   </div>
                   {String(m.id) !== String(currentUserId) && (
                     <button
+                      type="button"
                       className="button-close"
                       onClick={() => removeMember(m.id)}
                     >
@@ -187,13 +217,21 @@ function ChatInfoModal({
                 onChange={(e) => setNewMemberPhone(e.target.value)}
                 placeholder="Enter phone"
               />
-              <button className="input-button" onClick={addMember}>
+              <button
+                type="button"
+                className="input-button"
+                onClick={addMember}
+              >
                 Add Member
               </button>
             </div>
           </div>
 
-          <button className="delete-btn" onClick={handleDeleteChat}>
+          <button
+            type="button"
+            className="delete-btn"
+            onClick={handleDeleteChat}
+          >
             Delete Chat
           </button>
         </div>

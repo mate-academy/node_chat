@@ -75,12 +75,12 @@ app.post('/api/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
     if (isMatch) {
-      res.json({ id: user.id, name: user.name, email: user.email });
-    } else {
-      res.status(401).json({ error: 'Incorrect password' });
+      return res.json({ id: user.id, name: user.name, email: user.email });
     }
+
+    return res.status(401).json({ error: 'Incorrect password' });
   } catch (err) {
-    res.status(500).send('Server error');
+    return res.status(500).send('Server error');
   }
 });
 
@@ -94,12 +94,12 @@ app.get('/api/users/:id', async (req, res) => {
     );
 
     if (user.rows.length > 0) {
-      res.json(user.rows[0]);
-    } else {
-      res.status(404).json({ error: 'User not found' });
+      return res.json(user.rows[0]);
     }
+
+    return res.status(404).json({ error: 'User not found' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -180,7 +180,7 @@ app.post('/api/chats', async (req, res) => {
 
     await pool.query('COMMIT');
 
-    res.json({
+    return res.json({
       ...newChat.rows[0],
       recipient_name: otherUserName,
       last_message: 'Chat created',
@@ -188,7 +188,8 @@ app.post('/api/chats', async (req, res) => {
     });
   } catch (err) {
     await pool.query('ROLLBACK');
-    res.status(500).json({ error: err.message });
+
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -204,9 +205,9 @@ app.get('/api/chats/:chatId/members', async (req, res) => {
       [req.params.chatId],
     );
 
-    res.json(result.rows);
+    return res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -228,9 +229,10 @@ app.post('/api/chats/:chatId/members', async (req, res) => {
         'VALUES ($1, $2) ON CONFLICT DO NOTHING',
       [req.params.chatId, userResult.rows[0].id],
     );
-    res.json({ message: 'Member added' });
+
+    return res.json({ message: 'Member added' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -240,9 +242,10 @@ app.delete('/api/chats/:chatId/members/:userId', async (req, res) => {
       'DELETE FROM chat_members WHERE chat_id = $1 AND user_id = $2',
       [req.params.chatId, req.params.userId],
     );
-    res.json({ message: 'Member removed' });
+
+    return res.json({ message: 'Member removed' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -261,9 +264,9 @@ app.post('/api/messages', async (req, res) => {
     io.to(chatId.toString()).emit('receive_message', messageData);
     io.to(chatId.toString()).emit('update_chat_list', messageData);
 
-    res.json(messageData);
+    return res.json(messageData);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -280,9 +283,9 @@ app.get('/api/messages/:chatId', async (req, res) => {
       [chatId],
     );
 
-    res.json(result.rows);
+    return res.json(result.rows);
   } catch (err) {
-    res.status(500).send('Server Error');
+    return res.status(500).send('Server Error');
   }
 });
 
@@ -291,7 +294,8 @@ app.delete('/api/chats/:id', async (req, res) => {
 
   await pool.query('DELETE FROM messages WHERE chat_id = $1', [id]);
   await pool.query('DELETE FROM chats WHERE id = $1', [id]);
-  res.sendStatus(204);
+
+  return res.sendStatus(204);
 });
 
 app.put('/api/chats/:id', async (req, res) => {
@@ -301,7 +305,8 @@ app.put('/api/chats/:id', async (req, res) => {
     chatName,
     req.params.id,
   ]);
-  res.json({ message: 'Chat name changed' });
+
+  return res.json({ message: 'Chat name changed' });
 });
 
 app.put('/api/messages/read/:chatId', async (req, res) => {
@@ -314,9 +319,10 @@ app.put('/api/messages/read/:chatId', async (req, res) => {
         'AND sender_id != $2',
       [chatId, userId],
     );
-    res.json({ success: true });
+
+    return res.json({ success: true });
   } catch (err) {
-    res.status(500).send(err.message);
+    return res.status(500).send(err.message);
   }
 });
 // eslint-disable-next-line no-console

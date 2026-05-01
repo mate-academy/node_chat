@@ -6,11 +6,27 @@ function UserInfoModal({ onClose, user }) {
   }
 
   return (
-    <div className="user-modal-overlay" onClick={onClose}>
-      <div className="user-modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="user-modal-overlay"
+      role="button"
+      tabIndex="0"
+      onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') onClose();
+      }}
+    >
+      <div
+        className="user-modal-content"
+        role="button"
+        tabIndex="-1"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') e.stopPropagation();
+        }}
+      >
         <div className="modal-header">
           <h2>User info</h2>
-          <button className="button-close" onClick={onClose}>
+          <button type="button" className="button-close" onClick={onClose}>
             &times;
           </button>
         </div>

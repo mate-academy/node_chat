@@ -13,7 +13,9 @@ const pool = new Pool({
 pool.connect((err, client, release) => {
   if (err) {
     // eslint-disable-next-line no-console
-    return console.error('Connection error:', err.stack);
+    console.error('Connection error:', err.stack);
+
+    return;
   }
   // eslint-disable-next-line no-console
   console.log('Connection to the database was established successfully.!');

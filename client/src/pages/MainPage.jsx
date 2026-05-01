@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import '../App.scss';
-import CreateChatModal from './CreateChatModal';
 import { io } from 'socket.io-client';
 import LogoutIcon from '@mui/icons-material/Logout';
+import CreateChatModal from './CreateChatModal';
 import UserInfoModal from './UserInfoModal';
 import ChatInfoModal from './ChatInfoModal';
 import userPhoto from '../img/user-photo.jpg';
@@ -95,7 +95,7 @@ function MainPage({ currentUser, onLogout }) {
 
   useEffect(() => {
     if (!selectedChat?.id) {
-      return;
+      return undefined;
     }
 
     socket.emit('join_chat', selectedChat.id);
@@ -103,9 +103,7 @@ function MainPage({ currentUser, onLogout }) {
     const handleReceiveMessage = (newMessage) => {
       if (newMessage.chat_id === selectedChat.id) {
         setMessages((prev) => {
-          if (prev.find((m) => m.id === newMessage.id)) {
-            return prev;
-          }
+          if (prev.find((m) => m.id === newMessage.id)) return prev;
 
           return [...prev, newMessage];
         });
@@ -223,25 +221,35 @@ function MainPage({ currentUser, onLogout }) {
         />
       )}
       <header className="header">
-        <div className="title" onClick={() => setSelectedChat(null)}>
+        <div
+          className="title"
+          role="button"
+          tabIndex="0"
+          onClick={() => setSelectedChat(null)}
+          onKeyDown={(e) => e.key === 'Enter' && setSelectedChat(null)}
+        >
           Chats
         </div>
         <div className="header-left-data">
           <div
+            role="button"
+            tabIndex="0"
             className="add-chat"
             onClick={() => setIsCreateChatModalOpen(true)}
+            onKeyDown={(e) =>
+              e.key === 'Enter' && setIsCreateChatModalOpen(true)
+            }
           >
             +
           </div>
-          <button>
-            <img
-              onClick={() => setIsUserInfoModalOpen(true)}
-              className="user-photo"
-              src={userPhoto}
-              alt="user_photo"
-            />
+          <button
+            type="button"
+            className="user-photo-btn"
+            onClick={() => setIsUserInfoModalOpen(true)}
+          >
+            <img className="user-photo" src={userPhoto} alt="user_photo" />
           </button>
-          <button className="logout-button" onClick={onLogout}>
+          <button type="button" className="logout-button" onClick={onLogout}>
             <LogoutIcon />
           </button>
         </div>
@@ -256,7 +264,10 @@ function MainPage({ currentUser, onLogout }) {
                     selectedChat?.id === chat.id ? 'active' : ''
                   }`}
                   key={chat.id}
+                  role="button"
+                  tabIndex="0"
                   onClick={() => handleChatClick(chat)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleChatClick(chat)}
                 >
                   <div className="chat-block-left-data">
                     <img className="chat-photo" src={userPhoto} alt="chat" />
@@ -280,7 +291,7 @@ function MainPage({ currentUser, onLogout }) {
                           })
                         : ''}
                     </div>
-                    {parseInt(chat.unread_count) > 0 && (
+                    {parseInt(chat.unread_count, 10) > 0 && (
                       <div className="message-count">{chat.unread_count} </div>
                     )}
                   </div>
@@ -295,16 +306,15 @@ function MainPage({ currentUser, onLogout }) {
           {selectedChat ? (
             <>
               <div className="chat-header">
-                <button>
+                <button
+                  type="button"
+                  onClick={() => setIsChatInfoModalOpen(true)}
+                >
                   {' '}
-                  <img
-                    onClick={() => setIsChatInfoModalOpen(true)}
-                    className="chat-photo"
-                    src={userPhoto}
-                    alt="chat_img"
-                  />
+                  <img className="chat-photo" src={userPhoto} alt="chat_img" />
                 </button>
                 <button
+                  type="button"
                   className="header-chat-name"
                   onClick={() => setIsChatInfoModalOpen(true)}
                 >
@@ -346,7 +356,11 @@ function MainPage({ currentUser, onLogout }) {
                   onChange={(e) => setMessageText(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                 />
-                <button className="send-message-button" onClick={sendMessage}>
+                <button
+                  type="button"
+                  className="send-message-button"
+                  onClick={sendMessage}
+                >
                   &#10148;
                 </button>
               </div>

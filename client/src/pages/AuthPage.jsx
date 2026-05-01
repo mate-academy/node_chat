@@ -46,6 +46,7 @@ function AuthPage({ onLoginSuccess }) {
       localStorage.setItem('chat_user', JSON.stringify(data));
       onLoginSuccess(data);
     } catch (err) {
+      // eslint-disable-next-line no-alert
       alert(err.message);
     }
   };
@@ -94,7 +95,7 @@ function AuthPage({ onLoginSuccess }) {
             }
             required
           />
-          <button className="button" type="submit">
+          <button className="button" type="button">
             {isRegister ? 'Register' : 'Login'}
           </button>
         </form>

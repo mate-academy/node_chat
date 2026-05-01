@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 import MainPage from './pages/MainPage';
 import AuthPage from './pages/AuthPage';
-import { useState } from 'react';
 
 function App() {
   const [user, setUser] = useState(() => {
