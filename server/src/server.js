@@ -321,5 +321,3 @@ app.put('/api/messages/read/:chatId', async (req, res) => {
 });
 // eslint-disable-next-line no-console
 server.listen(5000, () => console.log('Server running on port 5000'));
-
-module.exports = server;

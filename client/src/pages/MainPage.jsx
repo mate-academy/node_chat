@@ -35,7 +35,10 @@ function MainPage({ currentUser, onLogout }) {
           const data = await res.json();
 
           setChats(Array.isArray(data) ? data : []);
-        } catch (err) {}
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(err.message);
+        }
       };
 
       loadChats();
@@ -140,7 +143,10 @@ function MainPage({ currentUser, onLogout }) {
       if (response.ok) {
         setMessageText('');
       }
-    } catch (err) {}
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
   };
 
   const handleChatClick = async (chat) => {
@@ -166,7 +172,10 @@ function MainPage({ currentUser, onLogout }) {
 
         setMessages(data);
       }
-    } catch (err) {}
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
   };
 
   const handleChatCreated = (newChat) => {
@@ -307,7 +316,7 @@ function MainPage({ currentUser, onLogout }) {
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`chat-message ${
+                    className={`messages-block-chat-message ${
                       msg.sender_id === MY_ID ? 'sent' : 'received'
                     }`}
                   >

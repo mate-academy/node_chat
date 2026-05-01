@@ -60,18 +60,6 @@ body {
   }
 }
 
-// Загальні стилі повідомлень та скролбару мають бути ВИЩЕ за вкладені
-.chat-message {
-  flex-shrink: 0;
-  gap: 10px;
-
-  width: fit-content;
-  max-width: 75%;
-  margin: 10px;
-  padding: 8px 14px;
-  border-radius: 20px;
-}
-
 .chats-block {
   overflow-y: auto;
   width: 35%;
@@ -103,6 +91,7 @@ body {
       padding: 10px;
 
       .chat-photo {
+        flex-shrink: 0;
         width: 60px;
         border-radius: 50%;
       }
@@ -110,18 +99,38 @@ body {
 
     &-left-data {
       display: flex;
+      flex: 1;
       gap: 10px;
       align-items: center;
 
-      .chat-name {
-        font-weight: 700;
-      }
+      min-width: 0;
 
-      .chat-message {
-        font-weight: 300;
+      .text-info {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-width: 0;
+
+        .chat-name,
+        .chat-message {
+          overflow: hidden;
+          width: 100%;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .chat-name {
+          font-weight: 700;
+        }
+
+        .chat-message {
+          max-width: none;
+          padding: 0;
+          border-radius: 0;
+          font-weight: 300;
+        }
       }
     }
-
     &-right-data {
       display: flex;
       flex-direction: column;
@@ -209,62 +218,71 @@ body {
     &::-webkit-scrollbar-thumb:hover {
       background-color: #6b6375;
     }
-  }
 
-  .chat-message {
-    &.received {
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-      background-color: #222329;
+    &-chat-message {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+
+      width: fit-content;
+      max-width: 75%;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 20px;
+
+      .user-name {
+        display: inline;
+        margin-bottom: 2px;
+        font-weight: 700;
+      }
 
       .text-info-message {
         display: flex;
-        align-items: center;
-        word-break: break-word;
-
-        .user-name {
-          margin-bottom: 2px;
-          font-weight: 700;
-        }
+        flex-wrap: wrap;
+        align-items: flex-end;
 
         .user-message {
+          flex: 1 1 100%;
+
           margin-bottom: 2px;
+
           font-weight: 300;
+          word-break: break-word;
+          overflow-wrap: break-word;
+        }
+        .message-time {
+          display: inline-block;
+
+          margin-left: auto;
+
+          font-size: 0.7rem;
+          text-align: right;
+          white-space: nowrap;
+          vertical-align: bottom;
+
+          opacity: 0.7;
         }
       }
-    }
 
-    &.sent {
-      align-self: flex-end;
+      &.received {
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+        background-color: #222329;
+      }
 
-      border-bottom-right-radius: 4px;
+      &.sent {
+        align-self: flex-end;
 
-      color: #222329;
-      text-align: right;
+        border-bottom-right-radius: 4px;
 
-      background-color: #6b6375;
+        color: #222329;
+        text-align: right;
 
-      .text-info-message {
-        display: flex;
-        align-items: center;
-
-        .user-name {
-          margin-bottom: 2px;
-          font-weight: 700;
-        }
-
+        background-color: #6b6375;
         .user-message {
-          margin-bottom: 2px;
-          font-weight: 400;
+          text-align: left;
         }
       }
-    }
-
-    .message-time {
-      margin-top: 3px;
-      margin-left: 5px;
-      font-size: 0.7rem;
-      opacity: 0.7;
     }
   }
 
@@ -298,7 +316,7 @@ body {
 }
 
 button {
-  padding-right: 0;
+  padding: 0;
   border: none;
 
   font-size: 18px;
