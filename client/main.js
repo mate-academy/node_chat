@@ -92,7 +92,7 @@ socket.on('room_renamed', ({ oldName, newName }) => {
 
   messages.innerHTML = '';
 
-  socket.emit('join-room', newName);
+  socket.emit('join_room', newName);
 });
 
 socket.on('room_deleted', (roomName) => {
