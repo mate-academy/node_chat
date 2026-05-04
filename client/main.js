@@ -9,11 +9,17 @@ const messages = document.getElementById('messages');
 const roomsDiv = document.getElementById('rooms');
 const roomInput = document.getElementById('roomInput');
 const createRoomBtn = document.getElementById('createRoom');
+const renameRoomBtn = document.getElementById('renameRoom');
+const deleteRoomBtn = document.getElementById('deleteRoom');
 
 let username = localStorage.getItem('username');
 let currentRoom = 'general';
 
 function addRoom(name) {
+  if ([...roomsDiv.children].some((b) => b.textContent === name)) {
+    return;
+  }
+
   const button = document.createElement('button');
 
   button.textContent = name;
@@ -71,6 +77,39 @@ socket.on('room_created', (roomName) => {
   addRoom(roomName);
 });
 
+socket.on('room_renamed', ({ oldName, newName }) => {
+  const btns = [...roomsDiv.children];
+
+  btns.forEach((b) => {
+    if (b.textContent === oldName) {
+      b.textContent = newName;
+    }
+  });
+
+  if (currentRoom === oldName) {
+    currentRoom = newName;
+  }
+
+  messages.innerHTML = '';
+
+  socket.emit('join-room', newName);
+});
+
+socket.on('room_deleted', (roomName) => {
+  [...roomsDiv.children].forEach((b) => {
+    if (b.textContent === roomName) {
+      b.remove();
+    }
+  });
+
+  if (currentRoom === roomName) {
+    currentRoom = 'general';
+    messages.innerHTML = '';
+
+    socket.emit('join_room', 'general');
+  }
+});
+
 btn.addEventListener('click', () => {
   const text = input.value;
 
@@ -102,4 +141,21 @@ createRoomBtn.addEventListener('click', () => {
 
   messages.innerHTML = '';
   roomInput.value = '';
+});
+
+renameRoomBtn.addEventListener('click', () => {
+  const newName = prompt('New room name');
+
+  if (!newName) {
+    return;
+  }
+
+  socket.emit('rename_room', {
+    oldName: currentRoom,
+    newName,
+  });
+});
+
+deleteRoomBtn.addEventListener('click', () => {
+  socket.emit('delete_room', currentRoom);
 });

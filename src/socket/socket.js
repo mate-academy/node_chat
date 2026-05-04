@@ -74,6 +74,44 @@ export function initSocket(io) {
       io.to(room).emit('message', message);
     });
 
+    socket.on('rename_room', ({ oldName, newName }) => {
+      if (!rooms[oldName] || !newName || rooms[newName]) {
+        return;
+      }
+
+      rooms[newName] = rooms[oldName];
+      delete rooms[oldName];
+
+      const clients = io.sockets.adapter.rooms.get(oldName);
+
+      if (clients) {
+        clients.forEach((clientId) => {
+          const clientSocket = io.sockets.sockets.get(clientId);
+
+          if (clientSocket) {
+            clientSocket.leave(oldName);
+            clientSocket.join(newName);
+          }
+        });
+      }
+
+      console.log(`Room renamed: ${oldName} -> ${newName}`);
+
+      io.emit('room_renamed', { oldName, newName });
+    });
+
+    socket.on('delete_room', (roomName) => {
+      if (!rooms[roomName] || roomName === 'general') {
+        return;
+      }
+
+      delete rooms[roomName];
+
+      console.log(`Room ${roomName} deleted`);
+
+      io.emit('room_deleted', roomName);
+    });
+
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
 
