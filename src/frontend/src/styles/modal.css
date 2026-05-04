@@ -1,0 +1,75 @@
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes dialog-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.modal-backdrop[data-state='open'] {
+  animation: backdrop-in 200ms ease-out both;
+}
+
+.modal-backdrop[data-state='closed'] {
+  animation: backdrop-out 250ms ease-in both;
+}
+
+.delete-room-dialog {
+  display: grid;
+  width: min(100%, 500px);
+  gap: 18px;
+  padding: 26px;
+  color: var(--color-dialog-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-muted);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.delete-room-dialog[data-state='open'] {
+  animation: dialog-in 200ms ease-out both;
+}
+
+.delete-room-dialog[data-state='closed'] {
+  animation: dialog-out 250ms ease-in both;
+}

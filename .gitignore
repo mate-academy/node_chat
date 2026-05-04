@@ -4,6 +4,7 @@
 
 # Node
 node_modules
-
+.env
+.env.*
 # MacOS
 .DS_Store

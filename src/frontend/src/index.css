@@ -1,0 +1,59 @@
+:root {
+  --font-family-base: "Google Sans", sans-serif;
+  --color-page-bg: #fdfdfb;
+  --color-surface: #fff;
+  --color-text: #202020;
+  --color-text-strong: #0f0f0f;
+  --color-text-dark: #111;
+  --color-muted: #777;
+  --color-muted-dark: #6d6d6d;
+  --color-muted-medium: #707070;
+  --color-muted-soft: #8b8b8b;
+  --color-dialog-text: #3f3f3f;
+  --color-border: #b9b9b9;
+  --color-border-control: #adadad;
+  --color-border-soft: #d0d0d0;
+  --color-border-input: #bdbdbd;
+  --color-focus: #808080;
+  --color-primary: #1f1f1f;
+  --color-danger: #f04444;
+  --color-danger-text: #d33;
+  --color-danger-solid: #d94848;
+  --radius-sm: 2px;
+  --radius-pill: 999px;
+  --font-size-xs: 13px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --app-min-height: 100svh;
+
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background: var(--color-page-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: var(--app-min-height);
+  margin: 0;
+  background: var(--color-page-bg);
+}
+
+button,
+input {
+  font: inherit;
+}

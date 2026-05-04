@@ -1,0 +1,54 @@
+.app-button {
+  display: grid;
+  min-width: 112px;
+  height: 36px;
+  place-items: center;
+  padding: 0 22px;
+  color: var(--color-muted-dark);
+  background: transparent;
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.35s, background 0.35s, border-color 0.35s;
+}
+
+.app-button.primary {
+  color: var(--color-surface);
+  background: var(--color-primary);
+  border-color: #4a4a4a;
+  font-weight: 700;
+}
+
+.app-button.danger {
+  color: var(--color-danger-text);
+  border-color: #e1a1a1;
+}
+
+.app-button.danger.solid {
+  color: var(--color-surface);
+  background: var(--color-danger-solid);
+  border-color: var(--color-danger-solid);
+  font-weight: 700;
+}
+
+.app-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app-icon-button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  color: var(--color-muted-medium);
+  background: transparent;
+  border: 0;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
