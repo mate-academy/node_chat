@@ -1,0 +1,143 @@
+.chat-modal-overlay {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.chat-modal-content {
+  width: 500px;
+  height: auto;
+  padding: 10px 30px;
+  border-radius: 15px;
+
+  font-weight: 400;
+  color: #6b6375;
+
+  background-color: #16171d;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button-close {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+
+  font-size: 20px;
+  font-weight: 600;
+  color: #6b6375;
+
+  background-color: #16171d;
+  &:hover {
+    color: #16171d;
+    background-color: #40384a;
+  }
+}
+
+.section-name {
+  display: flex;
+  align-items: center;
+}
+
+.input-block {
+  align-items: center;
+  margin-top: 10px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+}
+
+.item {
+  padding: 10px;
+}
+
+.chat-name {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.section-members {
+  width: 300px;
+  border: 2px solid #37303f;
+}
+
+.item-input {
+  width: 120px;
+  margin-right: 7px;
+  margin-bottom: 10px;
+  margin-left: 9px;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+
+  font-size: 14px;
+  color: #6b6375;
+
+  background-color: #252027;
+  &:focus {
+    outline: none;
+  }
+}
+
+.input-button {
+  cursor: pointer;
+
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+
+  font-size: 14px;
+  color: #16171d;
+
+  background-color: #585160;
+
+  transition: background 0.2s;
+
+  &:hover {
+    color: #564a60;
+    background-color: #312839;
+  }
+}
+
+.delete-btn {
+  cursor: pointer;
+
+  width: 100px;
+  height: 35px;
+  margin-top: 10px;
+  padding: 5px;
+  border: 3px solid #4c4158;
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: bold;
+  color: #6b6375;
+
+  background-color: #16171d;
+
+  transition: background 0.2s;
+
+  &:hover {
+    color: #16171d;
+    background-color: #4c4158;
+  }
+}
