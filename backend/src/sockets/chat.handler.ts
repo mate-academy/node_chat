@@ -87,6 +87,10 @@ export const handleChatConnection = async (io: Server, socket: Socket) => {
 
   socket.on('renameRoom', async (data) => {
     try {
+      if (!data || !data.roomId || !data.newName) {
+        return socket.emit('error', 'Invalid data for renaming room');
+      }
+
       await roomService.renameRoom(data);
 
       rooms = await roomService.getAllRooms();

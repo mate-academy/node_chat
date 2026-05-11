@@ -48,12 +48,12 @@ export const App = () => {
   }
 
   const handleSendMessage = (newMessageText: string) => {
-    if (!newMessageText) {
+    if (!newMessageText || !activeRoom) {
       return;
     }
 
     socket?.emit('sendMessage', {
-      roomId: activeRoom?.id,
+      roomId: activeRoom.id,
       text: newMessageText,
       author: username,
     });

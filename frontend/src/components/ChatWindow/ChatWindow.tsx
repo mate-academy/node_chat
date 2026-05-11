@@ -48,7 +48,11 @@ export const ChatWindow = ({
           type="text"
           value={newMessageText}
           onChange={(e) => setNewMessageText(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(newMessageText)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSendMessage(e.currentTarget.value);
+            }
+          }}
           placeholder="Write a message..."
         />
         <button
