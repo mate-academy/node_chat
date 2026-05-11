@@ -1,0 +1,131 @@
+.room-list {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__create-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  &__input {
+    flex-grow: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+
+    &:focus {
+      border-color: #007bff;
+    }
+  }
+
+  &__title {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  &__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+  }
+
+  &__item-name {
+    font-weight: 500;
+    color: #222;
+    margin-right: 10px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__item-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #fff;
+    transition: background-color 0.2s, transform 0.1s;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &--create {
+      padding: 10px 16px;
+      background-color: #007bff;
+      font-size: 14px;
+
+      &:hover { background-color: #0056b3; }
+    }
+
+    &--join {
+      background-color: #28a745;
+
+      &:hover { background-color: #218838; }
+    }
+
+    &--rename {
+      background-color: #ffc107;
+      color: #333;
+
+      &:hover { background-color: #e0a800; }
+    }
+
+    &--delete {
+      background-color: #dc3545;
+
+      &:hover { background-color: #c82333; }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+
+    &__title {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    &__create-form {
+      margin-bottom: 16px;
+    }
+
+    &__button {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+  }
+}
