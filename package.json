@@ -1,0 +1,8 @@
+{
+  "name": "chat-app-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install": "npm install --prefix backend && npm install --prefix frontend"
+  }
+}

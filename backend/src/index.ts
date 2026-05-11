@@ -13,6 +13,9 @@ import { handleChatConnection } from './sockets/chat.handler.js';
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+app.use(cors());
+
 const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, { cors: { origin: '*' } });

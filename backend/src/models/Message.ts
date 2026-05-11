@@ -15,6 +15,7 @@ class Message extends Model<InferAttributes<Message>, InferCreationAttributes<Me
   declare text: string;
   declare author: string;
   declare roomId: ForeignKey<Room['id']>;
+  declare createdAt: CreationOptional<Date>;
 }
 
 Message.init(
@@ -35,12 +36,18 @@ Message.init(
     roomId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    }
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
 
   {
     sequelize,
     tableName: 'messages',
+    timestamps: true,
   }
 );
 
