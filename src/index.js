@@ -16,8 +16,8 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST']
-  }
+    methods: ['GET', 'POST'],
+  },
 });
 
 let rooms = [];
@@ -33,23 +33,23 @@ io.on('connection', (socket) => {
   socket.on('create', (room) => {
     rooms.push(room);
     io.emit('update_rooms', rooms);
-  })
+  });
 
   socket.on('rename', (id, newName) => {
-    let room = rooms.find(room => room.id === id);
+    const room = rooms.find((room) => room.id === id);
 
     if (room) {
       room.name = newName;
       io.emit('update_rooms', rooms);
     }
-  })
+  });
 
   socket.on('delete', (id) => {
-    rooms = rooms.filter(room => room.id !== id);
-    messages = messages.filter(message => message.roomId !== id)
+    rooms = rooms.filter((room) => room.id !== id);
+    messages = messages.filter((message) => message.roomId !== id);
 
     io.emit('update_rooms', rooms);
-  })
+  });
 
   socket.on('send_message', (newMessage) => {
     messages.push(newMessage);
@@ -59,23 +59,23 @@ io.on('connection', (socket) => {
 
   socket.on('join', (id) => {
     socket.join(id);
-    const roomHistory = messages.filter(m => m.roomId === id)
-      socket.emit('room_history', roomHistory)
-  })
 
-  socket.on('disconnect', () => {
-    return;
+    const roomHistory = messages.filter((m) => m.roomId === id);
+
+    socket.emit('room_history', roomHistory);
   });
+
+  socket.on('disconnect', () => {});
 });
 
 const start = async (req, res) => {
   try {
     server.listen(PORT, () => {
       console.log(`🚀 Сервер успішно запущено на порту ${PORT}`);
-    })
+    });
   } catch (error) {
     console.error('❌ Помилка при запуску сервера:', error);
   }
-}
+};
 
 start();
