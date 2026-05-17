@@ -5,7 +5,8 @@ import { Message, Room } from '../types/types';
 import './App.scss';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3006')
+const BACKEND_PORT = import.meta.env.VITE_BACKEND_PORT || '3006';
+const socket = io(`http://localhost:${BACKEND_PORT}`)
 
 export const App = () => {
   const [userName, setUserName] = useState(localStorage.getItem('username') || '');
@@ -149,7 +150,7 @@ export const App = () => {
                       if (e.key === 'Enter') saveRoomName();
                       if (e.key === 'Escape') cancelRename();
                     }}
-                    onClick={(e) => e.stopPropagation()} 
+                    onClick={(e) => e.stopPropagation()}
                     autoFocus
                     className="room-rename-input"
                   />

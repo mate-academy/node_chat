@@ -71,10 +71,10 @@ io.on('connection', (socket) => {
 const start = async (req, res) => {
   try {
     server.listen(PORT, () => {
-      console.log(`🚀 Сервер успішно запущено на порту ${PORT}`);
+      console.log(`Сервер успішно запущено на порту ${PORT}`);
     });
   } catch (error) {
-    console.error('❌ Помилка при запуску сервера:', error);
+    console.error('Помилка при запуску сервера:', error);
   }
 };
 
