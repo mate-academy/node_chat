@@ -2,10 +2,11 @@
   "name": "node_chat",
   "version": "1.0.0",
   "description": "Chat using Node.js",
-  "main": "src/index.js",
+  "main": "server.js",
   "scripts": {
     "init": "mate-scripts init",
     "start": "vite",
+    "server": "node server.js",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "npm run format && mate-scripts lint",
