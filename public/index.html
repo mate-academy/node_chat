@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <div id="login-screen" class="login">
+      <form id="login-form" class="login__form">
+        <h2 class="login__title">Welcome to us!</h2>
+        <input
+        type="text"
+        id="username-input"
+        class="login__input"
+        placeholder="Please enter your name ...."
+        required
+        autocomplete="off"
+        >
+        <button
+          type="submit"
+          class="login__button"
+          > Enter the Chat
+        </button>
+        </form>
+    </div>
+
+    <div id="chat-screen" class="chat" style="display: none;">
+      <aside class="chat__sidebar sidebar">
+        <div class="sidebar__header">
+          <h3 class="sidebar__title">Rooms</h3>
+        </div>
+        <ul id="rooms-list" class="sidebar__list">
+        </ul>
+        <form id="create-room-form" class="sidebar__form">
+          <input
+          type="text"
+          id="new-room-input"
+          class="sidebar__input"
+          placeholder="New room ...."
+          required
+          autocomplete="off"
+          >
+          <button
+          type="submit"
+          class="sidebar__button"
+          >+</button>
+        </form>
+      </aside>
+      <main class="chat__main">
+        <header class="chat__header">
+          <h3 id="current-room-name" class="chat__room-name">General</h3>
+        </header>
+
+        <div id="messages-list" class="chat__messages">
+        </div>
+
+        <form id="message-form" class="chat__message-form">
+          <input
+          type="text"
+          id="message-input"
+          class="chat__input"
+          placeholder="Please enter your message..."
+          required
+          autocomplete="off"
+          >
+          <button
+          type="submit"
+          class="chat__send-button"
+          >Send</button>
+        </form>
+      </main>
+    </div>
+  </div>
+<script src="main.js"></script>
+</body>
+</html>
