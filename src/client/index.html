@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <section id="auth-panel" class="panel">
+        <h1>Node Chat</h1>
+        <p>Enter a username to join the chat.</p>
+        <form id="username-form">
+          <input
+            id="username-input"
+            type="text"
+            name="username"
+            placeholder="Username"
+            maxlength="32"
+            required
+            autocomplete="username"
+          />
+          <button type="submit">Join</button>
+        </form>
+        <p id="auth-error" class="error" hidden></p>
+      </section>
+
+      <section id="chat-panel" class="panel" hidden>
+        <header class="chat-header">
+          <span id="current-user"></span>
+          <button type="button" id="change-username-btn" class="link-btn">
+            Change username
+          </button>
+        </header>
+
+        <div class="layout">
+          <aside class="sidebar">
+            <div class="sidebar-header">
+              <h2>Rooms</h2>
+              <button type="button" id="create-room-btn" title="Create room">
+                +
+              </button>
+            </div>
+            <ul id="rooms-list"></ul>
+            <div id="room-actions" class="room-actions" hidden>
+              <button type="button" id="rename-room-btn">Rename</button>
+              <button type="button" id="delete-room-btn" class="danger">
+                Delete
+              </button>
+            </div>
+          </aside>
+
+          <main class="chat-main">
+            <h2 id="room-title">General</h2>
+            <ul id="messages-list"></ul>
+            <form id="message-form">
+              <input
+                id="message-input"
+                type="text"
+                placeholder="Type a message..."
+                maxlength="1000"
+                required
+                autocomplete="off"
+              />
+              <button type="submit">Send</button>
+            </form>
+          </main>
+        </div>
+      </section>
+    </div>
+    <script src="/protocol.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
