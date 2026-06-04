@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-zinc-800;
+  }
+}
