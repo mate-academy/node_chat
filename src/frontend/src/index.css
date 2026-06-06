@@ -1,0 +1,46 @@
+:root {
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --grey: #E5E7EB;
+
+  --font: 'Manrope', sans-serif;
+  --border-radius: 10px;
+  --shadow: 0px 0px 11px -7px rgba(0,0,0,0.9);
+  --border: 2px solid var(--grey);
+
+  --transition: all 0.2s;
+
+  --primary: #5B4CFF;
+  --primary-hover: #6D5EFF;
+  --primary-dark: #4338CA;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--text-primary);
+  font-family: 'Manrope', sans-serif;
+  background: #F5F5F7;
+}
+
+section {
+  background: #FFF;
+}
+
+
+input, button {
+  font-family: 'Manrope', sans-serif;
+}
+
+button {
+  background: none;
+  border: none;
+}
+
+ul {
+  list-style: none;
+}
