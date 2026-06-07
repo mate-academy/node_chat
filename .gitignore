@@ -4,6 +4,9 @@
 
 # Node
 node_modules
+dist
 
 # MacOS
 .DS_Store
+
+.env

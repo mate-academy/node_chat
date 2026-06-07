@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="chat-page">
+      <section class="chat-layout">
+        <aside class="chat-layout__sidebar">
+          <div class="panel panel--sidebar">
+            <div class="panel__header">
+              <p class="panel__eyebrow">Node Chat</p>
+              <h1 class="panel__title">Rooms</h1>
+              <p class="panel__text">
+                Create rooms and switch between conversations.
+              </p>
+            </div>
+
+            <form id="create-room-form" class="form form--stacked">
+              <label class="form__field">
+                <span class="form__label">New room</span>
+                <input
+                  class="form__input"
+                  id="room-name-input"
+                  name="roomName"
+                  type="text"
+                  placeholder="New room name"
+                  required
+                />
+              </label>
+              <button class="button button--primary" type="submit">
+                Create room
+              </button>
+            </form>
+
+            <ul id="rooms-list" class="room-list"></ul>
+          </div>
+        </aside>
+
+        <section class="chat-layout__content">
+          <div class="panel panel--chat">
+            <div class="panel__header">
+              <p class="panel__eyebrow">Active Room</p>
+              <h2
+                id="active-room-title"
+                class="panel__title panel__title--chat"
+              >
+                Select a room
+              </h2>
+            </div>
+
+            <ul id="messages-list" class="message-list"></ul>
+
+            <form id="message-form" class="form form--chat">
+              <label class="form__field">
+                <span class="form__label">Room</span>
+                <input
+                  class="form__input"
+                  type="text"
+                  name="room"
+                  placeholder="Choose room"
+                  readonly
+                  required
+                />
+              </label>
+
+              <label class="form__field">
+                <span class="form__label">Author</span>
+                <input
+                  class="form__input"
+                  type="text"
+                  name="author"
+                  placeholder="Enter your name"
+                  required
+                />
+              </label>
+
+              <label class="form__field form__field--full">
+                <span class="form__label">Message</span>
+                <input
+                  class="form__input"
+                  type="text"
+                  name="text"
+                  placeholder="Enter text"
+                  required
+                />
+              </label>
+
+              <button class="button button--primary form__submit" type="submit">
+                Send
+              </button>
+            </form>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
