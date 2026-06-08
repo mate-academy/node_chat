@@ -1,0 +1,62 @@
+{
+  "rooms": {
+    "retro-room": {
+      "id": "retro-room",
+      "name": "Retro Dungeon",
+      "cover": "/covers/cover1.jpg",
+      "creator": "System",
+      "messages": [
+        {
+          "id": "msg-1780946831410",
+          "author": "Sam",
+          "avatar": "/avatars/avatar1.jpg",
+          "text": "Hello",
+          "time": "22:27"
+        }
+      ]
+    },
+    "room-1780946080844": {
+      "id": "room-1780946080844",
+      "name": "Koi Lake",
+      "cover": "/covers/cover2.jpg",
+      "creator": "Samantha",
+      "messages": [
+        {
+          "id": "msg-1780946097495",
+          "author": "Samantha",
+          "avatar": "/avatars/avatar2.jpg",
+          "text": "Hi there!",
+          "time": "22:14"
+        },
+        {
+          "id": "msg-1780946109952",
+          "author": "Samantha",
+          "avatar": "/avatars/avatar2.jpg",
+          "text": "Welcome to this room!",
+          "time": "22:15"
+        },
+        {
+          "id": "msg-1780946300908",
+          "author": "Sam",
+          "avatar": "/avatars/avatar1.jpg",
+          "text": "Hi!",
+          "time": "22:18"
+        },
+        {
+          "id": "msg-1780947306216",
+          "author": "Sam",
+          "avatar": "/avatars/avatar1.jpg",
+          "text": "How are you?",
+          "time": "22:35"
+        },
+        {
+          "id": "msg-1780947340634",
+          "author": "Samantha",
+          "avatar": "/avatars/avatar2.jpg",
+          "text": "I am fine!",
+          "time": "22:35"
+        }
+      ]
+    }
+  }
+}
