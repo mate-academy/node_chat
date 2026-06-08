@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Private Multi-Session Chat with Rename (Fixed Flow)</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body
+    class="bg-slate-950 text-slate-100 font-sans h-screen w-screen m-0 overflow-hidden"
+  >
+    <div id="root" class="h-full w-full"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef } = React;
+
+      const getQueryParam = (param) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      };
+
+      function App() {
+        const [username, setUsername] = useState(() => {
+          const urlUser = getQueryParam('user');
+          if (urlUser) {
+            return urlUser.trim();
+          }
+          return localStorage.getItem('chat_username') || '';
+        });
+
+        const [isAuth, setIsAuth] = useState(!!username);
+
+        const [myRooms, setMyRooms] = useState(() => {
+          const saved = localStorage.getItem(`rooms_${username}`);
+          return saved
+            ? JSON.parse(saved)
+            : [{ id: 'general', name: 'General Chat' }];
+        });
+
+        const [activeRoomId, setActiveRoomId] = useState('general');
+        const [messages, setMessages] = useState([]);
+        const [messageInput, setMessageInput] = useState('');
+        const [newRoomName, setNewRoomName] = useState('');
+        const [searchRoomName, setSearchRoomName] = useState('');
+
+        const [editingRoomId, setEditingRoomId] = useState(null);
+        const [editNameInput, setEditNameInput] = useState('');
+
+        const ws = useRef(null);
+        const scrollRef = useRef(null);
+
+        const activeRoomIdRef = useRef(activeRoomId);
+        useEffect(() => {
+          activeRoomIdRef.current = activeRoomId;
+        }, [activeRoomId]);
+
+        useEffect(() => {
+          if (username && isAuth) {
+            localStorage.setItem(`rooms_${username}`, JSON.stringify(myRooms));
+          }
+        }, [myRooms, username, isAuth]);
+
+        useEffect(() => {
+          if (!isAuth || !username) return;
+
+          const protocol =
+            window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          const socketInstance = new WebSocket(
+            `${protocol}//${window.location.host}`,
+          );
+          ws.current = socketInstance;
+
+          socketInstance.onopen = () => {
+            socketInstance.send(
+              JSON.stringify({ type: 'USER_INIT', payload: { username } }),
+            );
+          };
+
+          socketInstance.onmessage = (event) => {
+            try {
+              const { type, payload } = JSON.parse(event.data);
+              switch (type) {
+                case 'ROOM_JOIN_SUCCESS':
+                  setMyRooms((prev) => {
+                    if (prev.some((r) => r.id === payload.room.id)) return prev;
+                    return [...prev, payload.room];
+                  });
+                  setActiveRoomId(payload.room.id);
+                  setMessages(payload.history);
+                  break;
+
+                case 'ROOM_RENAME_SUCCESS':
+                  setMyRooms((prev) =>
+                    prev.map((r) =>
+                      r.id === payload.room.id ? payload.room : r,
+                    ),
+                  );
+                  break;
+
+                case 'MSG_RECEIVE':
+                  setMessages((prev) => [...prev, payload]);
+                  break;
+
+                case 'ROOM_EVICTION':
+                  setMyRooms((prev) =>
+                    prev.filter((r) => r.id !== payload.deletedRoomId),
+                  );
+                  setActiveRoomId(payload.targetRoomId);
+                  break;
+
+                case 'ROOM_DELETED_NOTIFY':
+                  setMyRooms((prev) =>
+                    prev.filter((r) => r.id !== payload.deletedRoomId),
+                  );
+                  if (activeRoomIdRef.current === payload.deletedRoomId) {
+                    setActiveRoomId('general');
+                  }
+                  break;
+
+                case 'ERROR':
+                  alert(payload);
+                  break;
+                default:
+                  break;
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          };
+
+          return () => {
+            if (ws.current) {
+              ws.current.close();
+            }
+          };
+        }, [isAuth, username]);
+
+        useEffect(() => {
+          scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, [messages]);
+
+        const handleLogin = (e) => {
+          e.preventDefault();
+          const trimmed = username.trim();
+          if (!trimmed) return;
+          localStorage.setItem('chat_username', trimmed);
+          const newUrl =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            window.location.pathname +
+            '?user=' +
+            encodeURIComponent(trimmed);
+          window.history.pushState({ path: newUrl }, '', newUrl);
+          setIsAuth(true);
+        };
+
+        const handleLogout = () => {
+          localStorage.removeItem('chat_username');
+          const cleanUrl =
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            window.location.pathname;
+          window.history.pushState({ path: cleanUrl }, '', cleanUrl);
+          setUsername('');
+          setIsAuth(false);
+          setMyRooms([{ id: 'general', name: 'General Chat' }]);
+          if (ws.current) ws.current.close();
+        };
+
+        const handleSendMessage = (e) => {
+          e.preventDefault();
+          if (!messageInput.trim() || !ws.current) return;
+          ws.current.send(
+            JSON.stringify({
+              type: 'MSG_SEND',
+              payload: { text: messageInput.trim() },
+            }),
+          );
+          setMessageInput('');
+        };
+
+        const handleCreateRoom = (e) => {
+          e.preventDefault();
+          if (!newRoomName.trim() || !ws.current) return;
+          ws.current.send(
+            JSON.stringify({
+              type: 'ROOM_CREATE',
+              payload: { name: newRoomName.trim() },
+            }),
+          );
+          setNewRoomName('');
+        };
+
+        const handleJoinRoomByName = (e) => {
+          e.preventDefault();
+          if (!searchRoomName.trim() || !ws.current) return;
+          ws.current.send(
+            JSON.stringify({
+              type: 'ROOM_JOIN',
+              payload: { roomName: searchRoomName.trim() },
+            }),
+          );
+          setSearchRoomName('');
+        };
+
+        const handleSwitchToSavedRoom = (roomId) => {
+          if (roomId === activeRoomId || !ws.current) return;
+          ws.current.send(
+            JSON.stringify({
+              type: 'ROOM_JOIN',
+              payload: { roomName: roomId },
+            }),
+          );
+        };
+
+        const handleRenameRoom = (roomId, e) => {
+          e.stopPropagation();
+          if (!editNameInput.trim() || !ws.current) return;
+          ws.current.send(
+            JSON.stringify({
+              type: 'ROOM_RENAME',
+              payload: { roomId, newName: editNameInput.trim() },
+            }),
+          );
+          setEditingRoomId(null);
+          setEditNameInput('');
+        };
+
+        const handleDeleteRoom = (roomId, e) => {
+          e.stopPropagation();
+          if (!ws.current) return;
+          if (confirm('Ви впевнені, що хочете видалити цю кімнату для всіх?')) {
+            ws.current.send(
+              JSON.stringify({ type: 'ROOM_DELETE', payload: { roomId } }),
+            );
+          }
+        };
+
+        if (!isAuth) {
+          return (
+            <div class="flex items-center justify-center h-full w-full bg-slate-950">
+              <form
+                onSubmit={handleLogin}
+                class="bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-2xl w-full max-w-md"
+              >
+                <h2 class="text-2xl font-bold mb-6 text-center text-indigo-400">
+                  Вхід у Чат
+                </h2>
+                <div class="mb-4">
+                  <label class="block text-sm font-medium text-slate-400 mb-2">
+                    Ваш нікнейм
+                  </label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Введіть ваш username..."
+                    maxLength={25}
+                    required
+                    class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition-colors cursor-pointer"
+                >
+                  Увійти
+                </button>
+              </form>
+            </div>
+          );
+        }
+
+        const currentActiveRoom = myRooms.find((r) => r.id === activeRoomId);
+
+        return (
+          <div class="flex h-full w-full overflow-hidden">
+            <div class="w-80 bg-slate-900 border-r border-slate-800 flex flex-col h-full">
+              <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
+                <div class="truncate mr-2">
+                  <span class="text-xs text-slate-500 block font-medium uppercase tracking-wider">
+                    Користувач
+                  </span>
+                  <span class="font-bold text-indigo-400 truncate block">
+                    {username}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  class="text-xs text-rose-400 hover:text-rose-300 font-medium cursor-pointer"
+                >
+                  Вийти
+                </button>
+              </div>
+
+              <div class="p-4 border-b border-slate-800 bg-slate-950/10">
+                <p class="text-[11px] font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                  Створити кімнату
+                </p>
+                <form onSubmit={handleCreateRoom} class="flex gap-2">
+                  <input
+                    type="text"
+                    value={newRoomName}
+                    onChange={(e) => setNewRoomName(e.target.value)}
+                    placeholder="Назва кімнати..."
+                    maxLength={30}
+                    class="flex-1 px-3 py-1.5 text-sm rounded-xl bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:border-indigo-500"
+                  />
+                  <button
+                    type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-500 font-bold px-3 py-1.5 rounded-xl text-white text-sm cursor-pointer"
+                  >
+                    +
+                  </button>
+                </form>
+              </div>
+
+              <div class="p-4 border-b border-slate-800 bg-slate-950/20">
+                <p class="text-[11px] font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                  Увійти за назвою
+                </p>
+                <form onSubmit={handleJoinRoomByName} class="flex gap-2">
+                  <input
+                    type="text"
+                    value={searchRoomName}
+                    onChange={(e) => setSearchRoomName(e.target.value)}
+                    placeholder="Назва існуючої кімнати..."
+                    maxLength={30}
+                    class="flex-1 px-3 py-1.5 text-sm rounded-xl bg-slate-800 border border-slate-700 text-slate-100 focus:outline-none focus:border-emerald-500"
+                  />
+                  <button
+                    type="submit"
+                    class="bg-emerald-600 hover:bg-emerald-500 font-bold px-3 py-1.5 rounded-xl text-white text-sm cursor-pointer"
+                  >
+                    Join
+                  </button>
+                </form>
+              </div>
+
+              <div class="flex-1 overflow-y-auto p-3 space-y-1">
+                <p class="text-xs font-semibold text-slate-500 px-2 mb-2 uppercase tracking-wider">
+                  Мої Кімнати ({myRooms.length})
+                </p>
+                {myRooms.map((room) => (
+                  <div
+                    key={room.id}
+                    onClick={() => handleSwitchToSavedRoom(room.id)}
+                    class={`flex items-center justify-between p-2.5 rounded-xl text-sm transition-all cursor-pointer group ${room.id === activeRoomId ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 font-medium' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}
+                  >
+                    <div class="flex items-center gap-2 flex-1 truncate">
+                      <span class="text-slate-600 font-mono">#</span>
+                      {editingRoomId === room.id ? (
+                        <input
+                          type="text"
+                          value={editNameInput}
+                          onChange={(e) => setEditNameInput(e.target.value)}
+                          onKeyDown={(e) =>
+                            e.key === 'Enter' && handleRenameRoom(room.id, e)
+                          }
+                          onClick={(e) => e.stopPropagation()}
+                          autoFocus
+                          class="bg-slate-700 text-white text-xs px-2 py-0.5 rounded focus:outline-none w-full max-w-[130px]"
+                        />
+                      ) : (
+                        <span class="truncate">{room.name}</span>
+                      )}
+                    </div>
+
+                    {room.id !== 'general' && (
+                      <div class="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 transition-opacity ml-2">
+                        {editingRoomId === room.id ? (
+                          <button
+                            onClick={(e) => handleRenameRoom(room.id, e)}
+                            class="text-emerald-400 font-bold text-xs hover:text-emerald-300"
+                          >
+                            ✓
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingRoomId(room.id);
+                              setEditNameInput(room.name);
+                            }}
+                            class="text-slate-400 hover:text-slate-200 text-xs"
+                          >
+                            ✎
+                          </button>
+                        )}
+                        <button
+                          onClick={(e) => handleDeleteRoom(room.id, e)}
+                          class="text-rose-400 hover:text-rose-300 text-xs"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="flex-1 bg-slate-950 flex flex-col h-full overflow-hidden">
+              <div class="h-16 border-b border-slate-800 px-6 flex items-center bg-slate-900/40 backdrop-blur">
+                <span class="text-xl font-bold text-slate-500 mr-2">#</span>
+                <h1 class="text-base font-bold text-slate-100">
+                  {currentActiveRoom ? currentActiveRoom.name : 'General Chat'}
+                </h1>
+              </div>
+
+              <div class="flex-1 overflow-y-auto p-6 space-y-4">
+                {messages.length === 0 ? (
+                  <div class="text-slate-600 text-sm italic text-center mt-12">
+                    Немає повідомлень. Напишіть щось!
+                  </div>
+                ) : (
+                  messages.map((msg) => {
+                    const isOwn = msg.author === username;
+                    const isSystem = msg.author === 'System';
+
+                    if (isSystem) {
+                      return (
+                        <div key={msg.id} class="text-center my-2">
+                          <span class="text-xs bg-slate-900 px-3 py-1 rounded-full border border-slate-800 text-slate-500 italic">
+                            {msg.text}
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={msg.id}
+                        class={`flex flex-col max-w-[75%] ${isOwn ? 'ml-auto items-end' : 'mr-auto items-start'}`}
+                      >
+                        <div class="flex items-center gap-2 mb-1">
+                          <span
+                            class={`text-xs font-semibold ${isOwn ? 'text-indigo-400' : 'text-slate-400'}`}
+                          >
+                            {msg.author}
+                          </span>
+                          <span class="text-[10px] text-slate-600">
+                            {new Date(msg.timestamp).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                        <div
+                          class={`px-4 py-2.5 rounded-2xl text-sm break-words shadow-sm ${isOwn ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-800 text-slate-200 rounded-tl-none'}`}
+                        >
+                          {msg.text}
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+                <div ref={scrollRef} />
+              </div>
+
+              <div class="p-4 border-t border-slate-800 bg-slate-900/30">
+                <form onSubmit={handleSendMessage} class="flex gap-3">
+                  <input
+                    type="text"
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    placeholder={`Повідомлення в чат...`}
+                    maxLength={2000}
+                    class="flex-1 bg-slate-800 text-slate-100 placeholder-slate-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-slate-700 transition-shadow"
+                  />
+                  <button
+                    type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-6 py-3 rounded-xl transition-colors cursor-pointer"
+                  >
+                    Send
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
