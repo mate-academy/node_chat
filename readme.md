@@ -1,10 +1,57 @@
-# Chat (with Node.js) 
-Implement a chat application (both client and server)
+# Чат на Node.js
 
-- You type a username and send it to the server
-- It is now username (save it in localStorage)
-- All the messages should have an author, time and text
-- Implement an ability to create rooms (create / rename / join / delete)
-- New user should see all prev messages in the room
+Короткий опис
+------------
+Простий чат у реальному часі на базі Node.js, Express, Socket.io та PostgreSQL (Sequelize).
+Підтримує кімнати (створення / перейменування / приєднання / видалення), збереження повідомлень
+(автор, час, текст) та відображення попередньої історії повідомлень у кімнаті. Ім'я
+користувача вводиться при підключенні та зберігається у localStorage.
 
-**Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
+Функціональність
+-----------------
+- Збереження повідомлень: автор, час, текст
+- Кімнати: create / rename / join / delete
+- Історія повідомлень для кожної кімнати
+- Реальний час через Socket.io
+
+Вимоги
+-------
+- Node.js (рекомендовано 16+)
+- Docker (для локального запуску PostgreSQL) або доступна PostgreSQL
+- npm
+
+Швидкий старт
+-------------
+1. Встановіть залежності:
+```bash
+npm install
+```
+2. Запустіть PostgreSQL (рекомендовано через Docker Compose):
+```bash
+docker-compose up -d
+```
+3. Запустіть сервер у режимі розробки:
+```bash
+npm run dev
+```
+4. Відкрийте у браузері:
+```
+http://localhost:3000
+```
+
+Налаштування (опціонально)
+-------------------------
+Додайте файл `.env` у корінь проєкту або налаштуйте змінні оточення. Приклад:
+```env
+DB_NAME=main
+DB_USER=vladok
+DB_PASS=mytestdbpass1
+DB_HOST=localhost
+DB_PORT=5432
+PORT=3000
+```
+
+Примітки
+-------
+- SQL-скрипти для ініціалізації бази знаходяться в `postgres-init/` і виконуються при піднятті контейнера.
+- Докладні вимоги та завдання: https://github.com/mate-academy/js_task-guideline/blob/master/README.md
