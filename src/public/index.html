@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="./js/app.js" defer></script>
+  </head>
+  <body>
+    <!-- Username Modal -->
+    <div id="username-modal" class="modal">
+      <div class="modal-content">
+        <h2>Welcome to Node Chat</h2>
+        <p class="modal-sub">Enter a username to start chatting</p>
+        <input
+          type="text"
+          id="username-input"
+          placeholder="Your username..."
+          maxlength="30"
+          autocomplete="off"
+        />
+        <button id="username-submit">Join Chat</button>
+        <p id="username-error" class="error-text hidden"></p>
+      </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="hidden">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <span class="app-title">Node Chat</span>
+          <span id="current-user" class="current-user"></span>
+        </div>
+
+        <div class="rooms-header">
+          <span class="rooms-label">Rooms</span>
+          <button id="create-room-btn" class="icon-btn" title="Create room">&#43;</button>
+        </div>
+
+        <ul id="rooms-list"></ul>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="chat-area">
+        <div id="no-room-selected" class="no-room">
+          <p>Select a room to start chatting</p>
+        </div>
+
+        <div id="room-container" class="hidden">
+          <header class="chat-header">
+            <span id="room-name-display" class="room-title"></span>
+            <div class="room-actions">
+              <button id="rename-room-btn" class="action-btn">Rename</button>
+              <button id="delete-room-btn" class="action-btn danger">Delete</button>
+            </div>
+          </header>
+
+          <div id="messages" class="messages"></div>
+
+          <form id="message-form" class="message-form">
+            <input
+              type="text"
+              id="message-input"
+              placeholder="Type a message..."
+              autocomplete="off"
+            />
+            <button type="submit" class="send-btn">Send</button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
