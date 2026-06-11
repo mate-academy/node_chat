@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Chat from '../services/web-chat';
 
 interface IMessage {
@@ -26,13 +26,15 @@ export default function Messages({ idRoom }: { idRoom: string | null }) {
   const [messages, setMessages] = useState<IMessage[] | []>([]);
   const [text, setText] = useState('');
 
+  const socketRef = useRef<WebSocket | null>(null);
+
   const handleMessage = async () => {
     try {
       const author = localStorage.getItem('user');
-      if (!author || !idRoom) return;
+      if (!author || !idRoom || !socketRef.current) return;
       await Chat.createMessage(text, author, idRoom);
-      const { data } = await Chat.getMessage(idRoom);
-      setMessages(data);
+      socketRef.current.send(JSON.stringify({ text, author }));
+
       setText('');
     } catch (e) {
       console.log(e);
@@ -53,6 +55,45 @@ export default function Messages({ idRoom }: { idRoom: string | null }) {
     };
 
     fetchMessages(idRoom);
+  }, [idRoom]);
+
+  useEffect(() => {
+    socketRef.current = new WebSocket('ws://localhost:5000');
+    const socket = socketRef.current;
+
+    socket.onmessage = function (event) {
+      if (!event.data) return;
+
+      let incoming;
+
+      try {
+        incoming = JSON.parse(event.data);
+      } catch {
+        return;
+      }
+
+      if (!incoming.text || !incoming.author) return;
+
+      setMessages((prev) => {
+        const next = [
+          ...prev,
+          {
+            id: Date.now(),
+            author: incoming.author,
+            text: incoming.text,
+            createdAt: new Date().toISOString(),
+            userId: null,
+            roomId: Number(idRoom),
+          },
+        ];
+
+        return next;
+      });
+    };
+
+    return () => {
+      socket.close();
+    };
   }, [idRoom]);
 
   return (

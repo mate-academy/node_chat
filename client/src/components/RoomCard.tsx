@@ -68,7 +68,7 @@ export const RoomCard = ({
         >
           Delete
         </button>
-        <p className='text-[10px]'>id:{id}</p>
+        <p className="text-[10px]">id:{id}</p>
       </div>
     </div>
   );

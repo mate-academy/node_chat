@@ -12,7 +12,7 @@ export const Registration = ({ name, onName, onPage }: NameInputProps) => {
     try {
       if (!name.trim()) return;
       await Chat.registration(name);
-      localStorage.setItem('user', name)
+      localStorage.setItem('user', name);
       onName('');
       onPage('room');
     } catch (e) {

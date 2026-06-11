@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-
 @tailwind utilities;
 
 @layer base {

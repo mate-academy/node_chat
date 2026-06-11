@@ -18,7 +18,7 @@ function App() {
           <Registration name={name} onName={setName} onPage={setPage} />
         )}
         {page === 'room' && <Room onPage={setPage} onSetId={setIdRoom} />}
-        {page === 'chat' && <Chat  idRoom={idRoom}/>}
+        {page === 'chat' && <Chat idRoom={idRoom} />}
       </Container>
     </>
   );
