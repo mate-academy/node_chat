@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="username-screen">
+      <h2>Enter your name</h2>
+      <input type="text" id="username-input" placeholder="Your name" />
+      <button id="username-btn">Continue</button>
+    </div>
+
+    <div id="rooms-screen" class="hidden">
+      <h2>Rooms</h2>
+      <ul id="rooms-list"></ul>
+      <input type="text" id="new-room-input" placeholder="New room name" />
+      <button id="create-room-btn">Create room</button>
+    </div>
+
+    <div id="chat-screen" class="hidden">
+      <h2 id="room-title"></h2>
+      <button id="leave-room-btn">Back to rooms</button>
+      <div id="messages"></div>
+      <input type="text" id="message-input" placeholder="Message" />
+      <button id="send-message-btn">Send</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="chat.js"></script>
+  </body>
+</html>
