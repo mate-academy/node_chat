@@ -8,8 +8,10 @@ function createRoom({ name }) {
   return Room.create({ name });
 }
 
-function updateRoom(roomId, { name }) {
-  return Room.update({ name }, { where: { id: roomId } });
+async function updateRoom(roomId, { name }) {
+  await Room.update({ name }, { where: { id: roomId } });
+
+  return Room.findByPk(roomId);
 }
 
 function deleteRoom(roomId) {

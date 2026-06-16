@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-const API_URL = 'http://localhost:3005';
-const WS_URL = 'ws://localhost:3005';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3005';
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3005';
 
 function App() {
   const [rooms, setRooms] = useState([]);
@@ -12,6 +12,8 @@ function App() {
   const [userName, setUserName] = useState(() => {
     return localStorage.getItem('userName') || 'Guest';
   });
+  const [editRoomId, setEditRoomId] = useState(null);
+  const [editRoomName, setEditRoomName] = useState('');
   const wsRef = useRef(null);
 
   useEffect(() => {
@@ -102,6 +104,44 @@ function App() {
     setMessageText('');
   };
 
+  const handleStartEdit = (room, e) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setEditRoomId(room.id);
+    setEditRoomName(room.name);
+  };
+
+  const handleCancelEdit = () => {
+    setEditRoomId(null);
+    setEditRoomName('');
+  };
+
+  const handleRenameRoom = async (roomId) => {
+    if (!editRoomName.trim()) return;
+
+    const response = await fetch(`${API_URL}/rooms/${roomId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: editRoomName.trim() }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => null);
+      alert(error?.error || 'Failed to rename room');
+      return;
+    }
+
+    const updatedRoom = await response.json();
+    setRooms((prev) => prev.map((room) => (room.id === roomId ? updatedRoom : room)));
+    if (selectedRoom?.id === roomId) {
+      setSelectedRoom(updatedRoom);
+    }
+
+    setEditRoomId(null);
+    setEditRoomName('');
+  };
+
   const handleDeleteRoom = async (roomId, e) => {
     e.stopPropagation();
     if (!window.confirm('Delete this room?')) return;
@@ -130,21 +170,55 @@ function App() {
             {rooms.map((room) => (
               <li key={room.id}>
                 <div className="room-item">
-                  <button
-                    type="button"
-                    className={room.id === selectedRoom?.id ? 'active' : ''}
-                    onClick={() => setSelectedRoom(room)}
-                  >
-                    {room.name}
-                  </button>
-                  <button
-                    type="button"
-                    className="delete-btn"
-                    onClick={(e) => handleDeleteRoom(room.id, e)}
-                    title="Delete room"
-                  >
-                    x
-                  </button>
+                  {editRoomId === room.id ? (
+                    <>
+                      <input
+                        className="room-edit-input"
+                        value={editRoomName}
+                        onChange={(e) => setEditRoomName(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className="save-btn"
+                        onClick={() => handleRenameRoom(room.id)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        className="cancel-btn"
+                        onClick={handleCancelEdit}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className={room.id === selectedRoom?.id ? 'active' : ''}
+                        onClick={() => setSelectedRoom(room)}
+                      >
+                        {room.name}
+                      </button>
+                      <button
+                        type="button"
+                        className="edit-btn"
+                        onClick={(e) => handleStartEdit(room, e)}
+                        title="Rename room"
+                      >
+                        ✎
+                      </button>
+                      <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={(e) => handleDeleteRoom(room.id, e)}
+                        title="Delete room"
+                      >
+                        ×
+                      </button>
+                    </>
+                  )}
                 </div>
               </li>
             ))}

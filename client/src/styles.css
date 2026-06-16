@@ -106,6 +106,40 @@ body {
   border-radius: 6px;
   cursor: pointer;
 }
+.room-edit-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.edit-btn,
+.save-btn,
+.cancel-btn,
+.delete-btn {
+  min-width: 40px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.edit-btn {
+  background: #fbbf24;
+  color: #111827;
+}
+.save-btn {
+  background: #16a34a;
+  color: white;
+}
+.cancel-btn {
+  background: #6b7280;
+  color: white;
+}
+.edit-btn:hover,
+.save-btn:hover,
+.cancel-btn:hover,
+.delete-btn:hover {
+  opacity: 0.95;
+}
 header {
   padding: 16px;
   border-bottom: 1px solid var(--border);

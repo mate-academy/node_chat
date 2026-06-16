@@ -45,11 +45,9 @@ const updateRoom = async (req, res) => {
     });
   }
 
-  await roomService.updateRoom(roomId, { name });
+  const updatedRoom = await roomService.updateRoom(roomId, { name });
 
-  return res.status(200).json({
-    message: 'Room updated successfully',
-  });
+  return res.status(200).json(updatedRoom);
 };
 
 const deleteRoom = async (req, res) => {

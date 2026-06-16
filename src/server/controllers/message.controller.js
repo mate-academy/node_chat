@@ -8,7 +8,9 @@ const createMessage = async (req, res) => {
   const { text, userName } = req.body;
 
   if (!text || !userName || !roomId) {
-    return res.status(400);
+    return res
+      .status(400)
+      .json({ error: 'text, userName and roomId are required' });
   }
 
   const newMessage = await messageService.createMessage({
