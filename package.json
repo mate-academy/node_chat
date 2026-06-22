@@ -7,7 +7,7 @@
   "scripts": {
     "init": "mate-scripts init",
     "start": "node server/src/index.js",
-    "lint": "npm run format && eslint ./server/src",
+    "lint": "npm run format && eslint ./server/src --no-eslintrc --config server/.eslintrc.cjs",
     "format": "prettier --ignore-path .prettierignore --write './**/*.{js,ts,vue}'",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
