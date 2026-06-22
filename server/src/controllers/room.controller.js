@@ -17,6 +17,7 @@ const create = async (req, res, next) => {
   const newRoom = await roomService.createRoom(name.trim(), userId);
 
   const io = req.app.get('io');
+
   io.emit('room_created', newRoom);
 
   res.status(200).json(newRoom);
@@ -33,6 +34,7 @@ const rename = async (req, res, next) => {
   const updatedRoom = await roomService.renameRoom(id, newName.trim());
 
   const io = req.app.get('io');
+
   io.emit('room_renamed', { roomId: id, newName: updatedRoom.name });
 
   res.status(200).json(updatedRoom);
@@ -44,6 +46,7 @@ const remove = async (req, res, next) => {
   const result = await roomService.deleteRoom(id);
 
   const io = req.app.get('io');
+
   io.emit('room_deleted', { roomId: id });
 
   io.in(id).disconnectSockets();

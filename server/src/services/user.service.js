@@ -1,7 +1,7 @@
 import { User } from '../models/index.js';
 
 export const loginUser = async (username) => {
-  const [user, created] = await User.findOrCreate({
+  const [user] = await User.findOrCreate({
     where: { username: username },
   });
 

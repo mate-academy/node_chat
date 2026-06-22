@@ -39,7 +39,6 @@ const deleteRoom = async (roomId) => {
     success: true,
     message: 'Room successfully deleted',
     roomId: Number(roomId),
-    deletedCount,
   };
 };
 

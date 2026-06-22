@@ -54,15 +54,13 @@ io.on('connection', (socket) => {
       );
 
       io.to(roomId).emit('receive_message', savedMessage);
-    } catch (error) {
-      console.error('Error of saving messages by sockets', error);
-    }
+    } catch (error) {}
   });
 
   socket.on('disconnect', () => {});
 });
 
 httpServer.listen(PORT, () => {
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-console
   console.log(`Server running on localhost:${PORT}`);
 });
