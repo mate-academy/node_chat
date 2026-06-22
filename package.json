@@ -8,7 +8,7 @@
     "init": "mate-scripts init",
     "start": "node src/index.js",
     "lint": "npm run format && mate-scripts lint",
-    "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
+    "format": "prettier --ignore-path .prettierignore --write './**/*.{js,ts,vue}'",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
     "postinstall": "npm run update",
