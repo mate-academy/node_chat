@@ -30,6 +30,8 @@ const handleCreateRoom = async () => {
 };
 
 const handleRenameRoom = async () => {
+  if (!chatStore.activeRoom) return;
+
   const currentName = chatStore.activeRoom.name;
   const promptName = prompt("Enter new room name:", currentName);
 
@@ -39,6 +41,8 @@ const handleRenameRoom = async () => {
 };
 
 const handleDeleteRoom = async () => {
+  if (!chatStore.activeRoom) return;
+
   if (confirm("Are you sure you want to delete this room?")) {
     await chatStore.deleteRoom(chatStore.activeRoomId);
   }
@@ -78,7 +82,7 @@ const handleSendMessage = () => {
           :key="room.id"
           class="room-item"
           :class="{ active: chatStore.activeRoomId === room.id }"
-          @click="chatStore.changeRoom(room.id)"
+          @click="chatStore.changeRoom(room.id, currentUser.id)"
         >
           <div class="room-avatar">#</div>
           <div class="room-info">

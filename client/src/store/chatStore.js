@@ -66,7 +66,7 @@ export const useChatStore = defineStore("chat", () => {
     }
   };
 
-  const changeRoom = async (roomId) => {
+  const changeRoom = async (roomId, userId) => {
     error.value = null;
     activeRoomId.value = roomId;
 
@@ -75,15 +75,27 @@ export const useChatStore = defineStore("chat", () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3005/rooms/${roomId}/messages`,
+      const joinResponse = await fetch(
+        `http://localhost:3005/rooms/${roomId}/join`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        },
       );
 
-      if (!response.ok) {
+      if (!joinResponse.ok) {
         throw new Error("Failed to load message history.");
       }
 
-      messages.value = await response.json();
+      const messagesResponse = await fetch(
+        `http://localhost:3005/rooms/${roomId}/messages`,
+      );
+      if (!messagesResponse.ok) {
+        throw new Error("Failed to load message history.");
+      }
+
+      messages.value = await messagesResponse.json();
     } catch (err) {
       error.value = err.message;
     }
