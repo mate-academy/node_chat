@@ -31,9 +31,9 @@ const logout = () => {
 
     <div v-else class="main-layout">
       <header class="app-header">
-        <span
-          >Logged in as: <strong>{{ currentUser.username }}</strong></span
-        >
+        <span>
+          Logged in as: <strong>{{ currentUser.username }}</strong>
+        </span>
         <button @click="logout" class="logout-btn">Log out</button>
       </header>
 
@@ -43,7 +43,6 @@ const logout = () => {
 </template>
 
 <style>
-/* Скидаємо базові відступи браузера, щоб чат був на весь екран */
 body,
 html {
   margin: 0;

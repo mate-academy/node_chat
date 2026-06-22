@@ -9,7 +9,6 @@ import { authRouter } from './routes/auth.route.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { roomRouter } from './routes/room.route.js';
 import { messageService } from './services/message.service.js';
-import { ApiError } from './exeptions/api.error.js';
 
 const PORT = process.env.PORT || 3005;
 

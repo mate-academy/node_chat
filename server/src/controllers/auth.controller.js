@@ -5,7 +5,7 @@ export const login = async (req, res, next) => {
   const { username } = req.body;
 
   if (!username || username.trim() === '') {
-    return next(ApiError.badRequest({ message: 'Username is required' }));
+    return next(ApiError.badRequest('Username is required'));
   }
 
   const user = await userService.loginUser(username.trim());
