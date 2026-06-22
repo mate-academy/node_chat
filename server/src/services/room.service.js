@@ -34,6 +34,13 @@ const deleteRoom = async (roomId) => {
   }
 
   await room.destroy();
+
+  return {
+    success: true,
+    message: 'Room successfully deleted',
+    roomId: Number(roomId),
+    deletedCount,
+  };
 };
 
 const joinRoom = async (roomId, userId) => {
@@ -44,6 +51,13 @@ const joinRoom = async (roomId, userId) => {
   }
 
   await room.addUser(userId);
+
+  return {
+    success: true,
+    message: 'User successfully joined the room',
+    roomId: Number(roomId),
+    userId: Number(userId),
+  };
 };
 
 export const roomService = {
