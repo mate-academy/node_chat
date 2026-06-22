@@ -1,4 +1,4 @@
-# Chat (with Node.js) 
+# Chat (with Node.js)
 Implement a chat application (both client and server)
 
 - You type a username and send it to the server
