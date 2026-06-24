@@ -6,16 +6,16 @@ import { NameForm } from './NameForm.jsx';
 
 const DataLoader = ({ onData }) => {
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:3000/message');
+    const socket = new WebSocket('ws://localhost:3000');
 
-    eventSource.onmessage = (event) => {
+    socket.addEventListener('message', (event) => {
       onData(JSON.parse(event.data));
-    };
+    });
 
-    return () => eventSource.close();
+    return () => socket.close();
   }, []);
 
-  return <h1 className="title">Server Sent Events</h1>;
+  return <h1 className="title">WebSocket</h1>;
 };
 
 export function App() {

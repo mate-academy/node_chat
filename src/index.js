@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import express from 'express';
 import cors from 'cors';
+import { WebSocketServer } from 'ws';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -40,4 +41,17 @@ app.post('/messages', (req, res) => {
   res.status(201).json(message);
 });
 
-app.listen(PORT);
+const server = app.listen(PORT);
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', (client) => {
+  client.on('message', (data) => {
+    client.send(data);
+  });
+});
+
+messageEmitter.on('message', (data) => {
+  for (const client of wss.clients) {
+    client.send(JSON.stringify(data));
+  }
+});
