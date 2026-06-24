@@ -1,8 +1,8 @@
 export const MessageList = ({ messages }) => (
   <ul>
-    {messages.map(message => (
+    {[...messages].reverse().map((message) => (
       <li key={message.time}>
-        {message.text}
+        <strong>{message.author}</strong>: {message.text}
       </li>
     ))}
   </ul>
