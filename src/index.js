@@ -45,6 +45,10 @@ const server = app.listen(PORT);
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', (client) => {
+  for (const message of messages) {
+    client.send(JSON.stringify(message));
+  }
+
   client.on('message', (data) => {
     client.send(data);
   });
