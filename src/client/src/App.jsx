@@ -1,38 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { MessageForm } from './MessageForm.jsx';
 import { MessageList } from './MessageList.jsx';
 import { NameForm } from './NameForm.jsx';
 
-const API_URL = 'http://127.0.0.1:3000/messages';
-
-function getMessages() {
-  return axios.get(API_URL).then((res) => res.data);
-}
-
 const DataLoader = ({ onData }) => {
-  const proceedRef = useRef(true);
-
-  async function loadData() {
-    const messages = await getMessages();
-
-    onData(messages);
-
-    if (proceedRef.current) {
-      loadData();
-    }
-  }
-
   useEffect(() => {
-    loadData();
+    const eventSource = new EventSource('http://localhost:3000/message');
 
-    return () => {
-      proceedRef.current = false;
+    eventSource.onmessage = (event) => {
+      onData(JSON.parse(event.data));
     };
+
+    return () => eventSource.close();
   }, []);
 
-  return <h1 className="title">Long polling</h1>;
+  return <h1 className="title">Server Sent Events</h1>;
 };
 
 export function App() {
@@ -42,8 +25,8 @@ export function App() {
     () => localStorage.getItem('username') || '',
   );
 
-  function saveData(messages) {
-    setMessages(messages);
+  function saveData(message) {
+    setMessages((current) => [...current, message]);
   }
 
   function handleLogin(name) {

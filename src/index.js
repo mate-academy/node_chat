@@ -15,6 +15,19 @@ app.get('/messages', (req, res) => {
   messageEmitter.once('message', () => res.send(messages));
 });
 
+app.get('/message', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Connection', 'keep-alive');
+
+  const callback = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  messageEmitter.on('message', callback);
+  req.on('close', () => messageEmitter.off('message', callback));
+});
+
 app.post('/messages', (req, res) => {
   const message = {
     text: req.body.text,
