@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 import { MessageForm } from './MessageForm.jsx';
@@ -12,17 +12,27 @@ function getMessages() {
 }
 
 const DataLoader = ({ onData }) => {
+  const proceedRef = useRef(true);
+
+  async function loadData() {
+    const messages = await getMessages();
+
+    onData(messages);
+
+    if (proceedRef.current) {
+      loadData();
+    }
+  }
+
   useEffect(() => {
-    getMessages().then(onData);
+    loadData();
 
-    const timerId = setInterval(() => {
-      getMessages().then(onData);
-    }, 1000);
-
-    return () => clearInterval(timerId);
+    return () => {
+      proceedRef.current = false;
+    };
   }, []);
 
-  return <h1 className="title">Short polling</h1>;
+  return <h1 className="title">Long polling</h1>;
 };
 
 export function App() {

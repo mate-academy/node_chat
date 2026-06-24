@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import express from 'express';
 import cors from 'cors';
 
@@ -8,9 +9,10 @@ app.use(express.json());
 app.use(cors());
 
 const messages = [];
+const messageEmitter = new EventEmitter();
 
 app.get('/messages', (req, res) => {
-  res.json(messages);
+  messageEmitter.once('message', () => res.send(messages));
 });
 
 app.post('/messages', (req, res) => {
@@ -21,6 +23,7 @@ app.post('/messages', (req, res) => {
   };
 
   messages.push(message);
+  messageEmitter.emit('message', message);
   res.status(201).json(message);
 });
 
