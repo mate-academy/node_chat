@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Chat</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <h1 class="brand">Node Chat</h1>
+
+      <section class="panel">
+        <span class="label">Username</span>
+        <form class="user-row" id="userForm">
+          <input id="usernameInput" autocomplete="username" placeholder="Your username">
+          <button type="submit">Save</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <span class="label">Rooms</span>
+        <form class="room-form" id="roomForm">
+          <input id="roomInput" placeholder="New room name">
+          <button type="submit">Create</button>
+        </form>
+        <ul class="room-list" id="roomList"></ul>
+        <div class="room-actions">
+          <button id="renameRoom" type="button">Rename</button>
+          <button class="danger" id="deleteRoom" type="button">Delete</button>
+        </div>
+      </section>
+
+      <p class="notice" id="notice"></p>
+    </aside>
+
+    <section class="chat">
+      <header class="chat-header">
+        <h2 class="chat-title" id="roomTitle">Choose a room</h2>
+        <p class="chat-subtitle" id="roomInfo">Messages include author, time, and text.</p>
+      </header>
+
+      <div class="messages" id="messages"></div>
+
+      <form class="composer" id="messageForm">
+        <input id="messageInput" placeholder="Write a message" autocomplete="off">
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
