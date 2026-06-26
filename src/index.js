@@ -10,10 +10,6 @@ app.use(cors());
 
 const rooms = new Map();
 
-function clientsInRoom(name) {
-  return [...wss.clients].filter((c) => c.room === name);
-}
-
 app.get('/rooms', (req, res) => {
   res.json([...rooms.keys()]);
 });
@@ -90,6 +86,10 @@ app.post('/messages', (req, res) => {
 
 const server = app.listen(PORT);
 const wss = new WebSocketServer({ server });
+
+function clientsInRoom(name) {
+  return [...wss.clients].filter((c) => c.room === name);
+}
 
 wss.on('connection', (client, req) => {
   const url = new URL(req.url, 'http://localhost');
