@@ -1,6 +1,6 @@
-import express from 'express';
-import cors from 'cors';
-import { WebSocketServer } from 'ws';
+const express = require('express');
+const cors = require('cors');
+const { WebSocketServer } = require('ws');
 
 const PORT = process.env.PORT || 3000;
 const app = express();

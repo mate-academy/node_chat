@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Chat using Node.js",
   "main": "src/index.js",
-  "type": "module",
   "scripts": {
     "init": "mate-scripts init",
     "start": "node src/index.js",
