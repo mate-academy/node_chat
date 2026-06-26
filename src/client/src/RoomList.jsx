@@ -16,6 +16,19 @@ export const RoomList = ({ onJoin }) => {
     loadRooms();
   }, []);
 
+  async function handleRename(room) {
+    const newName = window.prompt(`Rename "${room}" to:`, room);
+
+    if (!newName || newName === room) return;
+
+    try {
+      await axios.patch(`${API_URL}/${room}`, { name: newName });
+      setRooms((prev) => prev.map((r) => (r === room ? newName : r)));
+    } catch (err) {
+      setError(err.response?.status === 409 ? 'Room already exists' : 'Failed to rename room');
+    }
+  }
+
   async function handleDelete(room) {
     if (!window.confirm(`Delete room "${room}"?`)) return;
 
@@ -35,6 +48,9 @@ export const RoomList = ({ onJoin }) => {
             <span className="room-name">{room}</span>
             <button className="button" onClick={() => onJoin(room)}>
               Join
+            </button>
+            <button className="button" onClick={() => handleRename(room)}>
+              ✎
             </button>
             <button
               className="button is-danger"

@@ -10,6 +10,10 @@ app.use(cors());
 
 const rooms = new Map();
 
+function clientsInRoom(name) {
+  return [...wss.clients].filter((c) => c.room === name);
+}
+
 app.get('/rooms', (req, res) => {
   res.json([...rooms.keys()]);
 });
@@ -32,13 +36,33 @@ app.delete('/rooms/:name', (req, res) => {
     return res.status(404).json({ error: 'Room not found' });
   }
 
-  for (const client of wss.clients) {
-    if (client.room === name) {
-      client.close();
-    }
+  for (const client of clientsInRoom(name)) {
+    client.close();
   }
 
   res.status(204).send();
+});
+
+app.patch('/rooms/:name', (req, res) => {
+  const { name } = req.params;
+  const { name: newName } = req.body;
+
+  if (!rooms.has(name)) {
+    return res.status(404).json({ error: 'Room not found' });
+  }
+
+  if (rooms.has(newName)) {
+    return res.status(409).json({ error: 'Room already exists' });
+  }
+
+  rooms.set(newName, rooms.get(name));
+  rooms.delete(name);
+
+  for (const client of clientsInRoom(name)) {
+    client.room = newName;
+  }
+
+  res.json({ name: newName });
 });
 
 app.post('/messages', (req, res) => {
@@ -57,10 +81,8 @@ app.post('/messages', (req, res) => {
 
   const payload = JSON.stringify(message);
 
-  for (const client of wss.clients) {
-    if (client.room === message.room) {
-      client.send(payload);
-    }
+  for (const client of clientsInRoom(message.room)) {
+    client.send(payload);
   }
 
   res.status(201).json(message);
