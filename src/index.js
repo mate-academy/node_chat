@@ -25,6 +25,22 @@ app.post('/rooms', (req, res) => {
   res.status(201).json({ name });
 });
 
+app.delete('/rooms/:name', (req, res) => {
+  const { name } = req.params;
+
+  if (!rooms.delete(name)) {
+    return res.status(404).json({ error: 'Room not found' });
+  }
+
+  for (const client of wss.clients) {
+    if (client.room === name) {
+      client.close();
+    }
+  }
+
+  res.status(204).send();
+});
+
 app.post('/messages', (req, res) => {
   const message = {
     text: req.body.text,

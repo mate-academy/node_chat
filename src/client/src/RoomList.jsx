@@ -16,6 +16,17 @@ export const RoomList = ({ onJoin }) => {
     loadRooms();
   }, []);
 
+  async function handleDelete(room) {
+    if (!window.confirm(`Delete room "${room}"?`)) return;
+
+    try {
+      await axios.delete(`${API_URL}/${room}`);
+      setRooms((prev) => prev.filter((r) => r !== room));
+    } catch {
+      setError('Failed to delete room');
+    }
+  }
+
   return (
     <>
       <ul className="rooms">
@@ -24,6 +35,12 @@ export const RoomList = ({ onJoin }) => {
             <span className="room-name">{room}</span>
             <button className="button" onClick={() => onJoin(room)}>
               Join
+            </button>
+            <button
+              className="button is-danger"
+              onClick={() => handleDelete(room)}
+            >
+              ×
             </button>
           </li>
         ))}
