@@ -29,6 +29,18 @@ export const RoomList = ({ onJoin }) => {
     }
   }
 
+  async function handleCreate(event) {
+    event.preventDefault();
+
+    try {
+      await axios.post(API_URL, { name });
+      setRooms((prev) => [...prev, name]);
+      setName('');
+    } catch (err) {
+      setError(err.response?.status === 409 ? 'Room already exists' : 'Failed to create room');
+    }
+  }
+
   async function handleDelete(room) {
     if (!window.confirm(`Delete room "${room}"?`)) return;
 
@@ -62,24 +74,7 @@ export const RoomList = ({ onJoin }) => {
         ))}
       </ul>
 
-      <form
-        className="field is-horizontal"
-        onSubmit={async (event) => {
-          event.preventDefault();
-
-          try {
-            await axios.post(API_URL, { name });
-            setRooms((prev) => [...prev, name]);
-            setName('');
-          } catch (err) {
-            if (err.response?.status === 409) {
-              setError('Room already exists');
-            } else {
-              setError('Failed to create room');
-            }
-          }
-        }}
-      >
+      <form className="field is-horizontal" onSubmit={handleCreate}>
         <input
           type="text"
           className="input"
