@@ -6,6 +6,7 @@ const API_URL = 'http://127.0.0.1:3000/rooms';
 export const RoomList = ({ onJoin }) => {
   const [rooms, setRooms] = useState([]);
   const [name, setName] = useState('');
+  const [error, setError] = useState('');
 
   function loadRooms() {
     return axios.get(API_URL).then((response) => setRooms(response.data));
@@ -33,10 +34,17 @@ export const RoomList = ({ onJoin }) => {
         onSubmit={async (event) => {
           event.preventDefault();
 
-          await axios.post(API_URL, { name });
-          await loadRooms();
-
-          setName('');
+          try {
+            await axios.post(API_URL, { name });
+            setRooms((prev) => [...prev, name]);
+            setName('');
+          } catch (err) {
+            if (err.response?.status === 409) {
+              setError('Room already exists');
+            } else {
+              setError('Failed to create room');
+            }
+          }
         }}
       >
         <input
@@ -44,9 +52,13 @@ export const RoomList = ({ onJoin }) => {
           className="input"
           placeholder="New room name"
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => {
+            setName(event.target.value);
+            setError('');
+          }}
         />
         <button className="button">Create</button>
+        {error && <p className="help is-danger">{error}</p>}
       </form>
     </>
   );

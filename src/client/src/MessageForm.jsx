@@ -3,11 +3,11 @@ import axios from 'axios';
 
 const API_URL = 'http://127.0.0.1:3000/messages';
 
-export const MessageForm = ({ username }) => {
+export const MessageForm = ({ username, room }) => {
   const [text, setText] = useState('');
 
   function sendMessage(text) {
-    return axios.post(API_URL, { text, author: username });
+    return axios.post(API_URL, { text, author: username, room });
   }
 
   return (
