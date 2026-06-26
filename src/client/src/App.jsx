@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { MessageForm } from './MessageForm.jsx';
 import { MessageList } from './MessageList.jsx';
@@ -14,7 +14,7 @@ const DataLoader = ({ room, onData }) => {
     });
 
     return () => socket.close();
-  }, [room]);
+  }, [room, onData]);
 
   return null;
 };
@@ -27,9 +27,9 @@ export function App() {
     () => localStorage.getItem('username') || '',
   );
 
-  function saveData(message) {
+  const saveData = useCallback((message) => {
     setMessages((current) => [...current, message]);
-  }
+  }, []);
 
   function handleLogin(name) {
     localStorage.setItem('username', name);
