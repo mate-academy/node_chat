@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import express from 'express';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
@@ -9,53 +8,63 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const messages = [];
-const messageEmitter = new EventEmitter();
+const rooms = new Map();
 
-app.get('/messages', (req, res) => {
-  messageEmitter.once('message', () => res.send(messages));
+app.get('/rooms', (req, res) => {
+  res.json([...rooms.keys()]);
 });
 
-app.get('/message', (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-store');
-  res.setHeader('Connection', 'keep-alive');
+app.post('/rooms', (req, res) => {
+  const { name } = req.body;
 
-  const callback = (data) => {
-    res.write(`data: ${JSON.stringify(data)}\n\n`);
-  };
+  if (rooms.has(name)) {
+    return res.status(409).json({ error: 'Room already exists' });
+  }
 
-  messageEmitter.on('message', callback);
-  req.on('close', () => messageEmitter.off('message', callback));
+  rooms.set(name, []);
+  res.status(201).json({ name });
 });
 
 app.post('/messages', (req, res) => {
   const message = {
     text: req.body.text,
     author: req.body.author,
+    room: req.body.room,
     time: new Date(),
   };
 
-  messages.push(message);
-  messageEmitter.emit('message', message);
+  if (!rooms.has(message.room)) {
+    return res.status(404).json({ error: 'Room not found' });
+  }
+
+  rooms.get(message.room).push(message);
+
+  const payload = JSON.stringify(message);
+
+  for (const client of wss.clients) {
+    if (client.room === message.room) {
+      client.send(payload);
+    }
+  }
+
   res.status(201).json(message);
 });
 
 const server = app.listen(PORT);
 const wss = new WebSocketServer({ server });
 
-wss.on('connection', (client) => {
-  for (const message of messages) {
-    client.send(JSON.stringify(message));
+wss.on('connection', (client, req) => {
+  const url = new URL(req.url, 'http://localhost');
+
+  client.room = url.searchParams.get('room');
+
+  if (!rooms.has(client.room)) {
+    client.close();
+
+    return;
   }
 
-  client.on('message', (data) => {
-    client.send(data);
-  });
-});
-
-messageEmitter.on('message', (data) => {
-  for (const client of wss.clients) {
-    client.send(JSON.stringify(data));
+  for (const message of rooms.get(client.room)) {
+    client.send(JSON.stringify(message));
   }
 });
