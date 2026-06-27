@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Node Chat</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <section class="panel username-panel">
+        <h1>Chat</h1>
+        <div class="username-info">
+          <span class="label">Username:</span>
+          <strong id="usernameLabel">...</strong>
+        </div>
+        <button id="changeUsernameButton" type="button">Change username</button>
+      </section>
+
+      <section class="panel room-panel">
+        <div class="panel-heading">
+          <h2>Rooms</h2>
+        </div>
+        <form id="roomForm" class="room-form">
+          <input id="roomTitleInput" type="text" placeholder="Create new room" autocomplete="off" />
+          <button type="submit">Create</button>
+        </form>
+        <ul id="roomList" class="room-list"></ul>
+      </section>
+    </aside>
+
+    <main class="chat-panel">
+      <header class="chat-header">
+        <div>
+          <h2 id="activeRoomTitle">Pick a room</h2>
+          <p id="roomSubtitle">Join a room to see messages.</p>
+        </div>
+      </header>
+
+      <section id="messages" class="messages"></section>
+
+      <form id="messageForm" class="message-form">
+        <input id="messageText" type="text" placeholder="Write a message" autocomplete="off" disabled />
+        <button type="submit" disabled>Send</button>
+      </form>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
