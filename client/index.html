@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Chat</title>
+  <link rel="stylesheet" href="./styles/style.css">
+</head>
+<body>
+  <div id="auth-screen" class="screen">
+    <form id="auth-form">
+      <h2>Введіть ваше ім'я</h2>
+      <input type="text" id="username-input" placeholder="Ім'я користувача" required autocomplete="off">
+      <button type="submit">Увійти</button>
+    </form>
+  </div>
+
+  <div id="chat-screen" class="chat-container hidden">
+
+    <aside class="chat-container__sidebar sidebar">
+      <div class="sidebar__header">
+        <h2 class="sidebar__title">Кімнати</h2>
+        <button id="create-room-btn" class="sidebar__create-btn" title="Створити кімнату">+</button>
+      </div>
+      <ul id="rooms-list" class="sidebar__list">
+        </ul>
+    </aside>
+
+    <main class="chat-container__main chat-area">
+      <div class="chat-area__header">
+        <h2 id="current-room-name">Оберіть кімнату</h2>
+      </div>
+      <div class="chat-area__messages" id="messages-list">
+        </div>
+
+        <form id="message-form" class="chat-area__form hidden">
+        <input type="text" id="message-input" class="chat-area__input" placeholder="Введіть повідомлення..." required autocomplete="off">
+        <button type="submit" class="chat-area__submit">Відправити</button>
+      </form>
+    </main>
+
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
