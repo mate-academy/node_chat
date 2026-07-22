@@ -7,5 +7,5 @@ module.exports = {
     'no-proto': 0
   },
   plugins: ['jest'],
-  ignorePatterns: ['src/client/**'],
+  ignorePatterns: ['src/client/**', 'src/client'],
 };
