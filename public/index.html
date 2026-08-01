@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section id="login" class="login">
+      <form id="login-form" class="login__form">
+        <h1>Enter your username</h1>
+        <input
+          id="username-input"
+          class="login__input"
+          type="text"
+          placeholder="Username"
+          autocomplete="off"
+          required
+        />
+        <button type="submit" class="btn">Join chat</button>
+      </form>
+    </section>
+
+    <section id="chat" class="chat hidden">
+      <aside class="sidebar">
+        <div class="sidebar__header">
+          <span>Rooms</span>
+          <button id="create-room" class="btn btn--small">+ New</button>
+        </div>
+        <ul id="rooms" class="rooms"></ul>
+        <div class="sidebar__footer">
+          Signed in as <strong id="current-user"></strong>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="main__header">
+          <h2 id="room-title">Select a room</h2>
+        </header>
+
+        <div id="messages" class="messages"></div>
+
+        <form id="message-form" class="message-form hidden">
+          <input
+            id="message-input"
+            class="message-form__input"
+            type="text"
+            placeholder="Type a message…"
+            autocomplete="off"
+          />
+          <button type="submit" class="btn">Send</button>
+        </form>
+      </main>
+    </section>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
