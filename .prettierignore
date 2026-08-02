@@ -1,2 +1,6 @@
 /node_modules
 /dist
+/src/generated
+package-lock.json
+.github/workflows/*.yml
+README.md

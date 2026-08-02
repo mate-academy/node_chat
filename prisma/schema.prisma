@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  name String
+  password String?
+  confirmedEmail Boolean @default(false)
+  googleId String? @unique
+  tokens Token[]
+  refreshTokens RefreshToken[]
+  messages Message[]
+  ownedRooms Room[]
+  memberships RoomMember[]
+  tokenVersion Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RefreshToken {
+  id String @id @default(cuid())
+  tokenHash String @unique
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiredTime DateTime
+  userAgent String?
+  ipAddress String?
+  deviceLabel String?
+  lastUsedAt DateTime?
+  familyId String
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([familyId])
+}
+
+model Token {
+  id String @id @default(cuid())
+  tokenHash String @unique
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiredTime DateTime
+  type TokenTypes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, type])
+}
+
+model Message {
+  id String @id @default(cuid())
+  content String
+  userId String?
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  roomId String
+  room Room @relation(name: "room", fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([roomId, createdAt])
+}
+
+model Room {
+  id String @id @default(cuid())
+  name String
+  members RoomMember[]
+  messages Message[] @relation(name: "room")
+  ownerId String
+  owner User @relation(fields: [ownerId], references: [id])
+  lastActivityAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([lastActivityAt])
+}
+
+model RoomMember {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomId String
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  role Role @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  @@unique([userId, roomId])
+  @@index([roomId])
+  @@index([userId])
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum TokenTypes {
+  ACTIVATION
+  RESET
+}
