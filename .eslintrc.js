@@ -6,12 +6,5 @@ module.exports = {
   rules: {
     'no-proto': 0
   },
-  plugins: ['jest'],
-  overrides: [
-    {
-      files: ['src/public/**/*.js'],
-      env: { browser: true },
-      globals: { io: 'readonly' }
-    }
-  ]
+  plugins: ['jest']
 };
