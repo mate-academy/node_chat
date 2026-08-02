@@ -1,0 +1,285 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #f2f4f7;
+  color: #1f2933;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.06);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Login screen */
+#login-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.card label {
+  font-size: 14px;
+  color: #52606d;
+}
+
+/* Shared elements */
+input[type='text'] {
+  padding: 10px 12px;
+  border: 1px solid #d9dfe4;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+input[type='text']:focus {
+  outline: none;
+  border-color: #3e63dd;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #3e63dd;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #3151bf;
+}
+
+.link-btn {
+  background: none;
+  color: #3e63dd;
+  padding: 4px 8px;
+}
+
+.link-btn:hover {
+  background: #eef1fb;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e4e7eb;
+}
+
+.topbar h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #52606d;
+}
+
+.inline-form {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e4e7eb;
+}
+
+.inline-form input {
+  flex: 1;
+}
+
+/* Room list */
+.room-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 12px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.room-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.room-item:hover {
+  background: #f5f7fa;
+}
+
+.room-item-name {
+  flex: 1;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.room-item-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.icon-btn {
+  background: none;
+  color: #7b8794;
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.icon-btn:hover {
+  background: #eef1fb;
+  color: #3e63dd;
+}
+
+.icon-btn:disabled {
+  color: #cbd2d9;
+  cursor: not-allowed;
+}
+
+.icon-btn:disabled:hover {
+  background: none;
+}
+
+/* Chat screen */
+#chat-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.message-list {
+  list-style: none;
+  margin: 0;
+  padding: 16px 20px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-item {
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #f5f7fa;
+  align-self: flex-start;
+}
+
+.message-item.own {
+  align-self: flex-end;
+  background: #e6ecfd;
+}
+
+.message-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: #7b8794;
+  margin-bottom: 2px;
+}
+
+.message-author {
+  font-weight: 600;
+  color: #3e63dd;
+}
+
+.message-text {
+  font-size: 15px;
+  word-break: break-word;
+}
+
+/* Modal (confirmations / prompts) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 10;
+}
+
+.modal {
+  width: 100%;
+  max-width: 340px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modal p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.secondary-btn {
+  background: #eef1fb;
+  color: #3e63dd;
+}
+
+.secondary-btn:hover {
+  background: #dfe5fa;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: #1f2933;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 20;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}

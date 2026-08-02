@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Login screen -->
+      <section id="login-screen" class="screen">
+        <form id="login-form" class="card">
+          <h1>Welcome to Node Chat</h1>
+          <label for="username-input">Choose a username</label>
+          <input
+            id="username-input"
+            type="text"
+            placeholder="e.g. john_doe"
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Continue</button>
+        </form>
+      </section>
+
+      <!-- Room list screen -->
+      <section id="rooms-screen" class="screen hidden">
+        <header class="topbar">
+          <h1>Rooms</h1>
+          <div class="topbar-user">
+            <span id="current-username"></span>
+            <button id="change-username-btn" class="link-btn">
+              Change username
+            </button>
+          </div>
+        </header>
+
+        <form id="create-room-form" class="inline-form">
+          <input
+            id="room-name-input"
+            type="text"
+            placeholder="New room name"
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Create room</button>
+        </form>
+
+        <ul id="room-list" class="room-list"></ul>
+      </section>
+
+      <!-- Chat screen -->
+      <section id="chat-screen" class="screen hidden">
+        <header class="topbar">
+          <button id="leave-room-btn" class="link-btn">&larr; Rooms</button>
+          <h1 id="chat-room-name"></h1>
+        </header>
+
+        <ul id="message-list" class="message-list"></ul>
+
+        <form id="message-form" class="inline-form">
+          <input
+            id="message-input"
+            type="text"
+            placeholder="Type a message..."
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- Modal used for confirmations and text prompts (replaces window.confirm/prompt) -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      <div class="modal">
+        <p id="modal-message"></p>
+        <input id="modal-input" type="text" class="hidden" autocomplete="off" />
+        <div class="modal-actions">
+          <button id="modal-cancel-btn" type="button" class="secondary-btn">
+            Cancel
+          </button>
+          <button id="modal-confirm-btn" type="button">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast used for brief notifications (replaces window.alert) -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
