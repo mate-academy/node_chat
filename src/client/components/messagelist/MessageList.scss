@@ -1,0 +1,14 @@
+.message {
+  &__chat {
+    border: 1px solid white;
+    height: 350px;
+    width: auto;
+    margin-bottom: 10px;
+  }
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+  }
+}
