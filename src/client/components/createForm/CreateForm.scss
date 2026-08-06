@@ -1,0 +1,29 @@
+
+.control {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.input--margin-bottom {
+  margin-bottom: 10px;
+}
+.input--width {
+  width: 180px !important;
+}
+
+.button-create {
+  box-sizing: border-box;
+  height: 100px;
+}
+
+
+
+.control__select-container {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+

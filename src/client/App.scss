@@ -1,0 +1,11 @@
+@use "@fortawesome/fontawesome-free/css/all.min.css";
+@use './components/MessageForm';
+@use './components/createForm/CreateForm';
+@use './components/messagelist/MessageList';
+
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
