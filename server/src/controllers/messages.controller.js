@@ -5,8 +5,6 @@ const registerMessagesController = (io, socket) => {
     const username = socket.data.username;
     const roomId = socket.data.roomId;
 
-    console.log('send message', text);
-
     if (!username || !roomId) {
       return;
     }

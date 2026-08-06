@@ -9,8 +9,6 @@ const { getMessages } = require('../services/messages.service');
 
 const registerRoomsController = (io, socket) => {
   socket.on('create room', (name) => {
-    console.log('create room received:', name);
-
     if (typeof name !== 'string' || name.trim() === '') {
       return;
     }

@@ -25,6 +25,7 @@ const io = new Server(httpServer, {
 });
 
 io.on('connection', (socket) => {
+  // eslint-disable-next-line no-console
   console.log('Client connected');
 
   registerUserController(socket);
@@ -32,10 +33,12 @@ io.on('connection', (socket) => {
   registerMessagesController(io, socket);
 
   socket.on('disconnect', () => {
+    // eslint-disable-next-line no-console
     console.log('Client disconnected');
   });
 });
 
 httpServer.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Сервер запущено: http://localhost:${PORT}`);
 });

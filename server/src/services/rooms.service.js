@@ -43,4 +43,10 @@ const deleteRoom = (roomId) => {
   return true;
 };
 
-module.exports = { createRoom, getRooms, getRoomById, renameRoom, deleteRoom };
+module.exports = {
+  createRoom,
+  getRooms,
+  getRoomById,
+  renameRoom,
+  deleteRoom,
+};
