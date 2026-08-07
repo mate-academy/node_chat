@@ -2,13 +2,13 @@ const express = require('express');
 
 const {
   controller: userController,
-} = require('../controllers/users.controller');
+} = require('../controllers/user.controller');
 const { catchError } = require('../utils/catchError');
 
 const router = express.Router();
 
-router.get('/', (req, res) => catchError(userController.getAll));
+router.get('/', catchError(userController.getAll));
 
-router.get('/:id', (req, res) => catchError(userController.getById));
+router.get('/:id', catchError(userController.getById));
 
 module.exports = { router };

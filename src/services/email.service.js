@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 const services = {
   sendEmail: async ({ email, subject, html }) => {
     return transporter.sendMail({
-      from: 'chatapp22072026@gmail.com',
+      from: process.env.EMAIL_USER,
       to: email,
       subject,
       html,

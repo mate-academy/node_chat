@@ -19,7 +19,7 @@ const controllers = {
       throw ApiError.badRequest('Somethindg went wrong');
     }
 
-    res.send(updatedUser);
+    res.send(userServices.normalize(updatedUser));
   },
   setNewPassword: async (req, res) => {
     const { id } = req.params;
@@ -38,7 +38,7 @@ const controllers = {
     user.password = hashedPassword;
     await user.save();
 
-    res.send(user);
+    res.send(userServices.normalize(user));
   },
   requestEmailChange: async (req, res) => {
     const { id } = req.params;
@@ -70,7 +70,11 @@ const controllers = {
 
     const emailChangeToken = uuidv4();
 
-    await userServices.setPendingEmail(id, newEmail, emailChangeToken);
+    const updatedUser = await userServices.setPendingEmail(
+      id,
+      newEmail,
+      emailChangeToken,
+    );
 
     await emailServices.sendEmailChangeEmail(newEmail, emailChangeToken);
 
@@ -85,9 +89,7 @@ const controllers = {
     `,
     });
 
-    res.send({
-      message: 'Confirmation link sent to your new email',
-    });
+    res.send(userServices.normalize(updatedUser));
   },
 
   confirmEmailChange: async (req, res) => {
@@ -101,7 +103,7 @@ const controllers = {
       });
     }
 
-    res.send(user);
+    res.send(userServices.normalize(user));
   },
 };
 

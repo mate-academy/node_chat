@@ -43,7 +43,7 @@ const generateTokens = async (res, user) => {
 
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 3600 * 1000,
-    HttpOnly: true,
+    httpOnly: true,
   });
 
   res.send({
@@ -78,7 +78,7 @@ const controller = {
 
     await emailServices.sendActivationEmail(email, activationToken);
 
-    res.send(newUser);
+    res.send(userServices.normalize(newUser));
   },
   activate: async (req, res) => {
     const { activationToken } = req.params;
@@ -146,7 +146,7 @@ const controller = {
     });
 
     res.clearCookie('refreshToken', {
-      HttpOnly: true,
+      httpOnly: true,
     });
 
     res.sendStatus(204);
