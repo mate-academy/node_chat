@@ -48,7 +48,7 @@ export function App() {
   const [currentRoomId, setCurrentRoomId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState(() =>
-    localStorage.getItem("chat_username" || ""),
+    localStorage.getItem("chat_username") || "",
   );
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export function App() {
           <RoomsList rooms={rooms} onRoomId={setCurrentRoomId} onRoomUpdate={setRooms} />
           {currentRoomId && (
             <>
-              <MessageForm currentRoomId={currentRoomId} />
+              <MessageForm currentRoomId={currentRoomId} username={username} />
               <MessageList messages={messages} />
             </>
           )}

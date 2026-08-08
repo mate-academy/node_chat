@@ -1,7 +1,7 @@
-import express from "express";
-import cors from "cors";
-import { EventEmitter } from "events";
-import { WebSocketServer } from "ws";
+import express from 'express';
+import cors from 'cors';
+import { EventEmitter } from 'events';
+import { WebSocketServer } from 'ws';
 
 const app = express();
 
@@ -11,9 +11,8 @@ app.use(express.json());
 const emitter = new EventEmitter();
 
 const rooms = [];
-let username = "";
 
-app.post("/rooms", (req, res) => {
+app.post('/rooms', (req, res) => {
   const { name } = req.body;
 
   if (!name) {
@@ -31,21 +30,19 @@ app.post("/rooms", (req, res) => {
   res.status(201).send(newRoom);
 });
 
-app.get("/rooms", (req, res) => {
+app.get('/rooms', (req, res) => {
   return res.send(rooms);
 });
 
-app.patch("/rooms/:id", (req, res) => {
+app.patch('/rooms/:id', (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
 
-    if (typeof name !== "string" || name.trim().length === 0) {
-      return res
-        .status(400)
-        .json({
-          error: "Field 'name' is required and must be a non-empty string",
-        });
+    if (typeof name !== 'string' || name.trim().length === 0) {
+      return res.status(400).json({
+        error: "Field 'name' is required and must be a non-empty string",
+      });
     }
 
     const room = rooms.find((room) => room.id === +id);
@@ -58,12 +55,11 @@ app.patch("/rooms/:id", (req, res) => {
 
     return res.status(200).json(room);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-app.delete("/rooms/:id", (req, res) => {
+app.delete('/rooms/:id', (req, res) => {
   try {
     const { id } = req.params;
 
@@ -77,13 +73,12 @@ app.delete("/rooms/:id", (req, res) => {
 
     return res.sendStatus(200);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-app.post("/rooms/:id/message", (req, res) => {
-  const { text } = req.body;
+app.post('/rooms/:id/message', (req, res) => {
+  const { text, author } = req.body;
 
   if (!text) {
     return res.sendStatus(400);
@@ -96,38 +91,33 @@ app.post("/rooms/:id/message", (req, res) => {
   }
 
   const message = {
+    id: Date.now(),
     text,
-    author: username,
+    author,
     time: new Date(),
     roomId: room.id,
   };
 
   room.messages.push(message);
 
-  emitter.emit("message", message);
+  emitter.emit('message', message);
 
   res.status(201).send(room.messages);
 });
 
-app.post("/user", (req, res) => {
+app.post('/user', (req, res) => {
   const name = req.body.username?.trim();
 
   if (!name) {
-    res.status(400).send({ error: "Username is required" });
+    res.status(400).send({ error: 'Username is required' });
 
     return;
   }
 
-  username = name;
-
-  res.status(201).send({ username });
+  res.status(201).send({ username: name });
 });
 
-app.get("/user", (req, res) => {
-  res.send({ username });
-});
-
-app.get("/rooms/:id/messages", (req, res) => {
+app.get('/rooms/:id/messages', (req, res) => {
   const room = rooms.find((room) => room.id === Number(req.params.id));
 
   if (!room) {
@@ -138,12 +128,12 @@ app.get("/rooms/:id/messages", (req, res) => {
 });
 
 const server = app.listen(3005, (req, res) => {
-  console.log("Server is running");
+  console.log('Server is running');
 });
 
 const wss = new WebSocketServer({ server });
 
-emitter.on("message", (message) => {
+emitter.on('message', (message) => {
   for (const client of wss.clients) {
     client.send(JSON.stringify(message));
   }

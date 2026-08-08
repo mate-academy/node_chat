@@ -1,13 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
 
-function sendMessage(text, currentRoomId) {
+function sendMessage(text, currentRoomId, username) {
   return axios.post(`http://localhost:3005/rooms/${currentRoomId}/message`, {
     text,
+    author: username,
   });
 }
 
-export const MessageForm = ({ currentRoomId }) => {
+export const MessageForm = ({ currentRoomId, username }) => {
   const [text, setText] = useState("");
 
   return (
@@ -16,7 +17,7 @@ export const MessageForm = ({ currentRoomId }) => {
       onSubmit={async (event) => {
         event.preventDefault();
 
-        await sendMessage(text, currentRoomId);
+        await sendMessage(text, currentRoomId, username);
 
         setText("");
       }}
