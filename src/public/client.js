@@ -121,8 +121,8 @@ function connect() {
     send({ type: 'join', username, roomId: currentRoomId });
   });
 
-  ws.addEventListener('message', (event) => {
-    const data = JSON.parse(event.data);
+  ws.addEventListener('message', (e) => {
+    const data = JSON.parse(e.data);
 
     switch (data.type) {
       case 'roomsList': {
@@ -197,10 +197,10 @@ usernameInput.addEventListener('keydown', (e) => {
 });
 
 addRoomBtn.addEventListener('click', () => {
-  const name = prompt('Room name:');
+  const roomName = prompt('Room name:');
 
-  if (name && name.trim()) {
-    send({ type: 'createRoom', name: name.trim() });
+  if (roomName && roomName.trim()) {
+    send({ type: 'createRoom', name: roomName.trim() });
   }
 });
 
@@ -209,10 +209,10 @@ renameRoomBtn.addEventListener('click', () => {
     return;
   }
 
-  const name = prompt('New room name:');
+  const newName = prompt('New room name:');
 
-  if (name && name.trim()) {
-    send({ type: 'renameRoom', roomId: currentRoomId, name: name.trim() });
+  if (newName && newName.trim()) {
+    send({ type: 'renameRoom', roomId: currentRoomId, name: newName.trim() });
   }
 });
 
