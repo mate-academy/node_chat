@@ -73,7 +73,7 @@ export function RoomsList({ rooms, onRoomId, onRoomUpdate }) {
                   setNewRoomName(event.target.value);
                 }}
                 onBlur={(event) => {
-                  renameRoom(editIdRoom, newRoomName);
+                  renameRoom(editIdRoom, event.target.value);
                   setNewRoomName("");
                   setEditIdRoom(null);
                 }}
@@ -84,7 +84,7 @@ export function RoomsList({ rooms, onRoomId, onRoomUpdate }) {
             className="button"
             onClick={(event) => {
               if (editIdRoom) {
-                renameRoom(editIdRoom, newRoomName);
+                renameRoom(editIdRoom, event.target.value);
                 setNewRoomName('');
                 setEditIdRoom(null);
               }

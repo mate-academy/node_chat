@@ -45,7 +45,7 @@ app.patch('/rooms/:id', (req, res) => {
       });
     }
 
-    const room = rooms.find((room) => room.id === +id);
+    const room = rooms.find((r) => r.id === +id);
 
     if (!room) {
       return res.status(404).json({ error: `Room with id ${id} not found` });
@@ -84,7 +84,7 @@ app.post('/rooms/:id/message', (req, res) => {
     return res.sendStatus(400);
   }
 
-  const room = rooms.find((room) => room.id === Number(req.params.id));
+  const room = rooms.find((r) => r.id === Number(req.params.id));
 
   if (!room) {
     return res.sendStatus(404);
@@ -118,7 +118,7 @@ app.post('/user', (req, res) => {
 });
 
 app.get('/rooms/:id/messages', (req, res) => {
-  const room = rooms.find((room) => room.id === Number(req.params.id));
+  const room = rooms.find((r) => r.id === Number(req.params.id));
 
   if (!room) {
     return res.sendStatus(404);
@@ -127,9 +127,7 @@ app.get('/rooms/:id/messages', (req, res) => {
   res.send(room.messages);
 });
 
-const server = app.listen(3005, (req, res) => {
-  console.log('Server is running');
-});
+const server = app.listen(3005);
 
 const wss = new WebSocketServer({ server });
 

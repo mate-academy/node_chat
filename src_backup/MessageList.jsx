@@ -1,7 +1,7 @@
 export const MessageList = ({ messages }) => (
   <ul className="mt-5">
     {messages.map(message => (
-      <li key={message.id} className="box mb-4">
+      <li key={message.time} className="box mb-4">
         <div className="is-flex is-justify-content-space-between is-align-items-center mb-2">
           <h1 className="title is-5 mb-0">
             {message.author}
