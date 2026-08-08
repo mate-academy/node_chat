@@ -1,3 +1,4 @@
+/* eslint-env browser */
 'use strict';
 
 const STORAGE_KEY = 'chat_username';
