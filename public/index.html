@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node.js Chat</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Auth Screen -->
+      <div id="auth-screen" class="screen">
+        <h2>Welcome to Node Chat</h2>
+        <form id="auth-form">
+          <input
+            type="text"
+            id="username-input"
+            placeholder="Enter your username"
+            required
+            minlength="2"
+          />
+          <button type="submit">Join Chat</button>
+        </form>
+      </div>
+
+      <!-- Chat Screen -->
+      <div id="chat-screen" class="screen hidden">
+        <div class="sidebar">
+          <div class="user-info">
+            Logged in as: <strong id="current-username"></strong>
+          </div>
+
+          <div class="rooms-header">
+            <h3>Rooms</h3>
+            <button id="create-room-btn">+</button>
+          </div>
+
+          <ul id="rooms-list">
+            <!-- Rooms will be injected here -->
+          </ul>
+        </div>
+
+        <div class="main-chat hidden" id="main-chat-area">
+          <div class="chat-header">
+            <h2 id="current-room-name">Select a Room</h2>
+            <div class="room-actions hidden" id="room-actions">
+              <button id="rename-room-btn">Rename</button>
+              <button id="delete-room-btn" class="danger">Delete</button>
+            </div>
+          </div>
+
+          <div class="messages" id="messages-container">
+            <!-- Messages will be injected here -->
+          </div>
+
+          <form id="message-form" class="message-form">
+            <input
+              type="text"
+              id="message-input"
+              placeholder="Type a message..."
+              required
+              autocomplete="off"
+            />
+            <button type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="create-room-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Create Room</h3>
+        <input type="text" id="new-room-name" placeholder="Room name" />
+        <div class="modal-actions">
+          <button id="cancel-create-room">Cancel</button>
+          <button id="confirm-create-room">Create</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="rename-room-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Rename Room</h3>
+        <input type="text" id="rename-room-input" placeholder="New room name" />
+        <div class="modal-actions">
+          <button id="cancel-rename-room">Cancel</button>
+          <button id="confirm-rename-room">Rename</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
