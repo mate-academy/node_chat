@@ -8,6 +8,8 @@
     "init": "mate-scripts init",
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
+    "client": "npm run dev --prefix client",
+    "client:install": "npm install --prefix client",
     "lint": "npm run format && mate-scripts lint",
     "format": "prettier --ignore-path .prettierignore --write './server/**/*.{js,ts}'",
     "test:only": "mate-scripts test",
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@mate-academy/eslint-config": "latest",
     "@mate-academy/scripts": "^2.1.3",
+    "dotenv": "^17.4.2",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "28.6.0",
     "eslint-plugin-node": "11.1.0",
