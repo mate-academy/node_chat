@@ -1,0 +1,55 @@
+.message-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-list li {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 2px 2px 0 rgba(59, 54, 44, 0.1);
+  max-width: 80%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.message-body {
+  flex: 1;
+}
+
+.message-list li strong {
+  color: var(--teal);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.message-list li p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.message-list .time {
+  color: var(--ink-light);
+  font-size: 11px;
+  margin-left: 6px;
+}

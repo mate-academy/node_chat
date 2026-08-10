@@ -1,0 +1,126 @@
+:root {
+  --paper: #efe6d8;
+  --card: #fbf7ef;
+  --input-bg: #fffdf7;
+  --ink: #3b362c;
+  --ink-light: #6b6456;
+  --teal: #1f4b43;
+  --gold: #e8b84b;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--paper);
+}
+
+body {
+  color: var(--ink);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.section.content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--teal);
+  margin-bottom: 4px;
+}
+
+.title small {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 16px;
+  color: var(--ink-light);
+  font-weight: normal;
+}
+
+.connection-banner {
+  background: var(--gold);
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: 8px 8px 8px 0;
+  margin-bottom: 12px;
+  font-size: 14px;
+  box-shadow: 2px 2px 0 rgba(59, 54, 44, 0.15);
+}
+
+.typing-indicator {
+  color: var(--ink-light);
+  font-style: italic;
+  font-size: 13px;
+  margin: 6px 0;
+}
+
+.error-text {
+  background: #f6ddd4;
+  color: #a34a2f;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.field.is-horizontal {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.field.is-horizontal .input {
+  flex: 1;
+  border: 1px solid #d8cbb4;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  background: var(--input-bg);
+  color: var(--ink);
+}
+
+.field.is-horizontal .input:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+.field.is-horizontal .button {
+  border: none;
+  background: var(--teal);
+  color: #fdf6e3;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.field.is-horizontal .button:hover {
+  background: #163a34;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.header-row .title {
+  margin-bottom: 0;
+}
+
+.username-badge {
+  background: var(--teal);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
