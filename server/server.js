@@ -1,61 +1,72 @@
 import express from 'express';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
-import { randomUUID } from 'crypto';
-
-import dotenv from 'dotenv/config';
+import 'dotenv/config';
+import { sequelize, Room, Message } from './models/index.js';
 
 const PORT = process.env.PORT || 3001;
 
-export const createServer = () => {
+export const createServer = async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+
+    const roomCount = await Room.count();
+
+    if (roomCount === 0) {
+      await Room.create({ name: 'General' });
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to connect or sync database:', error);
+  }
+
   const app = express();
 
   app.use(express.json());
   app.use(cors());
 
-  // rooms: Map<roomId, { id, name, messages[], clients: Set<ws> }>
-  const rooms = new Map();
+  // activeRooms: Map<roomId, Set<ws>>
+  const activeRooms = new Map();
 
-  // Create a default "General" room
-  const defaultRoomId = randomUUID();
+  const getRoomsList = async () => {
+    const dbRooms = await Room.findAll({
+      include: [
+        {
+          model: Message,
+          attributes: ['id'],
+        },
+      ],
+      order: [['createdAt', 'ASC']],
+    });
 
-  rooms.set(defaultRoomId, {
-    id: defaultRoomId,
-    name: 'General',
-    messages: [],
-    clients: new Set(),
-  });
-
-  // Helper: get serializable room list (without clients Set)
-  const getRoomsList = () =>
-    [...rooms.values()].map(({ id, name, messages }) => ({
-      id,
-      name,
-      messageCount: messages.length,
+    return dbRooms.map((room) => ({
+      id: room.id,
+      name: room.name,
+      messageCount: room.Messages ? room.Messages.length : 0,
     }));
+  };
 
-  // Helper: broadcast to all clients in a room
   const broadcastToRoom = (roomId, payload) => {
-    const room = rooms.get(roomId);
+    const clients = activeRooms.get(roomId);
 
-    if (!room) {
+    if (!clients) {
       return;
     }
 
     const data = JSON.stringify(payload);
 
-    room.clients.forEach((client) => {
+    clients.forEach((client) => {
       if (client.readyState === 1 /* OPEN */) {
         client.send(data);
       }
     });
   };
 
-  // Helper: broadcast to ALL connected clients
-  const broadcastToAll = (wss, payload) => {
+  const broadcastToAll = (wssInstance, payload) => {
     const data = JSON.stringify(payload);
 
-    wss.clients.forEach((client) => {
+    wssInstance.clients.forEach((client) => {
       if (client.readyState === 1) {
         client.send(data);
       }
@@ -88,11 +99,10 @@ export const createServer = () => {
   const wss = new WebSocketServer({ server });
 
   wss.on('connection', (ws) => {
-    // Each client has: username, currentRoomId
     ws.username = null;
     ws.currentRoomId = null;
 
-    ws.on('message', (raw) => {
+    ws.on('message', async (raw) => {
       let payload;
 
       try {
@@ -109,11 +119,12 @@ export const createServer = () => {
           ws.username =
             String(payload.username).trim().slice(0, 32) || 'Anonymous';
 
-          // Send current rooms list so client can pick one
+          const roomsList = await getRoomsList();
+
           ws.send(
             JSON.stringify({
               type: 'rooms_list',
-              rooms: getRoomsList(),
+              rooms: roomsList,
             }),
           );
           break;
@@ -124,18 +135,14 @@ export const createServer = () => {
           const roomName = String(payload.name || 'New Room')
             .trim()
             .slice(0, 64);
-          const roomId = randomUUID();
 
-          rooms.set(roomId, {
-            id: roomId,
-            name: roomName,
-            messages: [],
-            clients: new Set(),
-          });
+          await Room.create({ name: roomName });
+
+          const roomsList = await getRoomsList();
 
           broadcastToAll(wss, {
             type: 'rooms_list',
-            rooms: getRoomsList(),
+            rooms: roomsList,
           });
           break;
         }
@@ -144,16 +151,15 @@ export const createServer = () => {
         case 'join_room': {
           const { roomId } = payload;
 
-          // Leave current room
           if (ws.currentRoomId) {
-            const prev = rooms.get(ws.currentRoomId);
+            const prevClients = activeRooms.get(ws.currentRoomId);
 
-            if (prev) {
-              prev.clients.delete(ws);
+            if (prevClients) {
+              prevClients.delete(ws);
             }
           }
 
-          const room = rooms.get(roomId);
+          const room = await Room.findByPk(roomId);
 
           if (!room) {
             ws.send(
@@ -162,15 +168,28 @@ export const createServer = () => {
             break;
           }
 
-          room.clients.add(ws);
+          if (!activeRooms.has(roomId)) {
+            activeRooms.set(roomId, new Set());
+          }
+
+          activeRooms.get(roomId).add(ws);
           ws.currentRoomId = roomId;
 
-          // Send full message history to the newly joined client
+          const messages = await Message.findAll({
+            where: { roomId },
+            order: [['createdAt', 'ASC']],
+          });
+
           ws.send(
             JSON.stringify({
               type: 'history',
               roomId,
-              messages: room.messages,
+              messages: messages.map((m) => ({
+                id: m.id,
+                author: m.author,
+                text: m.text,
+                createdAt: m.createdAt,
+              })),
             }),
           );
           break;
@@ -178,79 +197,92 @@ export const createServer = () => {
 
         // ─── Rename Room ─────────────────────────────────────────────────
         case 'rename_room': {
-          const room = rooms.get(payload.roomId);
+          const room = await Room.findByPk(payload.roomId);
 
           if (!room) {
             break;
           }
 
-          room.name = String(payload.name || room.name)
+          const newName = String(payload.name || room.name)
             .trim()
             .slice(0, 64);
 
+          await room.update({ name: newName });
+
+          const roomsList = await getRoomsList();
+
           broadcastToAll(wss, {
             type: 'rooms_list',
-            rooms: getRoomsList(),
+            rooms: roomsList,
           });
           break;
         }
 
         // ─── Delete Room ─────────────────────────────────────────────────
         case 'delete_room': {
-          const room = rooms.get(payload.roomId);
+          const room = await Room.findByPk(payload.roomId);
 
           if (!room) {
             break;
           }
 
-          // Notify members of deletion
           broadcastToRoom(payload.roomId, {
             type: 'room_deleted',
             roomId: payload.roomId,
           });
 
-          // Disconnect members from room
-          room.clients.forEach((client) => {
-            client.currentRoomId = null;
-          });
+          const clientsInRoom = activeRooms.get(payload.roomId);
 
-          rooms.delete(payload.roomId);
+          if (clientsInRoom) {
+            clientsInRoom.forEach((client) => {
+              client.currentRoomId = null;
+            });
+            activeRooms.delete(payload.roomId);
+          }
+
+          await room.destroy();
+
+          const roomsList = await getRoomsList();
 
           broadcastToAll(wss, {
             type: 'rooms_list',
-            rooms: getRoomsList(),
+            rooms: roomsList,
           });
           break;
         }
 
         // ─── Chat Message ─────────────────────────────────────────────────
         case 'chat_message': {
-          const room = rooms.get(ws.currentRoomId);
-
-          if (!room) {
+          if (!ws.currentRoomId) {
             ws.send(
               JSON.stringify({ type: 'error', message: 'Join a room first' }),
             );
             break;
           }
 
-          const message = {
-            id: randomUUID(),
-            author: ws.username || 'Anonymous',
-            text: String(payload.text || '').trim(),
-            createdAt: new Date().toISOString(),
-          };
+          const text = String(payload.text || '').trim();
 
-          if (!message.text) {
+          if (!text) {
             break;
           }
 
-          room.messages.push(message);
+          const messageRecord = await Message.create({
+            roomId: ws.currentRoomId,
+            author: ws.username || 'Anonymous',
+            text,
+          });
+
+          const messagePayload = {
+            id: messageRecord.id,
+            author: messageRecord.author,
+            text: messageRecord.text,
+            createdAt: messageRecord.createdAt,
+          };
 
           broadcastToRoom(ws.currentRoomId, {
             type: 'chat_message',
             roomId: ws.currentRoomId,
-            message,
+            message: messagePayload,
           });
           break;
         }
@@ -262,10 +294,10 @@ export const createServer = () => {
 
     ws.on('close', () => {
       if (ws.currentRoomId) {
-        const room = rooms.get(ws.currentRoomId);
+        const clientsInRoom = activeRooms.get(ws.currentRoomId);
 
-        if (room) {
-          room.clients.delete(ws);
+        if (clientsInRoom) {
+          clientsInRoom.delete(ws);
         }
       }
     });
