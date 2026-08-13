@@ -6,8 +6,8 @@
   "scripts": {
     "init": "mate-scripts init",
     "start": "node src/index.js",
-    "lint": "npm run format && mate-scripts lint",
-    "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
+    "lint": "npm run format && cd client && npm install && npx eslint src && cd ../server && npm install && npx eslint src",
+    "format": "prettier --ignore-path .prettierignore --write './{client,server}/src/**/*.{js,ts,jsx}'",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
     "postinstall": "npm run update",
@@ -17,7 +17,7 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "@mate-academy/eslint-config": "latest",
-    "@mate-academy/scripts": "^1.8.6",
+    "@mate-academy/scripts": "^2.1.3",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-node": "^11.1.0",
