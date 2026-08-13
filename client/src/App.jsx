@@ -59,6 +59,18 @@ export function App() {
     setRoomName('');
   };
 
+  const renameRoom = (id) => {
+    const newName = prompt('Введіть нову назву кімнати:');
+    if (!newName || !newName.trim()) return;
+
+    socket.send(
+      JSON.stringify({
+        type: 'RENAME_ROOM',
+        payload: { roomId: id, newName: newName.trim() },
+      }),
+    );
+  };
+
   const deleteRoom = (id) => {
     socket.send(
       JSON.stringify({ type: 'DELETE_ROOM', payload: { roomId: id } }),
@@ -113,7 +125,10 @@ export function App() {
               {r.id === currentRoomId ? `-> ${r.name}` : r.name}
             </button>
             {r.id !== 'general' && (
-              <button onClick={() => deleteRoom(r.id)}>Видалити</button>
+              <>
+                <button onClick={() => renameRoom(r.id)}>Перейменувати</button>
+                <button onClick={() => deleteRoom(r.id)}>Видалити</button>
+              </>
             )}
           </li>
         ))}

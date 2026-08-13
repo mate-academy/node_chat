@@ -70,6 +70,14 @@ wss.on('connection', (ws) => {
       broadcast({ type: 'ROOMS_LIST', payload: Object.values(rooms) });
     }
 
+    if (type === 'RENAME_ROOM') {
+      const { roomId, newName } = payload;
+      if (rooms[roomId]) {
+        rooms[roomId].name = newName;
+        broadcast({ type: 'ROOMS_LIST', payload: Object.values(rooms) });
+      }
+    }
+
     if (type === 'DELETE_ROOM') {
       delete rooms[payload.roomId];
       broadcast({ type: 'ROOMS_LIST', payload: Object.values(rooms) });

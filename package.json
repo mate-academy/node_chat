@@ -6,7 +6,7 @@
   "scripts": {
     "init": "mate-scripts init",
     "start": "node src/index.js",
-    "lint": "npm run format && cd client && npx eslint src && cd ../server && npx eslint src",
+    "lint": "npm run format && cd client && npm install && npx eslint src && cd ../server && npm install && npx eslint src",
     "format": "prettier --ignore-path .prettierignore --write './{client,server}/src/**/*.{js,ts,jsx}'",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
