@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 
 export function App() {
   const [socket, setSocket] = useState(null);
-  const [username, setUsername] = useState(localStorage.getItem('username') || '');
+  const [username, setUsername] = useState(
+    localStorage.getItem('username') || '',
+  );
 
   const [rooms, setRooms] = useState([]);
   const [currentRoomId, setCurrentRoomId] = useState('general');
@@ -38,10 +40,12 @@ export function App() {
     e.preventDefault();
     if (!text.trim()) return;
 
-    socket.send(JSON.stringify({
-      type: 'SEND_MESSAGE',
-      payload: { roomId: currentRoomId, username, text }
-    }));
+    socket.send(
+      JSON.stringify({
+        type: 'SEND_MESSAGE',
+        payload: { roomId: currentRoomId, username, text },
+      }),
+    );
     setText('');
   };
 
@@ -49,12 +53,16 @@ export function App() {
     e.preventDefault();
     if (!roomName.trim()) return;
 
-    socket.send(JSON.stringify({ type: 'CREATE_ROOM', payload: { name: roomName } }));
+    socket.send(
+      JSON.stringify({ type: 'CREATE_ROOM', payload: { name: roomName } }),
+    );
     setRoomName('');
   };
 
   const deleteRoom = (id) => {
-    socket.send(JSON.stringify({ type: 'DELETE_ROOM', payload: { roomId: id } }));
+    socket.send(
+      JSON.stringify({ type: 'DELETE_ROOM', payload: { roomId: id } }),
+    );
 
     if (id === currentRoomId) {
       joinRoom('general');
@@ -63,14 +71,16 @@ export function App() {
 
   if (!username) {
     return (
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        const name = e.target.username.value.trim();
-        if (name) {
-          localStorage.setItem('username', name);
-          setUsername(name);
-        }
-      }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const name = e.target.username.value.trim();
+          if (name) {
+            localStorage.setItem('username', name);
+            setUsername(name);
+          }
+        }}
+      >
         <h2>Введіть імя:</h2>
         <input name="username" placeholder="Username..." />
         <button>Увійти</button>
@@ -85,7 +95,11 @@ export function App() {
       <h1>Чат ({username})</h1>
 
       <form onSubmit={createRoom}>
-        <input value={roomName} onChange={(e) => setRoomName(e.target.value)} placeholder="Нова кімната..." />
+        <input
+          value={roomName}
+          onChange={(e) => setRoomName(e.target.value)}
+          placeholder="Нова кімната..."
+        />
         <button>Створити кімнату</button>
       </form>
 
@@ -108,7 +122,11 @@ export function App() {
       <hr />
 
       <form onSubmit={sendMessage}>
-        <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Текст повідомлення..." />
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Текст повідомлення..."
+        />
         <button>Надіслати</button>
       </form>
 
