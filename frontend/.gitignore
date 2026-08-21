@@ -1,0 +1,10 @@
+# IDE
+.idea
+.vscode
+
+# Node
+node_modules
+frontend/node_modules
+
+# MacOS
+.DS_Store
