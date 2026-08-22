@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Chat using Node.js",
   "main": "src/index.js",
+  "type":"module",
   "scripts": {
     "init": "mate-scripts init",
     "start": "node src/index.js",
@@ -26,5 +27,9 @@
   },
   "mateAcademy": {
     "projectType": "javascript"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
   }
 }
