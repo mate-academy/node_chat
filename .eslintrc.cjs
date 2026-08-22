@@ -19,14 +19,12 @@ module.exports = {
     'no-console': 0,
     'no-proto': 0,
     'no-shadow': 0,
+    'react/jsx-uses-vars': 'error',
   },
   plugins: ['jest', 'react'],
   settings: {
     react: {
       version: 'detect',
     },
-  },
-  rules: {
-    'react/jsx-uses-vars': 'error',
   },
 };
