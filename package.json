@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Chat using Node.js",
   "main": "src/index.js",
-  "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "nodemon server/src/index.js",
