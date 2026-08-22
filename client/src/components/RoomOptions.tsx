@@ -34,7 +34,7 @@ export const RoomOptions: React.FC<Props> = ({
     }
 
     return () => {
-      removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isContextMenuOpen]);
 

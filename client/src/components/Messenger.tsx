@@ -103,7 +103,7 @@ export const Messenger: React.FC<Props> = ({ username }) => {
       socket.emit('RenameRoom', { room: name, newRoom: newName });
 
       setRooms((currentRooms) =>
-        currentRooms.map((room) => (room === name ? newName : name)),
+        currentRooms.map((room) => (room === name ? newName : room)),
       );
 
       if (currentRoomRef.current === name) {

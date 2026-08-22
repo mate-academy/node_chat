@@ -60,7 +60,7 @@ export const Rooms: React.FC<Props> = ({
   return (
     <div className={`${className} flex flex-col`}>
       {invitations.length > 0 && (
-        <div className="overflow-y-auto shrink-0 p-1">
+        <div className="overflow-y-auto shrink-0 p-1 flex flex-col gap-1">
           {invitations.map((invitation) => (
             <InvitationCard
               key={invitation.room}

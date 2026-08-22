@@ -36,7 +36,7 @@ export const Chat: React.FC<Props> = ({
           onSendMessage(text);
           setText('');
         }}
-        className="hrink-0 flex gap-5 w-full p-1 px-3 secondary-color"
+        className=" flex gap-5 w-full p-1 px-3 secondary-color"
       >
         <input
           type="text"

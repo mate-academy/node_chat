@@ -126,7 +126,7 @@ export const setupChatHandlers = (io, socket) => {
   });
 
   socket.on('disconnect', () => {
-    const username = users.get(socketIds);
+    const username = users.get(socket.id);
 
     socketIds.delete(username);
     users.delete(socket.id);
