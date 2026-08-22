@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import RoomList from '../components/RoomList';
+import Chat from '../components/Chat';
+import CreateRoomModal from '../components/CreateRoomModal';
 
 import {
   getRooms,

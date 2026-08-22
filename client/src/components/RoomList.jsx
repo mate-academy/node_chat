@@ -1,3 +1,5 @@
+import RoomItem from './RoomItem';
+
 const RoomList = ({
   rooms,
   selectedRoom,

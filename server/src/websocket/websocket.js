@@ -84,7 +84,7 @@ const setupWebSocket = (server) => {
             },
             {
               model: Room,
-              attributes: ['id', 'username'],
+              attributes: ['id', 'name'],
             },
           ],
         });

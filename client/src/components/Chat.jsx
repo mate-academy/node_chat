@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getRoomMessages } from '../services/chatService';
 import { createWebSocket } from '../services/websocketService';
+import MessageList from './MessageList';
+import MessageForm from './MessageForm';
 
 const Chat = ({ room, user, onLeave }) => {
   const [messages, setMessages] = useState([]);
