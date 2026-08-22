@@ -1,5 +1,3 @@
-import React from "react";
-
 const RoomItem = ({
   room,
   selected,
@@ -11,23 +9,27 @@ const RoomItem = ({
   return (
     <li>
       <div
-        className={`box p-3 mb-2 ${selected ? 'has-background-link-light' : ''
-          }`}
+        className={`box p-3 mb-2 ${
+          selected ? 'has-background-link-light' : ''
+        }`}
         style={{ cursor: 'pointer' }}
         onClick={() => onSelect(room)}
       >
-        <div className="is-flex is-align-items-center is-justify-content-space-between">
+        <div
+          className={
+            'is-flex is-align-items-center ' +
+            'is-justify-content-space-between'
+          }
+        >
           <span
-            className={
-              selected ? 'has-text-link has-text-weight-bold' : ''
-            }
+            className={selected ? 'has-text-link has-text-weight-bold' : ''}
           >
             {room.name}
           </span>
 
           <div
             className="buttons are-small mb-0"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(eventChat) => eventChat.stopPropagation()}
           >
             <button
               className="button is-light"

@@ -1,4 +1,4 @@
-import { WebSocketServer, WebSocket } from 'ws';
+import { WebSocketServer } from 'ws';
 import { Message, User, Room } from '../models/index.js';
 
 const setupWebSocket = (server) => {
@@ -80,11 +80,11 @@ const setupWebSocket = (server) => {
           include: [
             {
               model: User,
-              attributes: ['id', 'name'],
+              attributes: ['id', 'username'],
             },
             {
               model: Room,
-              attributes: ['id', 'name'],
+              attributes: ['id', 'username'],
             },
           ],
         });

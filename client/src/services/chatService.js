@@ -12,13 +12,13 @@ const request = async (url, options = {}) => {
   return data;
 };
 
-export const createUser = async (name) => {
+export const createUser = async (username) => {
   return request(`${API_URL}/users`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ username }),
   });
 };
 
@@ -26,43 +26,43 @@ export const getRooms = async (userId) => {
   return request(`${API_URL}/rooms?userId=${encodeURIComponent(userId)}`);
 };
 
-export const createRoom = async (name, userId) => {
+export const createRoom = async (username, userId) => {
   return request(`${API_URL}/rooms`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name, userId }),
+    body: JSON.stringify({ username, userId }),
   });
 };
 
-export const renameRoom = async (roomId, name) => {
+export const renameRoom = async (roomId, username) => {
   return request(`${API_URL}/rooms/${roomId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ username }),
   });
 };
 
-export const joinRoom = async (roomId, name) => {
+export const joinRoom = async (roomId, username) => {
   return request(`${API_URL}/rooms/${roomId}/join`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ username }),
   });
 };
 
-export const leaveRoom = async (roomId, name) => {
+export const leaveRoom = async (roomId, username) => {
   return request(`${API_URL}/rooms/${roomId}/leave`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ username }),
   });
 };
 

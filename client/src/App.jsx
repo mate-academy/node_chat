@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import LoginPage from './pages/LoginPage';
-import ChatPage from './pages/ChatPage';
+import { useState } from 'react';
 import { createUser } from './services/chatService';
 
 const getStoredUser = () => {
@@ -13,29 +11,21 @@ const getStoredUser = () => {
 
   return {
     id: userId,
-    name: username,
+    username,
   };
 };
 
 const App = () => {
-  const [user, setUser] = useState(
-    getStoredUser,
-  );
+  const [user, setUser] = useState(getStoredUser);
 
-  const handleLogin = async (name) => {
-    const user = await createUser(name);
+  const handleLogin = async (username) => {
+    const createdUser = await createUser(username);
 
-    localStorage.setItem(
-      'userId',
-      user.id,
-    );
+    localStorage.setItem('userId', createdUser.id);
 
-    localStorage.setItem(
-      'username',
-      user.name,
-    );
+    localStorage.setItem('username', createdUser.username);
 
-    setUser(user);
+    setUser(createdUser);
   };
 
   const handleLogout = () => {
@@ -46,19 +36,10 @@ const App = () => {
   };
 
   if (!user) {
-    return (
-      <LoginPage
-        onLogin={handleLogin}
-      />
-    );
+    return <LoginPage onLogin={handleLogin} />;
   }
 
-  return (
-    <ChatPage
-      user={user}
-      onLogout={handleLogout}
-    />
-  );
+  return <ChatPage user={user} onLogout={handleLogout} />;
 };
 
 export default App;

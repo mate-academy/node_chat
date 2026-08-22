@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import RoomList from '../components/RoomList';
-import CreateRoomModal from '../components/CreateRoomModal';
-import Chat from '../components/Chat';
+import { useEffect, useState } from 'react';
 
 import {
   getRooms,
@@ -14,17 +11,13 @@ import {
 
 const ChatPage = ({ user, onLogout }) => {
   const [rooms, setRooms] = useState([]);
-  const [selectedRoom, setSelectedRoom] =
-    useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
-  const [modalOpen, setModalOpen] =
-    useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const [editingRoom, setEditingRoom] =
-    useState(null);
+  const [editingRoom, setEditingRoom] = useState(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState('');
 
@@ -54,34 +47,24 @@ const ChatPage = ({ user, onLogout }) => {
     setModalOpen(true);
   };
 
-  const handleModalSubmit = async (name) => {
+  const handleModalSubmit = async (roomName) => {
     try {
       if (editingRoom) {
-        const updatedRoom = await renameRoom(
-          editingRoom.id,
-          name,
-        );
+        const updatedRoom = await renameRoom(editingRoom.id, roomName);
 
-        setRooms((prev) =>
-          prev.map((room) =>
-            room.id === updatedRoom.id
-              ? updatedRoom
-              : room,
-          ),
-        );
+        setRooms((prev) => {
+          return prev.map((room) => {
+            return room.id === updatedRoom.id ? updatedRoom : room;
+          });
+        });
 
-        if (
-          selectedRoom?.id === updatedRoom.id
-        ) {
+        if (selectedRoom?.id === updatedRoom.id) {
           setSelectedRoom(updatedRoom);
         }
       } else {
-        const newRoom = await createRoom(name, user.id);
+        const newRoom = await createRoom(roomName, user.id);
 
-        setRooms((prev) => [
-          ...prev,
-          newRoom,
-        ]);
+        setRooms((prev) => [...prev, newRoom]);
       }
 
       setModalOpen(false);
@@ -95,7 +78,7 @@ const ChatPage = ({ user, onLogout }) => {
     try {
       setError('');
 
-      await joinRoom(room.id, user.name);
+      await joinRoom(room.id, user.username);
 
       setSelectedRoom(room);
     } catch (err) {
@@ -104,17 +87,17 @@ const ChatPage = ({ user, onLogout }) => {
   };
 
   const handleAddParticipant = async (room) => {
-    const name = window.prompt(
-      `Enter the username to add to "${room.name}":`,
-    );
+    const promptMessage = `Enter the username to add to "${room.name}":`;
 
-    if (!name?.trim()) {
+    const username = window.prompt(promptMessage);
+
+    if (!username?.trim()) {
       return;
     }
 
     try {
       setError('');
-      await joinRoom(room.id, name.trim());
+      await joinRoom(room.id, username.trim());
     } catch (err) {
       setError(err.message);
     }
@@ -122,10 +105,7 @@ const ChatPage = ({ user, onLogout }) => {
 
   const handleLeaveRoom = async (room) => {
     try {
-      await leaveRoom(
-        room.id,
-        user.name,
-      );
+      await leaveRoom(room.id, user.username);
 
       setSelectedRoom(null);
     } catch (err) {
@@ -134,9 +114,7 @@ const ChatPage = ({ user, onLogout }) => {
   };
 
   const handleDeleteRoom = async (room) => {
-    const confirmed = window.confirm(
-      `Delete "${room.name}"?`,
-    );
+    const confirmed = window.confirm(`Delete "${room.name}"?`);
 
     if (!confirmed) {
       return;
@@ -145,11 +123,7 @@ const ChatPage = ({ user, onLogout }) => {
     try {
       await deleteRoom(room.id);
 
-      setRooms((prev) =>
-        prev.filter(
-          (item) => item.id !== room.id,
-        ),
-      );
+      setRooms((prev) => prev.filter((item) => item.id !== room.id));
 
       if (selectedRoom?.id === room.id) {
         setSelectedRoom(null);
@@ -162,9 +136,7 @@ const ChatPage = ({ user, onLogout }) => {
   if (loading) {
     return (
       <div className="container has-text-centered p-6">
-        <button className="button is-loading is-white">
-          Loading
-        </button>
+        <button className="button is-loading is-white">Loading</button>
       </div>
     );
   }
@@ -179,15 +151,10 @@ const ChatPage = ({ user, onLogout }) => {
         </div>
 
         <div className="navbar-end">
-          <div className="navbar-item">
-            {user.name}
-          </div>
+          <div className="navbar-item">{user.username}</div>
 
           <div className="navbar-item">
-            <button
-              className="button is-light"
-              onClick={onLogout}
-            >
+            <button className="button is-light" onClick={onLogout}>
               Logout
             </button>
           </div>
@@ -196,10 +163,7 @@ const ChatPage = ({ user, onLogout }) => {
 
       {error && (
         <div className="notification is-danger is-light m-3">
-          <button
-            className="delete"
-            onClick={() => setError('')}
-          />
+          <button className="delete" onClick={() => setError('')} />
 
           {error}
         </div>
@@ -226,20 +190,13 @@ const ChatPage = ({ user, onLogout }) => {
 
         <main className="column p-0">
           {selectedRoom ? (
-            <Chat
-              room={selectedRoom}
-              user={user}
-              onLeave={handleLeaveRoom}
-            />
+            <Chat room={selectedRoom} user={user} onLeave={handleLeaveRoom} />
           ) : (
             <div className="has-text-centered p-6">
-              <h1 className="title is-4">
-                Select a room
-              </h1>
+              <h1 className="title is-4">Select a room</h1>
 
               <p className="has-text-grey">
-                Choose a room from the list or
-                create a new one.
+                Choose a room from the list or create a new one.
               </p>
             </div>
           )}

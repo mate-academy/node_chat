@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import MessageList from './MessageList';
-import MessageForm from './MessageForm';
-import {
-  getRoomMessages,
-} from '../services/chatService';
-import {
-  createWebSocket,
-} from '../services/websocketService';
+import { useEffect, useState } from 'react';
+import { getRoomMessages } from '../services/chatService';
+import { createWebSocket } from '../services/websocketService';
 
-const Chat = ({
-  room,
-  user,
-  onLeave,
-}) => {
+const Chat = ({ room, user, onLeave }) => {
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,20 +17,15 @@ const Chat = ({
         setLoading(true);
         setError('');
 
-        // 1. Завантажуємо старі повідомлення
-        const oldMessages =
-          await getRoomMessages(room.id);
+        const oldMessages = await getRoomMessages(room.id);
 
         setMessages(oldMessages);
 
-        // 2. Створюємо WebSocket
         ws = createWebSocket();
 
         ws.onopen = () => {
           setConnected(true);
 
-          // 3. Повідомляємо серверу,
-          // що користувач зайшов у room
           ws.send(
             JSON.stringify({
               type: 'join-room',
@@ -50,14 +35,11 @@ const Chat = ({
           );
         };
 
-        ws.onmessage = (event) => {
-          const data = JSON.parse(event.data);
+        ws.onmessage = (eventChat) => {
+          const data = JSON.parse(eventChat.data);
 
           if (data.type === 'message') {
-            setMessages((prev) => [
-              ...prev,
-              data.message,
-            ]);
+            setMessages((prev) => [...prev, data.message]);
           }
 
           if (data.type === 'error') {
@@ -107,7 +89,7 @@ const Chat = ({
         type: 'message',
         userId: user.id,
         roomId: room.id,
-        author: user.name,
+        author: user.username,
         text,
       }),
     );
@@ -124,9 +106,7 @@ const Chat = ({
   if (loading) {
     return (
       <div className="has-text-centered p-6">
-        <button className="button is-loading is-white">
-          Loading
-        </button>
+        <button className="button is-loading is-white">Loading</button>
       </div>
     );
   }
@@ -142,32 +122,19 @@ const Chat = ({
       <div className="navbar px-4">
         <div className="navbar-brand">
           <div className="navbar-item">
-            <strong>
-              {room.name}
-            </strong>
+            <strong>{room.name}</strong>
           </div>
         </div>
 
         <div className="navbar-end">
           <div className="navbar-item">
-            <span
-              className={`tag ${
-                connected
-                  ? 'is-success'
-                  : 'is-danger'
-              }`}
-            >
-              {connected
-                ? 'Connected'
-                : 'Disconnected'}
+            <span className={`tag ${connected ? 'is-success' : 'is-danger'}`}>
+              {connected ? 'Connected' : 'Disconnected'}
             </span>
           </div>
 
           <div className="navbar-item">
-            <button
-              className="button is-light"
-              onClick={handleLeave}
-            >
+            <button className="button is-light" onClick={handleLeave}>
               Leave
             </button>
           </div>
@@ -175,23 +142,15 @@ const Chat = ({
       </div>
 
       {error && (
-        <div className="notification is-danger is-light m-3">
-          {error}
-        </div>
+        <div className="notification is-danger is-light m-3">{error}</div>
       )}
 
       <div style={{ flex: 1, minHeight: 0 }}>
-        <MessageList
-          messages={messages}
-          currentUserId={user.id}
-        />
+        <MessageList messages={messages} currentUserId={user.id} />
       </div>
 
       <div className="p-4">
-        <MessageForm
-          onSend={handleSendMessage}
-          disabled={!connected}
-        />
+        <MessageForm onSend={handleSendMessage} disabled={!connected} />
       </div>
     </div>
   );

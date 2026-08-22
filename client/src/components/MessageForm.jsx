@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const MessageForm = ({ onSend, disabled }) => {
   const [text, setText] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (eventChat) => {
+    eventChat.preventDefault();
 
     const trimmedText = text.trim();
 
@@ -24,9 +24,7 @@ const MessageForm = ({ onSend, disabled }) => {
           <input
             className="input"
             value={text}
-            onChange={(event) =>
-              setText(event.target.value)
-            }
+            onChange={(eventChat) => setText(eventChat.target.value)}
             placeholder="Write a message..."
             disabled={disabled}
           />

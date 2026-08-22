@@ -1,8 +1,7 @@
 import { Room, User, Message } from '../models/index.js';
 
 const createRoom = async (req, res, next) => {
-  const { name } = req.body;
-  const { userId } = req.body;
+  const { roomName, userId } = req.body;
 
   const user = await User.findByPk(userId);
 
@@ -12,14 +11,15 @@ const createRoom = async (req, res, next) => {
     });
   }
 
-  const room = await Room.create({ name });
+  const room = await Room.create({ roomName });
+
   await room.addUser(user);
 
   res.status(201).json(room);
 };
 
 const renameRoom = async (req, res, next) => {
-  const { name } = req.body;
+  const { roomName } = req.body;
   const { roomId } = req.params;
 
   const room = await Room.findByPk(roomId);
@@ -30,7 +30,7 @@ const renameRoom = async (req, res, next) => {
     });
   }
 
-  room.name = name;
+  room.name = roomName;
   await room.save();
 
   res.status(200).json(room);
@@ -38,7 +38,7 @@ const renameRoom = async (req, res, next) => {
 
 const joinUser = async (req, res, next) => {
   const { roomId } = req.params;
-  const { name } = req.body;
+  const { username } = req.body;
 
   const room = await Room.findByPk(roomId);
 
@@ -50,7 +50,7 @@ const joinUser = async (req, res, next) => {
 
   const user = await User.findOne({
     where: {
-      name,
+      username,
     },
   });
 
@@ -69,7 +69,7 @@ const joinUser = async (req, res, next) => {
 
 const leaveRoom = async (req, res, next) => {
   const { roomId } = req.params;
-  const { name } = req.body;
+  const { username } = req.body;
 
   const room = await Room.findByPk(roomId);
 
@@ -81,7 +81,7 @@ const leaveRoom = async (req, res, next) => {
 
   const user = await User.findOne({
     where: {
-      name,
+      username,
     },
   });
 
@@ -122,7 +122,7 @@ const getRoomMessages = async (req, res, next) => {
     include: [
       {
         model: User,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'username'],
       },
     ],
     order: [['createdAt', 'ASC']],
@@ -157,9 +157,9 @@ const getRooms = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { name } = req.body;
+  const { username } = req.body;
 
-  if (!name?.trim()) {
+  if (!username?.trim()) {
     return res.status(400).json({
       message: 'Username is required',
     });
@@ -167,7 +167,7 @@ const createUser = async (req, res) => {
 
   const existingUser = await User.findOne({
     where: {
-      name: name.trim(),
+      username: username.trim(),
     },
   });
 
@@ -176,7 +176,7 @@ const createUser = async (req, res) => {
   }
 
   const user = await User.create({
-    name: name.trim(),
+    username: username.trim(),
   });
 
   return res.status(201).json(user);

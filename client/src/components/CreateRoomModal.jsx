@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const CreateRoomModal = ({
-  isOpen,
-  room,
-  onClose,
-  onSubmit,
-}) => {
-  const [name, setName] = useState('');
+const CreateRoomModal = ({ isOpen, room, onClose, onSubmit }) => {
+  const [roomName, setRoomName] = useState('');
 
   useEffect(() => {
     if (isOpen) {
-      setName(room?.name || '');
+      setRoomName(room?.name || '');
     }
   }, [isOpen, room]);
 
@@ -20,10 +15,10 @@ const CreateRoomModal = ({
 
   const isEditing = Boolean(room);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (submitEvent) => {
+    submitEvent.preventDefault();
 
-    const trimmedName = name.trim();
+    const trimmedName = roomName.trim();
 
     if (!trimmedName) {
       return;
@@ -31,15 +26,12 @@ const CreateRoomModal = ({
 
     await onSubmit(trimmedName);
 
-    setName('');
+    setRoomName('');
   };
 
   return (
     <div className="modal is-active">
-      <div
-        className="modal-background"
-        onClick={onClose}
-      />
+      <div className="modal-background" onClick={onClose} />
 
       <div className="modal-card">
         <header className="modal-card-head">
@@ -47,26 +39,20 @@ const CreateRoomModal = ({
             {isEditing ? 'Rename room' : 'Create room'}
           </p>
 
-          <button
-            className="delete"
-            aria-label="close"
-            onClick={onClose}
-          />
+          <button className="delete" aria-label="close" onClick={onClose} />
         </header>
 
         <form onSubmit={handleSubmit}>
           <section className="modal-card-body">
             <div className="field">
-              <label className="label">
-                Room name
-              </label>
+              <label className="label">Room name</label>
 
               <div className="control">
                 <input
                   className="input"
-                  value={name}
-                  onChange={(event) =>
-                    setName(event.target.value)
+                  value={roomName}
+                  onChange={(changeEvent) =>
+                    setRoomName(changeEvent.target.value)
                   }
                   placeholder="Enter room name"
                   autoFocus
@@ -76,18 +62,11 @@ const CreateRoomModal = ({
           </section>
 
           <footer className="modal-card-foot">
-            <button
-              type="submit"
-              className="button is-primary"
-            >
+            <button type="submit" className="button is-primary">
               {isEditing ? 'Save' : 'Create'}
             </button>
 
-            <button
-              type="button"
-              className="button"
-              onClick={onClose}
-            >
+            <button type="button" className="button" onClick={onClose}>
               Cancel
             </button>
           </footer>

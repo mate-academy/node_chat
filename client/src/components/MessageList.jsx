@@ -1,10 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import MessageItem from './MessageItem';
+import { useEffect, useRef } from 'react';
 
-const MessageList = ({
-  messages,
-  currentUserId,
-}) => {
+const MessageList = ({ messages, currentUserId }) => {
   const bottomRef = useRef(null);
 
   useEffect(() => {
