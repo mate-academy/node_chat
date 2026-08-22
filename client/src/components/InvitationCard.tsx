@@ -12,7 +12,7 @@ export const InvitationCard: React.FC<Props> = ({
   rejectInvitation,
 }) => {
   return (
-    <div className="w-full flex flex-col gap-2 p-2 bg-slate-700 rounded-2xl">
+    <div className="w-full flex flex-col gap-2 p-2 elements-color">
       <span> Accept invitation from user: {invitation.room}</span>
       <div className="w-full flex justify-between gap-6">
         <button
