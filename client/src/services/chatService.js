@@ -26,23 +26,23 @@ export const getRooms = async (userId) => {
   return request(`${API_URL}/rooms?userId=${encodeURIComponent(userId)}`);
 };
 
-export const createRoom = async (username, userId) => {
+export const createRoom = async (roomName, userId) => {
   return request(`${API_URL}/rooms`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, userId }),
+    body: JSON.stringify({ roomName, userId }),
   });
 };
 
-export const renameRoom = async (roomId, username) => {
+export const renameRoom = async (roomId, roomName) => {
   return request(`${API_URL}/rooms/${roomId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username }),
+    body: JSON.stringify({ roomName }),
   });
 };
 

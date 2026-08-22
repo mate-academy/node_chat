@@ -11,7 +11,7 @@ const createRoom = async (req, res, next) => {
     });
   }
 
-  const room = await Room.create({ roomName });
+  const room = await Room.create({ name: roomName });
 
   await room.addUser(user);
 
