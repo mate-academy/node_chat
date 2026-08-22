@@ -13,12 +13,12 @@
     "format": "prettier --ignore-path .prettierignore --write './server/src/**/*.{js,jsx,ts,tsx}' './client/src/**/*.{js,jsx,ts,tsx}'",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
-    "postinstall": "npm run update",
     "test": "npm run lint && npm run test:only"
   },
   "author": "Mate academy",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.29.7",
     "@mate-academy/eslint-config": "latest",
     "@mate-academy/scripts": "^2.1.3",
     "@types/ws": "^8.18.1",
