@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+.main-color {
+  background-color: #090909;
+}
+
+.secondary-color {
+  background-color: #0c0c0c;
+  border-color: #151515;
+}
+
+.elements-color {
+  background-color: #151515;
+  border-color: #171717;
+}
+
+.elements-color-hover:hover {
+  background-color: #2f2f2f;
+}
+
+
+.elements-text-color {
+  color: #2f2f2f;
+}
+
+.elements-text-accent-color {
+  color: #4f4f4f;
+}
+
+.elements-accent-color {
+  background-color: #1c1c1c;
+  border-color: #171717;
+}

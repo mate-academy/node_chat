@@ -1,0 +1,36 @@
+import type { Invitation } from '../types/Invitation';
+
+interface Props {
+  invitation: Invitation;
+  applyInvitation: (room: string) => void;
+  rejectInvitation: (room: string) => void;
+}
+
+export const InvitationCard: React.FC<Props> = ({
+  invitation,
+  applyInvitation,
+  rejectInvitation,
+}) => {
+  return (
+    <div className="w-full flex flex-col gap-2 p-2 elements-color rounded-2xl">
+      <span className="wrap-break-word">
+        Accept invitation from user: {invitation.from} to group:
+        {invitation.room}
+      </span>
+      <div className="w-full flex justify-between gap-6">
+        <button
+          className="w-full cursor-pointer bg-green-900 h-10 rounded-2xl hover:bg-green-700"
+          onClick={() => applyInvitation(invitation.room)}
+        >
+          Yes
+        </button>
+        <button
+          className="w-full cursor-pointer bg-red-900 h-10 rounded-2xl hover:bg-red-700"
+          onClick={() => rejectInvitation(invitation.room)}
+        >
+          No
+        </button>
+      </div>
+    </div>
+  );
+};
