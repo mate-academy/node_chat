@@ -44,7 +44,7 @@ export const Chat: React.FC<Props> = ({
           onChange={(e) => setText(e.target.value)}
           placeholder="Write a message..."
           autoFocus
-          className="elements-text-accent-color text-md w-full outline-none rounded-md px-2 py-2 focus:outline-slate-600"
+          className="elements-text-accent-color text-md w-full outline-none rounded-md px-2 py-2 "
         />
         <button className="shrink-0 rounded-full ml-2 cursor-pointer flex items-center justify-center">
           <PaperAirplaneIcon className="w-8 h-8 elements-text-color" />
