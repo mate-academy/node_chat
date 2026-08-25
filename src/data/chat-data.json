@@ -1,0 +1,19 @@
+{
+  "rooms": [
+    {
+      "id": "general",
+      "name": "General",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "messages": {
+    "general": [
+      {
+        "id": "5cce5291-58d2-4bc3-a29b-f973a8d804de",
+        "author": "Andrew",
+        "time": "2026-08-25T03:43:33.751Z",
+        "text": "Hi!"
+      }
+    ]
+  }
+}
