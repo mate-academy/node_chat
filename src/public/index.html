@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#15162b" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="chat-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">N</span>
+          <div>
+            <strong>Node Chat</strong>
+            <span class="presence"><i></i> онлайн</span>
+          </div>
+        </div>
+
+        <div class="sidebar__heading">
+          <span>Кімнати</span>
+          <button class="icon-button" id="create-room" type="button" aria-label="Створити кімнату">
+            +
+          </button>
+        </div>
+
+        <nav class="room-list" id="room-list" aria-label="Кімнати чату"></nav>
+
+        <button class="profile" id="edit-username" type="button">
+          <span class="avatar" id="profile-avatar">?</span>
+          <span class="profile__text">
+            <strong id="profile-name">Гість</strong>
+            <small>Змінити ім’я</small>
+          </span>
+          <span aria-hidden="true">⋯</span>
+        </button>
+      </aside>
+
+      <section class="conversation">
+        <header class="conversation__header">
+          <button class="menu-button" id="menu-button" type="button" aria-label="Відкрити кімнати">☰</button>
+          <div>
+            <h1 id="room-title">Оберіть кімнату</h1>
+            <p id="room-subtitle">Почніть розмову</p>
+          </div>
+          <div class="room-actions">
+            <button id="rename-room" type="button" disabled>Перейменувати</button>
+            <button class="danger" id="delete-room" type="button" disabled>Видалити</button>
+          </div>
+        </header>
+
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+        <div class="messages" id="messages" aria-live="polite">
+          <div class="empty-state">
+            <span aria-hidden="true">✦</span>
+            <h2>Ласкаво просимо</h2>
+            <p>Оберіть кімнату ліворуч, щоб долучитися до розмови.</p>
+          </div>
+        </div>
+
+        <form class="composer" id="message-form">
+          <label class="sr-only" for="message-input">Повідомлення</label>
+          <textarea
+            id="message-input"
+            rows="1"
+            maxlength="1000"
+            placeholder="Напишіть повідомлення…"
+            disabled
+          ></textarea>
+          <button id="send-message" type="submit" disabled aria-label="Надіслати повідомлення">➤</button>
+        </form>
+      </section>
+    </main>
+
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <dialog class="username-dialog" id="username-dialog">
+      <form method="dialog" id="username-form">
+        <span class="dialog-mark" aria-hidden="true">N</span>
+        <h2>Як вас звати?</h2>
+        <p>Це ім’я бачитимуть інші учасники чату.</p>
+        <label for="username-input">Ваше ім’я</label>
+        <input id="username-input" name="username" maxlength="30" autocomplete="nickname" required />
+        <div class="dialog-actions">
+          <button class="secondary" id="cancel-username" type="button">Скасувати</button>
+          <button type="submit">Продовжити</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
