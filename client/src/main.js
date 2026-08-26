@@ -90,23 +90,31 @@ document.querySelector('#app').innerHTML = `
 `;
 
 const usernameSection = document.querySelector('#username-section');
+
 const chatSection = document.querySelector('#chat-section');
 
 const usernameForm = document.querySelector('#username-form');
+
 const usernameInput = document.querySelector('#username');
+
 const usernameMessage = document.querySelector('#username-message');
 
 const currentUser = document.querySelector('#current-user');
 
 const createRoomForm = document.querySelector('#create-room-form');
+
 const roomNameInput = document.querySelector('#room-name');
+
 const roomsList = document.querySelector('#rooms-list');
 
 const currentRoomName = document.querySelector('#current-room-name');
+
 const roomMessage = document.querySelector('#room-message');
 
 const messagesContainer = document.querySelector('#messages');
+
 const messageForm = document.querySelector('#message-form');
+
 const messageInput = document.querySelector('#message-input');
 
 const openChat = (username) => {
@@ -294,6 +302,7 @@ socket.on('room:joined', (room) => {
   renderRooms();
 
   currentRoomName.textContent = room.name;
+
   roomMessage.textContent = `Joined ${room.name}`;
 
   messagesContainer.innerHTML = '';
