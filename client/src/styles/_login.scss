@@ -1,0 +1,60 @@
+@use './variables' as v;
+@use './mixins' as m;
+
+#username-section {
+  width: min(440px, calc(100% - 32px));
+  min-height: 100vh;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  h1 {
+    margin: 0 0 32px;
+
+    font-size: 48px;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+}
+
+#username-form {
+  padding: 32px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: v.$surface;
+  border: 1px solid v.$border;
+  border-radius: v.$radius-large;
+
+  label {
+    color: v.$text-muted;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  input {
+    @include m.input;
+  }
+
+  button {
+    @include m.button;
+
+    height: 48px;
+  }
+}
+
+#username-message {
+  min-height: 24px;
+  margin-top: 12px;
+
+  color: v.$error;
+  font-size: 14px;
+}

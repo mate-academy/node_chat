@@ -1,0 +1,98 @@
+@use './variables' as v;
+@use './mixins' as m;
+
+#current-room-name {
+  margin: 0;
+
+  font-size: 22px;
+  letter-spacing: -0.5px;
+
+  &::before {
+    content: '# ';
+    color: v.$text-muted;
+  }
+}
+
+#room-message {
+  margin: 6px 0 20px;
+
+  color: v.$text-muted;
+  font-size: 13px;
+}
+
+#messages {
+  flex: 1;
+
+  min-height: 300px;
+  max-height: calc(100vh - 240px);
+  padding: 8px 4px 24px;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: v.$border-light transparent;
+
+  article {
+    padding: 12px 10px;
+
+    border-radius: v.$radius-small;
+
+    transition: background v.$transition;
+
+    &:hover {
+      background: v.$surface-light;
+    }
+
+    div {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    strong {
+      color: v.$text-light;
+      font-size: 14px;
+    }
+
+    time {
+      color: v.$text-muted;
+      font-size: 11px;
+    }
+
+    p {
+      margin: 5px 0 0;
+
+      color: v.$text;
+      font-size: 14px;
+      line-height: 1.55;
+
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+#message-form {
+  padding-top: 16px;
+
+  display: flex;
+  gap: 10px;
+
+  border-top: 1px solid v.$border;
+
+  &[hidden] {
+    display: none;
+  }
+
+  input {
+    @include m.input;
+
+    flex: 1;
+    min-width: 0;
+  }
+
+  button {
+    @include m.button;
+
+    min-width: 90px;
+  }
+}

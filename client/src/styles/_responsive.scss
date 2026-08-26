@@ -1,0 +1,75 @@
+@use './variables' as v;
+
+@media (max-width: v.$tablet) {
+  #chat-section {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+
+    grid-template-columns: 1fr;
+
+    border: 0;
+    border-radius: 0;
+
+    > header {
+      grid-column: 1;
+    }
+
+    > aside {
+      border-right: 0;
+      border-bottom: 1px solid v.$border;
+    }
+  }
+
+  #rooms-list {
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  #messages {
+    max-height: 55vh;
+  }
+}
+
+@media (max-width: v.$mobile) {
+  #username-section {
+    h1 {
+      font-size: 40px;
+    }
+  }
+
+  #username-form {
+    padding: 24px;
+  }
+
+  #chat-section {
+    > header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    > aside,
+    > section {
+      padding: 16px;
+    }
+  }
+
+  #rooms-list {
+    li {
+      grid-template-columns: 1fr auto;
+
+      span {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  #message-form {
+    gap: 8px;
+
+    button {
+      min-width: auto;
+      padding-inline: 14px;
+    }
+  }
+}

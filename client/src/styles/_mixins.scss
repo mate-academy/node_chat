@@ -1,0 +1,49 @@
+@use './variables' as v;
+
+@mixin input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+
+  color: v.$text;
+  background: v.$surface-input;
+
+  border: 1px solid v.$border-light;
+  border-radius: v.$radius-small;
+
+  outline: none;
+
+  transition: border-color v.$transition;
+
+  &:focus {
+    border-color: v.$text-muted;
+  }
+
+  &::placeholder {
+    color: v.$text-muted;
+    opacity: 0.6;
+  }
+}
+
+@mixin button {
+  min-height: 44px;
+  padding: 0 16px;
+
+  color: v.$text-dark;
+  font-weight: 700;
+
+  background: v.$text-light;
+  border: 0;
+  border-radius: v.$radius-small;
+
+  cursor: pointer;
+
+  transition:
+    background v.$transition,
+    transform v.$transition;
+
+  &:hover {
+    background: #fff;
+    transform: translateY(-1px);
+  }
+}
