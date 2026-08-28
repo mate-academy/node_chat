@@ -1,10 +1,7 @@
 import { WebSocketServer, WebSocket } from 'ws';
 
-// A single WebSocket server, shared across the app.
 let wss = null;
 
-// Attach a WebSocket server to the existing HTTP server.
-// WebSocket runs over HTTP, so we reuse the same server (and port).
 export function initRealtime(server) {
   wss = new WebSocketServer({ server });
 
@@ -19,9 +16,6 @@ export function initRealtime(server) {
   });
 }
 
-// Send an event to EVERY connected client.
-// The client decides what to do with it (e.g. only show messages
-// for the room it is currently viewing).
 export function broadcast(type, payload) {
   if (!wss) {
     return;

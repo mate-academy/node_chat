@@ -14,9 +14,8 @@ app.get('/', (req, res) => {
   res.send('Chat server is running');
 });
 
-/* ----------------------------- Rooms ----------------------------- */
+/* Rooms */
 
-// List all rooms (oldest first)
 app.get('/api/rooms', async (req, res) => {
   const rooms = await prisma.room.findMany({
     orderBy: { createdAt: 'asc' },
@@ -56,7 +55,6 @@ app.patch('/api/rooms/:id', async (req, res) => {
   res.json(room);
 });
 
-// Delete a room (its messages are removed automatically via onDelete: Cascade)
 app.delete('/api/rooms/:id', async (req, res) => {
   await prisma.room.delete({ where: { id: req.params.id } });
 
@@ -64,9 +62,8 @@ app.delete('/api/rooms/:id', async (req, res) => {
   res.status(204).end();
 });
 
-/* ---------------------------- Messages ---------------------------- */
+/* Messages */
 
-// All messages in a room (oldest first) — this is what a new user loads on join
 app.get('/api/rooms/:id/messages', async (req, res) => {
   const messages = await prisma.message.findMany({
     where: { roomId: req.params.id },
@@ -76,7 +73,6 @@ app.get('/api/rooms/:id/messages', async (req, res) => {
   res.json(messages);
 });
 
-// Post a message to a room
 app.post('/api/rooms/:id/messages', async (req, res) => {
   const author = req.body.author?.trim();
   const text = req.body.text?.trim();
@@ -93,11 +89,8 @@ app.post('/api/rooms/:id/messages', async (req, res) => {
   res.status(201).json(message);
 });
 
-// Error-handling middleware — must be registered AFTER all routes.
 app.use(errorHandler);
 
-// app.listen returns the underlying HTTP server; we hand it to the
-// WebSocket server so both share the same port.
 const server = app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
 });
