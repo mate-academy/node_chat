@@ -29,7 +29,7 @@ export function MessageList({ messages, username }) {
   if (messages.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center text-sm text-slate-400">
-        No messages yet — say hi! 👋
+        No messages yet!
       </div>
     );
   }

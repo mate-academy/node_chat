@@ -4,6 +4,7 @@ import { useChatSocket } from './useChatSocket';
 import { UsernameGate } from './components/UsernameGate';
 import { Sidebar } from './components/Sidebar';
 import { ChatWindow } from './components/ChatWindow';
+import { XIcon } from 'lucide-react';
 
 export default function App() {
   const [username, setUsername] = useState(() => localStorage.getItem('username') || '');
@@ -145,12 +146,12 @@ export default function App() {
 
       {error && (
         <div
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-rose-500 px-4 py-2 text-sm text-white shadow-lg"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 flex justify-center rounded-full bg-rose-500 px-4 py-2 text-sm text-white shadow-lg"
           onAnimationEnd={() => setError('')}
         >
           {error}
           <button className="ml-3 font-bold" onClick={() => setError('')}>
-            ✕
+            <XIcon size={20} />
           </button>
         </div>
       )}

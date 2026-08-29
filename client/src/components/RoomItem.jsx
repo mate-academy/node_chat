@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { EditIcon, TrashIcon } from 'lucide-react';
 
 export function RoomItem({ room, active, onSelect, onRename, onDelete }) {
   const [editing, setEditing] = useState(false);
@@ -28,7 +29,9 @@ export function RoomItem({ room, active, onSelect, onRename, onDelete }) {
   return (
     <div
       className={`group flex items-center gap-1 rounded-xl px-3 py-2 transition ${
-        active ? 'bg-indigo-500 text-white' : 'text-slate-700 hover:bg-slate-100'
+        active
+          ? 'bg-indigo-500 text-white'
+          : 'text-slate-700 hover:bg-slate-100'
       }`}
     >
       <button
@@ -49,17 +52,17 @@ export function RoomItem({ room, active, onSelect, onRename, onDelete }) {
         }`}
         title="Rename"
       >
-        ✏️
+        <EditIcon size={20} />
       </button>
 
       <button
         onClick={() => {
           if (confirm(`Delete room "${room.name}"?`)) onDelete(room.id);
         }}
-        className="opacity-0 transition group-hover:opacity-100 hover:scale-110"
+        className="opacity-0 transition group-hover:opacity-100 hover:text-rose-600"
         title="Delete"
       >
-        🗑️
+        <TrashIcon size={20} />
       </button>
     </div>
   );

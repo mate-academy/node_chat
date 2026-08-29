@@ -6,7 +6,6 @@ export function ChatWindow({ room, messages, username, onSendMessage }) {
     return (
       <main className="flex flex-1 items-center justify-center bg-slate-100">
         <div className="text-center text-slate-400">
-          <div className="mb-3 text-5xl">👋</div>
           <p className="font-medium">Pick a room to start chatting</p>
           <p className="text-sm">or create a new one on the left</p>
         </div>

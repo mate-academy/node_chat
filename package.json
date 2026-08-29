@@ -11,7 +11,9 @@
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
     "postinstall": "npm run update",
-    "test": "npm run lint && npm run test:only"
+    "test": "npm run lint && npm run test:only",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client"
   },
   "author": "Mate academy",
   "license": "GPL-3.0",
@@ -26,8 +28,5 @@
   },
   "mateAcademy": {
     "projectType": "javascript"
-  },
-  "dependencies": {
-    "ws": "^8.21.3"
   }
 }

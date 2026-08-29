@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SendIcon } from 'lucide-react';
 
 export function MessageForm({ onSend }) {
   const [text, setText] = useState('');
@@ -28,7 +29,7 @@ export function MessageForm({ onSend }) {
         disabled={!text.trim()}
         className="rounded-full bg-indigo-500 px-5 py-2 font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-40"
       >
-        Send
+        <SendIcon size={20}/>
       </button>
     </form>
   );

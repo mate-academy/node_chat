@@ -16,7 +16,7 @@ export function UsernameGate({ onSubmit }) {
         className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl"
       >
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-slate-800">Welcome to Chat</h1>
+          <h1 className="text-2xl font-bold text-slate-800">Welcome</h1>
           <p className="mt-1 text-sm text-slate-500">Pick a name to get started</p>
         </div>
 
