@@ -1,0 +1,10 @@
+node_modules
+dist
+client
+scripts
+.git
+.github
+.idea
+.env
+coverage
+npm-debug.log

@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ChatProfile {
+  id          String   @id @default(uuid())
+  email       String?  @unique
+  phone       String?  @unique
+  displayName String   @db.VarChar(50)
+  avatarUrl   String?  @db.VarChar(2048)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  deletedAt DateTime?
+
+  ownedRooms          Room[]           @relation("RoomOwner")
+  memberships         RoomMember[]
+  sentInvitations     RoomInvitation[] @relation("InvitationSender")
+  receivedInvitations RoomInvitation[] @relation("InvitationRecipient")
+  messages            Message[]
+}
+
+enum RoomVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+model Room {
+  id          String         @id @default(uuid())
+  name        String         @db.VarChar(80)
+  slug        String         @unique @db.VarChar(100)
+  description String?        @db.VarChar(500)
+  visibility  RoomVisibility @default(PUBLIC)
+  ownerId     String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  deletedAt DateTime?
+
+  owner ChatProfile @relation("RoomOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+
+  members     RoomMember[]
+  invitations RoomInvitation[]
+  messages    Message[]
+
+  @@index([ownerId])
+  @@index([visibility, deletedAt])
+}
+
+enum RoomMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model RoomMember {
+  roomId     String
+  userId     String
+  role       RoomMemberRole @default(MEMBER)
+  joinedAt   DateTime       @default(now())
+  lastReadAt DateTime?
+
+  room Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user ChatProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, userId])
+  @@index([userId])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  REVOKED
+}
+
+model RoomInvitation {
+  id          String           @id @default(uuid())
+  roomId      String
+  recipientId String
+  invitedById String
+  status      InvitationStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  respondedAt DateTime?
+  expiresAt   DateTime?
+
+  room      Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  recipient ChatProfile @relation("InvitationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  invitedBy ChatProfile @relation("InvitationSender", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, recipientId])
+  @@index([recipientId, status])
+  @@index([roomId, status])
+}
+
+model Message {
+  id              String    @id @default(uuid())
+  clientMessageId String
+  roomId          String
+  authorId        String
+  authorName      String    @db.VarChar(50)
+  text            String    @db.Text
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  editedAt        DateTime?
+  deletedAt       DateTime?
+
+  room   Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  author ChatProfile @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@unique([authorId, clientMessageId])
+  @@index([roomId, createdAt, id])
+}

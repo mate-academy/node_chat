@@ -2,29 +2,63 @@
   "name": "node_chat",
   "version": "1.0.0",
   "description": "Chat using Node.js",
-  "main": "src/index.js",
+  "main": "dist/main.js",
   "scripts": {
     "init": "mate-scripts init",
-    "start": "node src/index.js",
-    "lint": "npm run format && mate-scripts lint",
-    "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main.js",
+    "build": "nest build",
+    "lint": "npm run format:check && eslint \"src/**/*.ts\"",
+    "format": "prettier --ignore-path .prettierignore --write \"src/**/*.{js,ts}\"",
+    "format:check": "prettier --ignore-path .prettierignore --check \"src/**/*.{js,ts}\"",
     "test:only": "mate-scripts test",
     "update": "mate-scripts update",
-    "postinstall": "npm run update",
-    "test": "npm run lint && npm run test:only"
+    "test": "npm run lint && npm run test:only",
+    "test:ws": "ts-node scripts/ws-smoke-test.ts"
   },
   "author": "Mate academy",
   "license": "GPL-3.0",
   "devDependencies": {
     "@mate-academy/eslint-config": "latest",
-    "@mate-academy/scripts": "^1.8.6",
+    "@mate-academy/scripts": "^2.1.3",
+    "@nestjs/cli": "12.0.0",
+    "@types/node": "26.4.0",
+    "@types/pg": "8.23.1",
+    "@typescript-eslint/eslint-plugin": "7.18.0",
+    "@typescript-eslint/parser": "7.18.0",
+    "dotenv": "17.4.2",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-node": "^11.1.0",
     "jest": "^29.7.0",
-    "prettier": "^3.3.2"
+    "prettier": "^3.3.2",
+    "prisma": "7.10.0",
+    "socket.io-client": "4.8.3",
+    "ts-node": "10.9.2",
+    "tsconfig-paths": "4.2.0",
+    "typescript": "5.5.4"
   },
   "mateAcademy": {
-    "projectType": "javascript"
+    "projectType": "typescript"
+  },
+  "dependencies": {
+    "@nestjs/common": "12.0.1",
+    "@nestjs/config": "12.0.0",
+    "@nestjs/core": "12.0.1",
+    "@nestjs/platform-fastify": "12.0.1",
+    "@nestjs/platform-socket.io": "12.0.1",
+    "@nestjs/websockets": "12.0.1",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "class-transformer": "0.5.1",
+    "class-validator": "0.15.1",
+    "pg": "8.23.0",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "socket.io": "4.8.3"
+  },
+  "volta": {
+    "node": "24.15.0"
   }
 }
