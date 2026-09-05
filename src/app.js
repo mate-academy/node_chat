@@ -6,7 +6,7 @@ const path = require('node:path');
 const { ChatStore } = require('./store');
 const { chatPage } = require('./views');
 
-const publicDirectory = path.join(__dirname, '..', 'public');
+const publicDirectory = path.join(__dirname, 'public');
 const clean = (value, maximum) =>
   typeof value === 'string' ? value.trim().slice(0, maximum) : '';
 const summary = (room) => ({
@@ -32,40 +32,40 @@ async function requestBody(request) {
   for await (const chunk of request) {
     raw += chunk;
 
-    if (raw.length > 1_000_000) {
+    if (raw.length > 1000000) {
       throw new Error('Request is too large');
     }
   }
 
   try {
     return JSON.parse(raw || '{}');
-  } catch {
+  } catch (error) {
     throw new Error('Invalid JSON');
   }
 }
 
 function createApp(options = {}) {
-  const store =
-    options.store ||
-    new ChatStore(
-      options.dataFile === undefined
-        ? process.env.CHAT_DATA_FILE ||
-          path.join(__dirname, '..', 'data', 'chat.json')
-        : options.dataFile,
-    );
+  const dataFile =
+    options.dataFile === undefined
+      ? process.env.CHAT_DATA_FILE ||
+        path.join(__dirname, '..', 'data', 'chat.json')
+      : options.dataFile;
+  const store = options.store || new ChatStore(dataFile);
   const streams = new Set();
   const roomsPayload = () => ({ rooms: store.rooms().map(summary) });
-  const publish = (event, value) => {
+
+  function publish(event, value) {
     const data = `event: ${event}\ndata: ${JSON.stringify(value)}\n\n`;
 
     streams.forEach((stream) => stream.write(data));
-  };
+  }
 
   async function api(request, response, url) {
     const parts = url.pathname.split('/').filter(Boolean);
 
     if (request.method === 'POST' && url.pathname === '/api/users') {
-      const username = clean((await requestBody(request)).username, 32);
+      const input = await requestBody(request);
+      const username = clean(input.username, 32);
 
       if (!username) {
         return failure(response, 400, 'Username is required');
@@ -79,17 +79,18 @@ function createApp(options = {}) {
     }
 
     if (request.method === 'POST' && url.pathname === '/api/rooms') {
-      const name = clean((await requestBody(request)).name, 40);
+      const input = await requestBody(request);
+      const name = clean(input.name, 40);
 
       if (!name) {
         return failure(response, 400, 'Room name is required');
       }
 
-      if (
-        store
-          .rooms()
-          .some((item) => item.name.toLowerCase() === name.toLowerCase())
-      ) {
+      const duplicate = store
+        .rooms()
+        .some((item) => item.name.toLowerCase() === name.toLowerCase());
+
+      if (duplicate) {
         return failure(response, 409, 'A room with this name already exists');
       }
 
@@ -119,35 +120,37 @@ function createApp(options = {}) {
     }
 
     if (request.method === 'PATCH' && parts.length === 3) {
-      const name = clean((await requestBody(request)).name, 40);
+      const input = await requestBody(request);
+      const name = clean(input.name, 40);
 
       if (!name) {
         return failure(response, 400, 'Room name is required');
       }
 
-      if (
-        store
-          .rooms()
-          .some(
-            (item) =>
-              item.id !== room.id &&
-              item.name.toLowerCase() === name.toLowerCase(),
-          )
-      ) {
+      const duplicate = store
+        .rooms()
+        .some(
+          (item) =>
+            item.id !== room.id &&
+            item.name.toLowerCase() === name.toLowerCase(),
+        );
+
+      if (duplicate) {
         return failure(response, 409, 'A room with this name already exists');
       }
 
-      const updated = store.renameRoom(room.id, name);
+      const updatedRoom = store.renameRoom(room.id, name);
 
       publish('rooms', roomsPayload());
 
-      return json(response, 200, summary(updated));
+      return json(response, 200, summary(updatedRoom));
     }
 
     if (request.method === 'DELETE' && parts.length === 3) {
       if (store.rooms().length === 1) {
         return failure(response, 409, 'The last room cannot be deleted');
       }
+
       store.deleteRoom(room.id);
       publish('room-deleted', { id: room.id, ...roomsPayload() });
 
@@ -178,19 +181,21 @@ function createApp(options = {}) {
   }
 
   return http.createServer(async (request, response) => {
-    const url = new URL(
-      request.url,
-      `http://${request.headers.host || 'localhost'}`,
-    );
+    const host = request.headers.host || 'localhost';
+    const url = new URL(request.url, `http://${host}`);
 
     try {
       if (request.method === 'GET' && url.pathname === '/') {
-        response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        response.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+        });
 
         return response.end(chatPage());
       }
 
-      if (request.method === 'GET' && url.pathname === '/api/events') {
+      const eventPaths = ['/events', '/api/events'];
+
+      if (request.method === 'GET' && eventPaths.includes(url.pathname)) {
         response.writeHead(200, {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
@@ -216,14 +221,17 @@ function createApp(options = {}) {
         return;
       }
 
-      if (
-        request.method === 'GET' &&
-        ['/app.js', '/styles.css'].includes(url.pathname)
-      ) {
+      const publicFiles = ['/app.js', '/styles.css'];
+
+      if (request.method === 'GET' && publicFiles.includes(url.pathname)) {
         const file = path.join(publicDirectory, url.pathname.slice(1));
         const type = url.pathname.endsWith('.js')
           ? 'text/javascript'
           : 'text/css';
+
+        if (!fs.existsSync(file)) {
+          return failure(response, 404, 'Not found');
+        }
 
         response.writeHead(200, {
           'Content-Type': `${type}; charset=utf-8`,

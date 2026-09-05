@@ -43,7 +43,7 @@ class ChatStore {
       }
 
       return state;
-    } catch {
+    } catch (error) {
       return this.initialState();
     }
   }
@@ -64,6 +64,7 @@ class ChatStore {
   rooms() {
     return this.all().rooms;
   }
+
   findRoom(id) {
     return this.rooms().find((room) => room.id === id);
   }
@@ -71,23 +72,23 @@ class ChatStore {
   registerUser(username) {
     const state = this.all();
     const existing = state.users.find(
-      (member) => member.username.toLowerCase() === username.toLowerCase(),
+      (item) => item.username.toLowerCase() === username.toLowerCase(),
     );
 
     if (existing) {
       return existing;
     }
 
-    const newUser = {
+    const user = {
       id: randomUUID(),
       username,
       joinedAt: new Date().toISOString(),
     };
 
-    state.users.push(newUser);
+    state.users.push(user);
     this.save(state);
 
-    return newUser;
+    return user;
   }
 
   createRoom(name) {
@@ -107,6 +108,7 @@ class ChatStore {
     if (!room) {
       return null;
     }
+
     room.name = name;
     this.save(state);
 
@@ -115,13 +117,14 @@ class ChatStore {
 
   deleteRoom(id) {
     const state = this.all();
-    const before = state.rooms.length;
+    const previousLength = state.rooms.length;
 
     state.rooms = state.rooms.filter((room) => room.id !== id);
 
-    if (state.rooms.length === before) {
+    if (state.rooms.length === previousLength) {
       return false;
     }
+
     this.save(state);
 
     return true;
