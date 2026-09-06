@@ -1,0 +1,111 @@
+.roomList {
+  width: 320px;
+  height: 100%;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+
+  &::before {
+    content: "Chat Web";
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 20px;
+    background-color: #5542f6;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  &__createBtn {
+    margin: 12px 16px;
+    padding: 8px 12px;
+    background-color: #5542f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background-color: #4232d6;
+    }
+  }
+
+  &__item {
+    padding: 0 8px;
+  }
+}
+
+.room {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  position: relative;
+
+  &:hover {
+    background-color: #f8f9fa;
+
+    .room__edit, .room__delete, .room__leave, .room__join {
+      opacity: 1;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+
+  &__edit, &__delete, &__leave, &__join {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.4;
+    font-size: 0.9rem;
+    padding: 4px;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__renameForm {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+
+    input {
+      flex: 1;
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  }
+}
