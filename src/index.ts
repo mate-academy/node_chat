@@ -142,6 +142,15 @@ wss.on('connection', (ws) => {
   // Optional: Handle client disconnection
   socket.on('close', () => {
     delete connectedUsers[socket.id];
+
+    if (
+      !Object.values(connectedUsers).some(
+        (userSocket) => userSocket.userId === socket.userId,
+      )
+    ) {
+      delete userRooms[socket.userId];
+    }
+
     // eslint-disable-next-line no-console
     console.log('Client disconnected');
   });

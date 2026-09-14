@@ -9,20 +9,16 @@ import type {
 } from '../WebSocketContext.tsx';
 
 const Chats: React.FC = () => {
-  const { userName, messages, sendMessage } = useWebSocket();
-  const [roomMessages, setRoomMessages] = useState<Message[]>([]);
+  const { userName, messages, sendMessage, isConnected } = useWebSocket();
   const [activeRoom, setActiveRoom] = useState<Room>('General');
   const rooms: Rooms = messages.map((currRoom) => {
     return currRoom.title;
   });
 
-  useEffect(() => {
-    const foundRoomMessages = messages.find(
+  const roomMessages =
+    messages.find(
       (roomMessages: RoomMessages) => roomMessages.title === activeRoom,
-    )?.messages;
-
-    setRoomMessages(foundRoomMessages || []);
-  }, [messages, activeRoom]);
+    )?.messages || [];
 
   const handleSendMessage = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,11 +73,15 @@ const Chats: React.FC = () => {
                     id="message"
                     name="message"
                     type="text"
-                    placeholder="Input name first"
+                    placeholder="Text message"
                   />
                 </div>
                 <div className="control">
-                  <button type="submit" className="button is-success ">
+                  <button
+                    type="submit"
+                    className="button is-success"
+                    disabled={!isConnected}
+                  >
                     ⏎
                   </button>
                 </div>
@@ -90,7 +90,7 @@ const Chats: React.FC = () => {
           </div>
         </div>
         {roomMessages.map((msg, index) => (
-          <p key={index} className="panel-block">
+          <p key={`${msg.time}-${msg.author}-${index}`} className="panel-block">
             <strong className="pr-3">{msg.author}</strong>
             <span className="pr-3 is-family-monospace has-text-weight-light">
               [{new Date(msg.time).toLocaleTimeString()}]:

@@ -85,7 +85,7 @@ const RoomElement: React.FC<Props> = ({ title, canJoin }) => {
             title="rename"
             onClick={() => setState('edit')}
           >
-            ✎;
+            ✎
           </button>
           <button
             className="button is-info"
@@ -100,7 +100,7 @@ const RoomElement: React.FC<Props> = ({ title, canJoin }) => {
             title="delete"
             onClick={handleDelete}
           >
-            🗑;
+            🗑
           </button>
         </div>
       )}

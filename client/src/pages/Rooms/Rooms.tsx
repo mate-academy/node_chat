@@ -6,7 +6,7 @@ import type { RoomMessage } from '../../types/RoomMessage.ts';
 export const ROOM_MIN_LENGTH = 4;
 
 const Rooms: React.FC = () => {
-  const { rooms, messages, sendMessage } = useWebSocket();
+  const { rooms, messages, sendMessage, isConnected } = useWebSocket();
   const [canAddRoom, setCanAddRoom] = useState<boolean>(false);
   const joinedRooms = messages.map((roomMessages) => roomMessages.title);
 
@@ -37,7 +37,7 @@ const Rooms: React.FC = () => {
       return;
     }
 
-    setCanAddRoom(!rooms.some((room) => room === newRoom));
+    setCanAddRoom(isConnected && !rooms.some((room) => room === newRoom));
   };
 
   return (

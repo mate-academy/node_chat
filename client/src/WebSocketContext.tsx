@@ -70,22 +70,35 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:3000');
+    let isCancelled = false;
+
+    const socket = new WebSocket(
+      `ws://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`,
+    );
     socketRef.current = socket;
 
     socket.onopen = () => {
+      if (isCancelled) return;
+
       setIsConnected(true);
+
       if (userName) {
         sendMessage({ type: 'login', userName });
       }
     };
-    socket.onclose = () => setIsConnected(false);
+
+    socket.onclose = () => {
+      if (isCancelled) return;
+
+      setIsConnected(false);
+    };
 
     socket.onmessage = (event) => {
+      if (isCancelled) return;
+
       const data = JSON.parse(event.data);
 
       if (data.messages) {
-        console.log(data);
         setMessages(data.messages);
       }
 
@@ -95,12 +108,14 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     return () => {
-      // Safely close connection (handles React 18 Strict Mode double-mount)
-      if (socket.readyState === WebSocket.CONNECTING) {
-        socket.onopen = () => socket.close();
-      } else if (socket.readyState === WebSocket.OPEN) {
-        socket.close();
-      }
+      isCancelled = true;
+
+      socket.onopen = null;
+      socket.onclose = null;
+      socket.onerror = null;
+      socket.onmessage = null;
+
+      socket.close();
     };
   }, []);
 
