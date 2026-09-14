@@ -1,0 +1,12 @@
+.navbar {
+  display: flex;
+}
+
+.navbar-menu {
+  display: flex;
+}
+
+.navbar-brand {
+  width: 100%;
+  justify-content: space-between;
+}
