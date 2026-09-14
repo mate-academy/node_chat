@@ -14,10 +14,8 @@ export default function Root() {
         <Routes>
           <Route path="/" element={<App />}>
             <Route path="/login" element={<Login />} />
-          </Route>
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<App />}>
+            <Route element={<ProtectedRoute />}>
               <Route index element={<Chats />} />
               <Route path="rooms" element={<Rooms />} />
               <Route path="logout" element={<Logout />} />

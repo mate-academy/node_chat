@@ -9,7 +9,6 @@ const Rooms: React.FC = () => {
   const { rooms, messages, sendMessage } = useWebSocket();
   const [canAddRoom, setCanAddRoom] = useState<boolean>(false);
   const joinedRooms = messages.map((roomMessages) => roomMessages.title);
-  console.log('joinedRooms', joinedRooms);
 
   const handleAddRoom = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();

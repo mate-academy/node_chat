@@ -89,9 +89,12 @@ const Chats: React.FC = () => {
             </form>
           </div>
         </div>
-        {roomMessages.map((msg) => (
-          <p key={msg.time} className="panel-block">
-            <strong className="pr-3">{msg.author}:</strong>
+        {roomMessages.map((msg, index) => (
+          <p key={index} className="panel-block">
+            <strong className="pr-3">{msg.author}</strong>
+            <span className="pr-3 is-family-monospace has-text-weight-light">
+              [{new Date(msg.time).toLocaleTimeString()}]:
+            </span>{' '}
             {msg.text}
           </p>
         ))}

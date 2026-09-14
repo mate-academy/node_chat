@@ -130,7 +130,7 @@ wss.on('connection', (ws) => {
       }
 
       case 'message': {
-        const time = new Date();
+        const time = new Date().toISOString();
 
         if (rooms.addMessage(data.room, { ...data, time })) {
           sendMessages();
@@ -141,7 +141,7 @@ wss.on('connection', (ws) => {
 
   // Optional: Handle client disconnection
   socket.on('close', () => {
-    delete connectedUsers[socket.userId];
+    delete connectedUsers[socket.id];
     // eslint-disable-next-line no-console
     console.log('Client disconnected');
   });

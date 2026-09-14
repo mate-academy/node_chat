@@ -10,5 +10,5 @@ module.exports = {
     'no-proto': 0,
   },
   parser: '@typescript-eslint/parser',
-  plugins: ['jest', , '@typescript-eslint'],
+  plugins: ['jest', '@typescript-eslint'],
 };

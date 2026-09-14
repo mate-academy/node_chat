@@ -1,7 +1,7 @@
 import type { Room } from '../WebSocketContext.tsx';
 
 export type TextMessage = {
-  type: 'message' | 'login';
+  type: 'message';
   room: Room;
   author: string;
   text: string;

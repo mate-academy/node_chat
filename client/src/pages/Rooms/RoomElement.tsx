@@ -7,7 +7,7 @@ interface Props {
   canJoin: boolean;
 }
 
-type states = 'edit' | 'joined' | 'show';
+type states = 'edit' | 'show';
 
 const RoomElement: React.FC<Props> = ({ title, canJoin }) => {
   const { rooms, sendMessage } = useWebSocket();
