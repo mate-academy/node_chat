@@ -63,10 +63,7 @@ const RoomElement: React.FC<Props> = ({ title, canJoin }) => {
   };
 
   return (
-    <div
-      key={title}
-      className="panel-block is-flex is-justify-content-space-between"
-    >
+    <div className="panel-block is-flex is-justify-content-space-between">
       {state === 'edit' ? (
         <input
           className="input "

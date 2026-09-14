@@ -1,12 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useWebSocket } from '../WebSocketContext.tsx';
 import cn from 'classnames';
-import type {
-  Room,
-  Message,
-  Rooms,
-  RoomMessages,
-} from '../WebSocketContext.tsx';
+import type { Room, Rooms, RoomMessages } from '../WebSocketContext.tsx';
 
 const Chats: React.FC = () => {
   const { userName, messages, sendMessage, isConnected } = useWebSocket();
@@ -17,7 +12,8 @@ const Chats: React.FC = () => {
 
   const roomMessages =
     messages.find(
-      (roomMessages: RoomMessages) => roomMessages.title === activeRoom,
+      (currentRoomMessages: RoomMessages) =>
+        currentRoomMessages.title === activeRoom,
     )?.messages || [];
 
   const handleSendMessage = (event: React.SubmitEvent<HTMLFormElement>) => {
