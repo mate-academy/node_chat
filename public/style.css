@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  background: #f2f9ff;
+  color: #243447;
+}
+
+h1 {
+  margin-bottom: 30px;
+  font-size: 54px;
+  color: #2196d3;
+  text-align: center;
+}
+
+h2 {
+  color: #1976a8;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px 12px;
+  border: 1px solid #b8d9ed;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  background: white;
+}
+
+input:focus {
+  border-color: #2196d3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 211, 0.12);
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2196d3;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #1976a8;
+}
+
+#username-form {
+  justify-content: center;
+  margin-top: 80px;
+}
+
+#chat {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+#room-form {
+  margin-bottom: 25px;
+}
+
+#rooms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.room-container {
+  display:flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  background: #e1f2fc;
+  border-radius: 10px;
+}
+
+.room-container button {
+  border-radius: 6px;
+  padding: 7px 11px;
+  font-size: 14px;
+}
+
+.room-container button[data-room] {
+  background: #2196d3;
+  color: white;
+  font-weight: 600;
+}
+
+.room-container button[data-rename] {
+  background: white;
+  color: #1976a8;
+  border: 1px solid #b8d9ed;
+}
+
+.room-container button[data-delete] {
+  background: white;
+  color: #d9534f;
+  border: 1px solid #edc4c4;
+}
+
+.room-container button[data-save] {
+  background: #1976a8;
+  color: white;
+}
+
+.room-container button[data-room].active {
+  background: #1976a8;
+  box-shadow: 0 0 0 2px #b8d9ed;
+}
+
+#messages {
+  min-height: 250px;
+  margin: 0 0 20px;
+  padding: 20px 25px;
+  background: white;
+  border: 1px solid #d2e8f5;
+  border-radius: 12px;
+  list-style: none;
+  box-shadow: 0 3px 12px rgba(40, 120, 170, 0.08);
+}
+
+#messages li {
+  padding: 10px 0;
+  border-bottom: 1px solid #e6f1f7;
+}
+
+#messages li:last-child {
+  border-bottom: none;
+}
+
+#message-form {
+  margin-top: 15px;
+}
+
+#message-input {
+  flex: 1;
+  min-width: 0;
+}
+
+#message-form button {
+  min-width: 100px;
+}

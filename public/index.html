@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Chat</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <form id="username-form">
+    <input
+      id="username"
+      type="text"
+      placeholder="Enter your username"
+    >
+    <button type="submit">Join chat</button>
+  </form>
+
+  <main id="chat">
+
+    <section id="chat-window">
+
+      <form id="room-form">
+        <input
+          id="room-input"
+          type="text"
+          placeholder="New room name"
+        >
+          <button type="submit">Create room</button>
+      </form>
+
+      <div id="rooms">
+
+      </div>
+
+      <ul id="messages">
+      </ul>
+
+      <form id="message-form">
+        <input
+          id="message-input"
+          type="text"
+          placeholder="Enter a message"
+        >
+        <button type="submit">Send</button>
+      </form>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
+
