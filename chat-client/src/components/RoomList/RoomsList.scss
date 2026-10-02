@@ -1,0 +1,16 @@
+@use '../../styles/variables' as *;
+
+.roomsList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: 2rem;
+
+  &__empty {
+    text-align: center;
+    font-size: 1.4rem;
+  }
+
+}

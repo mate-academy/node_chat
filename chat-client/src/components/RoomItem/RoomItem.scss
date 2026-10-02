@@ -1,0 +1,146 @@
+@use '../../styles/variables' as *;
+
+
+.room {
+  display: flex;
+
+  &__item {
+    width: 50vw;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid $code-bg;
+    background-color: $code-bg;
+    color: #fff;
+    text-align: center;
+    transition: all 0.4s ease-in-out;
+    box-shadow: $shadow, 0 0 2rem rgba($bg, 0.7);
+
+    &:hover {
+      background-color: $bg;
+      color: $code-bg;
+
+      .room__button {
+        transition: all 0.4s ease-in-out;
+        border: 1px solid $code-bg;
+      }
+
+    }
+
+
+    .room__text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-self: center;
+
+      .form {
+        display: flex;
+        flex-direction: column;
+
+        gap: 0.7rem;
+        margin: 1rem 1rem 0 1rem;
+
+        input {
+          font-size: 1rem;
+          padding: 0.65rem;
+          border: 1px solid $code-bg;
+          border-radius: 0.5rem;
+          color: $code-bg;
+          background-color: $bg;
+
+
+        }
+
+        &__buttons {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 0.5rem;
+
+          &__save {
+            width: 70px;
+            font-size: 0.9rem;
+            padding: 0.55rem;
+            border: none;
+            border-radius: 0.5rem;
+            color: $code-bg;
+            background-color: $bg;
+            border: 1px solid $code-bg;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+              background-color: green;
+              color: $bg;
+            }
+
+          }
+
+          &__cancel {
+            width: 70px;
+            font-size: 0.9rem;
+            padding: 0.55rem;
+            border: none;
+            border-radius: 0.5rem;
+            color: $code-bg;
+            background-color: $bg;
+            border: 1px solid $code-bg;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease-in;
+
+            &:hover {
+              background-color: red;
+              color: $bg;
+            }
+
+
+          }
+        }
+      }
+
+      &-title {
+        font-size: 1rem;
+        margin: 0.3rem;
+
+      }
+
+      &-description {
+        font-size: 1rem;
+        margin: 0.7rem;
+
+      }
+    }
+  }
+
+  &__button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid $code-bg;
+    background-color: $bg;
+    font-size: 0.9rem;
+    color: $code-bg;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $code-bg;
+      color: $bg;
+    }
+
+    &:active {
+      transform: scale(0.95);
+      background-color: $code-bg;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+
+  }
+
+}

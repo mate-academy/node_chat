@@ -1,0 +1,64 @@
+@use '../../styles/variables' as *;
+
+.roomsPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &__loading {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-top: 5rem;
+  }
+
+
+  &__title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  &__name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  &__button {
+    font-size: 1.4rem;
+    padding: 1.1rem;
+    border-radius: 1rem;
+    border: 2px solid $code-bg;
+    background-color: $code-bg;
+    color: $bg;
+    transition: all 0.2s ease-in-out;
+    box-shadow: $shadow, 0 0 2rem rgba($code-bg, 0.8);
+
+
+    &:hover {
+      background-color: $bg;
+      color: $code-bg;
+    }
+
+    &:active {
+      transform: scale(0.95);
+      background-color: $code-bg;
+      color: #fff;
+    }
+
+  }
+
+  &__roomList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+}

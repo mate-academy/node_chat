@@ -1,0 +1,126 @@
+@use '../../styles/variables' as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba($bg, 0.76);
+  backdrop-filter: blur(5px);
+  animation: modal-overlay-in 160ms ease-out;
+}
+
+.modal-window {
+  width: min(100%, 27rem);
+  padding: clamp(1.5rem, 6vw, 2.25rem);
+  border: 1px solid $code-bg;
+  border-radius: 0.75rem;
+  background: $bg;
+  box-shadow: $shadow, 0 0 2rem rgba($code-bg, 0.12);
+  animation: modal-window-in 200ms ease-out;
+
+  .modal__title {
+    margin: 0 0 1.5rem;
+    color: $code-bg;
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+
+  form {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .modal__input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.8rem 0.95rem;
+    border: 1px solid rgba($code-bg, 0.65);
+    border-radius: 0.45rem;
+    outline: none;
+    background: $bg;
+    color: $code-bg;
+    font: inherit;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+
+    &::placeholder {
+      color: rgba($code-bg, 0.55);
+    }
+
+    &:hover {
+      border-color: $code-bg;
+    }
+
+    &:focus {
+      border-color: $code-bg;
+      box-shadow: 0 0 0 3px rgba($code-bg, 0.2);
+    }
+  }
+
+  .modal__button {
+    min-height: 2.9rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.45rem;
+    color: $bg;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease,
+      transform 160ms ease;
+
+
+
+
+    &:focus-visible {
+      outline: 2px solid $code-bg;
+      outline-offset: 3px;
+    }
+
+    &:first-of-type {
+      border-color: $code-bg;
+      background: $code-bg;
+
+      &:hover {
+        background: $bg;
+        color: $code-bg;
+      }
+    }
+
+    &:last-of-type {
+      border-color: $code-bg;
+      background: transparent;
+      color: $code-bg;
+
+      &:hover {
+        border-color: $code-bg;
+        background: $code-bg;
+        color: $bg;
+      }
+    }
+  }
+}
+
+@keyframes modal-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-window-in {
+  from { opacity: 0; transform: translateY(0.5rem) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .modal-window {
+    animation: none;
+  }
+
+  .modal-window .modal__input,
+  .modal-window .modal__button {
+    transition: none;
+  }
+}
