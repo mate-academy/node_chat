@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Chat</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>Node Chat</h1>
+        <span id="current-user">Not signed in</span>
+      </header>
+
+      <section id="login-panel" class="panel">
+        <h2>Join the chat</h2>
+        <form id="login-form">
+          <label for="username">Username</label>
+          <input id="username" name="username" maxlength="30" required />
+          <button type="submit">Join</button>
+        </form>
+      </section>
+
+      <main id="chat-panel" class="chat-layout" hidden>
+        <aside class="sidebar">
+          <h2>Chat rooms</h2>
+          <form id="create-room-form">
+            <input
+              id="room-name"
+              placeholder="New room name"
+              maxlength="40"
+              required
+            />
+            <button type="submit">Create</button>
+          </form>
+          <ul id="room-list"></ul>
+        </aside>
+
+        <section class="chat">
+          <div class="chat-heading">
+            <h2 id="room-title">General</h2>
+            <div id="room-actions"></div>
+          </div>
+
+          <p id="status" role="status"></p>
+          <div id="messages" class="messages"></div>
+
+          <form id="message-form" class="message-form">
+            <input
+              id="message-text"
+              placeholder="Type a message..."
+              maxlength="2000"
+              required
+            />
+            <button type="submit">Send</button>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
