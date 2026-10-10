@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node.js Chat App</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar for Rooms -->
+      <aside class="sidebar">
+        <h3>Rooms</h3>
+        <ul id="room-list"></ul>
+        <div class="room-actions">
+          <input
+            type="text"
+            id="new-room-name"
+            placeholder="New room name..."
+          />
+          <button id="create-room-btn">+ Create Room</button>
+        </div>
+      </aside>
+
+      <!-- Main Chat Area -->
+      <main class="chat-area">
+        <header>
+          <h2 id="current-room-name">Select a Room</h2>
+          <span id="username-display"></span>
+        </header>
+        <div id="messages-container" class="messages"></div>
+        <div class="message-input">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Type a message..."
+            disabled
+          />
+          <button id="send-btn" disabled>Send</button>
+        </div>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
