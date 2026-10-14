@@ -1,0 +1,91 @@
+.roomModal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__iconContainer{
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.5s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__icon {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  &__containerImput {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &__input {
+    height: 40px;
+    padding-inline: 10px;
+    border: 1px solid #e7e2e7;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 16px;
+    transition: all 0.5s;
+
+    &::placeholder {
+      color: #e7e2e7;;
+    }
+
+    &:focus {
+      outline: none;
+      border: 2px, solid, #7c7b7c;
+    }
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__button {
+    width: 40%;
+    height: 40px;
+    padding-inline: 10px;
+    border: 1px solid #e7e2e7;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.5s;
+
+    &--cancel {
+      background-color: #ffffff;
+
+      &:hover {
+        background-color: #dad8d8;
+      }
+    }
+
+    &--create {
+    background-color:#7131d8;
+    color: #eee;
+
+    &:hover {
+      background-color:#4b12a5;
+    }
+    }
+  }
+}

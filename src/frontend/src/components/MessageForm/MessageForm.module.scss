@@ -1,0 +1,53 @@
+.messageForm {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+
+  padding-block: 20px;
+
+  &__input {
+    height: 40px;
+    width: calc(100% - 45px);
+    padding-inline: 10px;
+    border: 1px solid #e7e2e7;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: all 0.5s;
+
+    &::placeholder {
+      color: #e7e2e7;;
+    }
+
+    &:focus {
+      outline: none;
+      border: 2px, solid, #7c7b7c;
+    }
+  }
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #7131d8;
+    cursor: pointer;
+    transition: all 0.5s;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      background-color:#4b12a5;
+    }
+  }
+
+  &__icon {
+    width: 30px;
+    height: 30px;
+    color: #eee;
+  }
+}

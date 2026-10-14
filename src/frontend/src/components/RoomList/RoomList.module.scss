@@ -1,0 +1,30 @@
+.roomList {
+  grid-column: span 4;
+  grid-row: 2 / span 1;
+  border-right: 2px solid #dad8d8;
+
+  &__add {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__add-button {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    &:hover{
+      transform: scale(1.2);
+    }
+  }
+
+  &__icon-add-room {
+    width: 20px;
+    height: 20px;
+  }
+}
