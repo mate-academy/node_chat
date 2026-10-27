@@ -1,0 +1,26 @@
+.chat-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+#message-form {
+  grid-template-columns: 1fr 2fr auto;
+}
+
+.room-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.room-select {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+html {
+  background-color: violet;
+}
+

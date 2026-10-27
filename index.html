@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Chat with rooms built with Node.js" />
+    <link rel="icon" href="/public/favicon.ico" />
+    <link rel="manifest" href="/public/manifest.json" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <title>Node chat</title>
+  </head>
+  <body>
+    <section class="section content">
+      <h1 class="title">Chat application</h1>
+
+      <form class="field chat-form" id="room-form">
+        <input
+          type="text"
+          class="input"
+          id="room-name"
+          placeholder="Enter a room name"
+        />
+        <button class="button" type="submit">Create</button>
+      </form>
+
+      <div class="rooms-list" id="rooms-list"></div>
+
+      <form class="field chat-form" id="message-form">
+        <input
+          type="text"
+          class="input"
+          id="user-name"
+          placeholder="Enter a name"
+        />
+        <input
+          type="text"
+          class="input"
+          id="message-text"
+          placeholder="Enter a message"
+        />
+        <button class="button" type="submit">Send</button>
+      </form>
+
+      <ul id="message-list"></ul>
+    </section>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/src/scripts/main.js"></script>
+  </body>
+</html>
