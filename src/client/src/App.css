@@ -1,0 +1,203 @@
+html {
+  align-items: center;
+  margin: 0;
+}
+
+body {
+  align-items: center;
+  margin: 0;
+  background-color: #fff;
+}
+
+.Deleting_room {
+  width: 40px;
+  display: block;
+}
+
+input {
+  height: 30px;
+  width: 70px;
+}
+
+.mainChat {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: 510px;
+  width: 700px;
+  overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
+  background-color: #0e1621;
+  border: 1px solid #0e1621;
+  color: #e2e8f0;
+}
+
+.Room_part {
+  padding-top: 20px;
+  width: 360px;
+  background-color: #17212b;
+  border-right: 1px solid #0e1621;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.Creating_Room {
+  padding: 12px 15px;
+  border-bottom: 1px solid #0e1621;
+}
+
+.Opening {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #2b5278;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.createRoom {
+  display: relative;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #e6ebf1;
+  border-radius: 8px;
+  border: 1px solid #232e3c;
+}
+
+.Inner_Part {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.Name.Sign {
+  height: 14px;
+  font-size: 9px;
+  color: #8ab4f8;
+  margin-bottom: 10px;
+  margin-top: 6px;
+}
+
+.Server_response {
+  border-top: 1px solid #0e1621;
+}
+
+.button_Sign {
+  display: flex;
+  margin-left: 5px;
+  background-color: #2b5278;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  align-items: center;
+  font-weight: 500;
+  justify-content: center;
+}
+
+.button_Sign_delete {
+  padding: 6px 14px;
+  margin-top: 22px;
+  margin-left: 5px;
+  background-color: #2b5278;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+
+.room {
+  padding: 15px;
+  display: flex;
+  border-bottom: 1px solid #232e3c;
+}
+
+
+.All_messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #f9f9fb;
+  min-width: 400px;
+  min-height: 410px;
+  max-height: 411px;
+}
+
+
+.Message {
+  background-color: #ffffff;
+  border: 1px solid #eaedf1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  max-width: 80%;
+  align-self: flex-start;
+}
+
+
+.Message p:nth-child(1) {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  color: #1a1a1a;
+  word-break: break-word;
+}
+
+
+.Message p:nth-child(2) {
+  margin: 0;
+  font-size: 11px;
+  color: #888888;
+  text-align: right;
+}
+
+
+.Message p:nth-child(3) {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: #4a90e2;
+  font-weight: 600;
+}
+
+.just_for_flex {
+  display: flex;
+}
+
+.messager {
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #e0e0e0;
+}
+
+.messager form {
+  display: flex;
+  gap: 8px;
+}
+
+.button_Sign {
+  padding: 10px 18px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
