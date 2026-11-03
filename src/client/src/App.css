@@ -72,6 +72,14 @@ input {
   border: 1px solid #232e3c;
 }
 
+.for_center {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
 .Inner_Part {
   display: flex;
   flex-direction: column;

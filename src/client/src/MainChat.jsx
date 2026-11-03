@@ -191,100 +191,102 @@ function MainChat() {
 
   return (
     <>
-      <div className='mainChat'>
-        <div className='Room_part'>
-          <div className='Creating_Room'>
-            {!ActiveOpening && <button className='Opening' onClick={() => {
-              ActiveOpening ? setActiveOpening(false) : setActiveOpening(true);
-            }}>Create a new room</button>}
+      <div className='for_center'>
+        <div className='mainChat'>
+          <div className='Room_part'>
+            <div className='Creating_Room'>
+              {!ActiveOpening && <button className='Opening' onClick={() => {
+                ActiveOpening ? setActiveOpening(false) : setActiveOpening(true);
+              }}>Create a new room</button>}
 
-            {ActiveOpening &&
-              <div className='createRoom'>
-                <form onSubmit={CreatingRoom}>
-                  <p className="Name Sign">Write name of your room here</p>
-                  <input
-                    type="text"
-                    value={Roomname}
-                    onChange={(event) => setRoomName(event.target.value)}
-                  />
+              {ActiveOpening &&
+                <div className='createRoom'>
+                  <form onSubmit={CreatingRoom}>
+                    <p className="Name Sign">Write name of your room here</p>
+                    <input
+                      type="text"
+                      value={Roomname}
+                      onChange={(event) => setRoomName(event.target.value)}
+                    />
 
-                  <button className="button_Sign" type="submit" disabled={isLoading}>
-                    {isLoading ? 'loading' : `Log in`}
-                  </button>
-                </form>
-                {Error && <p className="Name Sign">{Error}</p>}
-              </div>}
-          </div>
+                    <button className="button_Sign" type="submit" disabled={isLoading}>
+                      {isLoading ? 'loading' : `Log in`}
+                    </button>
+                  </form>
+                  {Error && <p className="Name Sign">{Error}</p>}
+                </div>}
+            </div>
 
-          <div className='rooms'>
-            {ArrayRoom.map(obj => {
-              return (
-                <div className='room' key={obj.id} onClick={() => setChosenRoom(obj.id)}>
-                  <div className='Inner_Part'>
-                    <p className='room_name'>{obj.name}</p>
-                    <div className='Changing_room'>
-                      <p className="Name Sign">Write new name for room</p>
-                      <div className='just_for_flex'>
-                        <input
-                          type="text"
-                          value={NewRoomname[obj.id] || ''}
-                          onChange={(event) => setNewRoomName((prev) => ({ ...prev, [obj.id]: event.target.value }))}
-                          required
-                        />
+            <div className='rooms'>
+              {ArrayRoom.map(obj => {
+                return (
+                  <div className='room' key={obj.id} onClick={() => setChosenRoom(obj.id)}>
+                    <div className='Inner_Part'>
+                      <p className='room_name'>{obj.name}</p>
+                      <div className='Changing_room'>
+                        <p className="Name Sign">Write new name for room</p>
+                        <div className='just_for_flex'>
+                          <input
+                            type="text"
+                            value={NewRoomname[obj.id] || ''}
+                            onChange={(event) => setNewRoomName((prev) => ({ ...prev, [obj.id]: event.target.value }))}
+                            required
+                          />
 
-                        <button className="button_Sign" type="submit" disabled={isLoading}
-                          onClick={() => PatchRoom(obj.id, NewRoomname[obj.id])}>
-                          {isLoading ? 'loading' : `Change name`}
-                        </button>
+                          <button className="button_Sign" type="submit" disabled={isLoading}
+                            onClick={() => PatchRoom(obj.id, NewRoomname[obj.id])}>
+                            {isLoading ? 'loading' : `Change name`}
+                          </button>
+                        </div>
                       </div>
                     </div>
+
+                    <div className='Deleting_room'>
+                      <form onSubmit={deleteRoom}>
+                        <button className="button_Sign_delete" type="submit" disabled={isLoading}
+                          onClick={() => deleteRoom(obj.id)}>
+                          X
+                        </button>
+                      </form>
+                    </div>
                   </div>
+                );
+              })}
 
-                  <div className='Deleting_room'>
-                    <form onSubmit={deleteRoom}>
-                      <button className="button_Sign_delete" type="submit" disabled={isLoading}
-                        onClick={() => deleteRoom(obj.id)}>
-                        X
-                      </button>
-                    </form>
+            </div>
+            <div className='Server_response'>
+              {PatchError && <p className="Name Sign">{PatchError}</p>}
+            </div>
+          </div>
+
+          <div className='Main_chat'>
+            <div className='All_messages'>
+              {Allmessages.map(obj => {
+                return (
+                  <div className='Message' key={obj.id}>
+                    <p>{obj.text}</p>
+                    <p>{obj.createdAt}</p>
+                    <p>{obj.userId}</p>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
 
-          </div>
-          <div className='Server_response'>
-            {PatchError && <p className="Name Sign">{PatchError}</p>}
-          </div>
-        </div>
+            </div>
+            {MessageError && <p className="Name Sign">{MessageError}</p>}
+            <div className='messager'>
+              <form onSubmit={MessageSubmit}>
+                <input
+                  type="text"
+                  value={Message}
+                  onChange={(event) => setMessage(event.target.value)}
+                  required
+                />
 
-        <div className='Main_chat'>
-          <div className='All_messages'>
-            {Allmessages.map(obj => {
-              return (
-                <div className='Message' key={obj.id}>
-                  <p>{obj.text}</p>
-                  <p>{obj.createdAt}</p>
-                  <p>{obj.userId}</p>
-                </div>
-              );
-            })}
-
-          </div>
-          {MessageError && <p className="Name Sign">{MessageError}</p>}
-          <div className='messager'>
-            <form onSubmit={MessageSubmit}>
-              <input
-                type="text"
-                value={Message}
-                onChange={(event) => setMessage(event.target.value)}
-                required
-              />
-
-              <button className="button_Sign" type="submit" disabled={isLoading}>
-                {isLoading ? 'loading' : `Change name`}
-              </button>
-            </form>
+                <button className="button_Sign" type="submit" disabled={isLoading}>
+                  {isLoading ? 'loading' : `Change name`}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
