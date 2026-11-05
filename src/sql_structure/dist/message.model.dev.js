@@ -1,33 +1,42 @@
 'use strict';
 
-var _require = require('sequelize'),
-    DataTypes = _require.DataTypes;
+const _require = require('sequelize');
+const DataTypes = _require.DataTypes;
 
-var _require2 = require('../db'),
-    sequelize = _require2.sequelize;
+const _require2 = require('../db');
+const sequelize = _require2.sequelize;
 
-var Message = sequelize.define('auth_users_message', {
-  text: {
-    type: DataTypes.STRING,
-    allowNull: false
+const Message = sequelize.define(
+  'auth_users_message',
+  {
+    text: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    roomId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
+  {
+    timestamps: false,
+    tableName: 'auth_users_message',
   },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  roomId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  }
-}, {
-  timestamps: false,
-  tableName: 'auth_users_message'
-});
+);
+
 module.exports = {
-  Message: Message
+  Message: Message,
 };

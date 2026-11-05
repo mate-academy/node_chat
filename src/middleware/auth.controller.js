@@ -14,15 +14,17 @@ const login = async (req, res, next) => {
       return res.status(400).send('name is not typed');
     }
 
-    const existingUser = await User.findOne({ where: { name } });
+    const existingUser = await User.findOne({ where: { name: name } });
 
-    if (existingUser) {
-      return res.status(409).send('this User already exists');
+    if (!existingUser) {
+      const user = await User.create({ name });
+
+      res.status(201).send({ user: normalizeUser(user) });
+
+      return;
     }
 
-    const user = await User.create({ name });
-
-    res.status(201).send({ user: normalizeUser(user) });
+    res.status(201).send({ user: normalizeUser(existingUser) });
   } catch (err) {
     next(err);
   }
@@ -105,7 +107,7 @@ const CreateMessage = async (req, res, next) => {
     const trimmedtext = text.trim();
 
     if (!trimmedtext) {
-      return res.status(400).send({ errors: 'write message yoo' });
+      return res.status(400).send({ errors: 'you need to write message' });
     }
 
     const user = await User.findOne({ where: { name: username } });
@@ -117,6 +119,7 @@ const CreateMessage = async (req, res, next) => {
     const sendmess = await Message.create({
       text: trimmedtext,
       userId: user.id,
+      username: username,
       roomId: roomId,
     });
 

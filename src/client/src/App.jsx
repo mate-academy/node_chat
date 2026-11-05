@@ -3,8 +3,6 @@ import './App.css';
 import Mainpage from './mainpage';
 import MainChat from './MainChat';
 
-/*eslint-disable*/
-
 function App() {
   return (
     <>
@@ -15,7 +13,7 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path="*" element={<Mainpage />} />
+          <Route path="/" element={<Mainpage />} />
           <Route path="/MainChat" element={<MainChat />} />
         </Routes>
       </main>

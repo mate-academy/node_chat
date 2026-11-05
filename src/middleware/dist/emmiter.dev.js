@@ -1,9 +1,10 @@
 'use strict';
 
-var _require = require('events'),
-    EventEmitter = _require.EventEmitter;
+const _require = require('events');
+const EventEmitter = _require.EventEmitter;
 
-var emitter = new EventEmitter();
+const emitter = new EventEmitter();
+
 module.exports = {
-  emitter: emitter
+  emitter: emitter,
 };

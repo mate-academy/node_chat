@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './App.css'
 
 function MainChat() {
@@ -15,7 +15,7 @@ function MainChat() {
   const [chosenRoom, setChosenRoom] = useState(0);
   const [Allmessages, setAllmessages] = useState([]);
   const [MessageError, setMessageError] = useState('');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const API_URL = 'http://localhost:3000';
   const username = localStorage.getItem('username');
 
@@ -75,7 +75,7 @@ function MainChat() {
 
         if (!response.ok) {
           setPatchError(
-            'Something went wrong',
+            response.errors
           );
 
           return;
@@ -97,8 +97,9 @@ function MainChat() {
       .then(async (response) => {
 
         if (!response.ok) {
+          const data = await response.json();
           setPatchError(
-            'Something went wrong',
+            data.errors || 'Something went wrong'
           );
 
           return;
@@ -125,8 +126,9 @@ function MainChat() {
       .then(async (response) => {
 
         if (!response.ok) {
+          const data = await response.json();
           setError(
-            'Something went wrong',
+            data.errors || 'Something went wrong'
           );
 
           return;
@@ -174,8 +176,9 @@ function MainChat() {
       .then(async (response) => {
 
         if (!response.ok) {
+          const data = await response.json();
           setError(
-            'Something went wrong',
+            data.errors || 'Something went wrong'
           );
 
           return;
@@ -188,10 +191,22 @@ function MainChat() {
       .finally(() => { setIsLoading(false); setActiveOpening(false); });
   }
 
+  function logout() {
+    localStorage.removeItem('username');
+    navigate('/');
+  }
+
 
   return (
     <>
+      <div className='upper_bar'>
+        <div className='pusto'><p>{username}</p></div>
+        <div className='just_for_normal'>
+          <button className='Opening' onClick={() => logout()}>log out</button>
+        </div>
+      </div>
       <div className='for_center'>
+
         <div className='mainChat'>
           <div className='Room_part'>
             <div className='Creating_Room'>
@@ -205,6 +220,7 @@ function MainChat() {
                     <p className="Name Sign">Write name of your room here</p>
                     <input
                       type="text"
+                      className='forSubmit'
                       value={Roomname}
                       onChange={(event) => setRoomName(event.target.value)}
                     />
@@ -222,7 +238,7 @@ function MainChat() {
                 return (
                   <div className='room' key={obj.id} onClick={() => setChosenRoom(obj.id)}>
                     <div className='Inner_Part'>
-                      <p className='room_name'>{obj.name}</p>
+                      <p className='room_name__this'>{obj.name}</p>
                       <div className='Changing_room'>
                         <p className="Name Sign">Write new name for room</p>
                         <div className='just_for_flex'>
@@ -266,7 +282,7 @@ function MainChat() {
                   <div className='Message' key={obj.id}>
                     <p>{obj.text}</p>
                     <p>{obj.createdAt}</p>
-                    <p>{obj.userId}</p>
+                    <p>{obj.username}</p>
                   </div>
                 );
               })}
@@ -279,11 +295,12 @@ function MainChat() {
                   type="text"
                   value={Message}
                   onChange={(event) => setMessage(event.target.value)}
+                  className='forSubmit'
                   required
                 />
 
                 <button className="button_Sign" type="submit" disabled={isLoading}>
-                  {isLoading ? 'loading' : `Change name`}
+                  {isLoading ? 'loading' : `Write message`}
                 </button>
               </form>
             </div>

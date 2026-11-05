@@ -16,6 +16,10 @@ const Message = sequelize.define(
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,

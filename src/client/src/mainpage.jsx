@@ -34,6 +34,7 @@ function Mainpage() {
         // в файлі profile
         // navigate('/chat');
         localStorage.setItem('username', name);
+        // sessionStorage.setItem('username', name); логіка простого видалення коли виходиш
         navigate('/MainChat');
       })
       .catch(() => setErrors('Server is not available'))
@@ -49,9 +50,9 @@ function Mainpage() {
 
   return (
     <>
-      <div>
+      <div className='for_center page'>
         <form onSubmit={HandleSubmit}>
-          <p className="Name Sign">Email</p>
+          <p className="Name Sign">write your name or username here</p>
           <input
             type="text"
             value={name}
@@ -63,7 +64,7 @@ function Mainpage() {
 
           {errors && <p className="error">{errors}</p>}
 
-          <button className="button_Sign" type="submit" disabled={isLoading}>
+          <button className="button_Sign page" type="submit" disabled={isLoading}>
             {isLoading ? 'loading' : `Log in`}
           </button>
 

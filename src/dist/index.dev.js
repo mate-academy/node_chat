@@ -1,30 +1,31 @@
 'use strict';
 
-var http = require('http');
+const http = require('http');
 
-var express = require('express');
+const express = require('express');
 
-var cors = require('cors');
+const cors = require('cors');
 
-var _require = require('ws'),
-    WebSocketServer = _require.WebSocketServer;
+const _require = require('ws');
+const WebSocketServer = _require.WebSocketServer;
 
-var _require2 = require('../src/middleware/emmiter'),
-    emitter = _require2.emitter; // Підключаємо бібліотеку cors.
+const _require2 = require('../src/middleware/emmiter');
+const emitter = _require2.emitter; // Підключаємо бібліотеку cors.
 // Вона допомагає браузеру дозволити frontend отримувати відповіді
 // від backend, якщо вони мають різні origin.
 
+const authRouter = require('./middleware/auth.routes');
 
-var authRouter = require('./middleware/auth.routes');
+const createServer = function createServer() {
+  const app = express();
 
-var createServer = function createServer() {
-  var app = express();
-  app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173' // origin - це адреса клієнта
-    // process.env.CLIENT_URL — змінна середовища,
-    // у якій можна зберегти адресу frontend.
-
-  }));
+  app.use(
+    cors({
+      origin: process.env.CLIENT_URL || 'http://localhost:5173', // origin - це адреса клієнта
+      // process.env.CLIENT_URL — змінна середовища,
+      // у якій можна зберегти адресу frontend.
+    }),
+  );
   app.use(express.json());
   app.use(authRouter); // eslint-disable-next-line
 
@@ -38,32 +39,38 @@ var createServer = function createServer() {
     // якщо ми не хочемо обробляти її тут.
     if (error.type === 'entity.parse.failed') {
       res.status(400).send({
-        message: 'Invalid JSON'
+        message: 'Invalid JSON',
       });
+
       return;
     }
 
     res.status(500).send({
-      message: 'Internal server error'
+      message: 'Internal server error',
     });
-  });
-  var server = http.createServer(app);
-  var wss = new WebSocketServer({
-    server: server
   });
 
-  var broadcast = function broadcast(type, payload) {
-    var data = JSON.stringify({
+  const server = http.createServer(app);
+  const wss = new WebSocketServer({
+    server: server,
+  });
+
+  const broadcast = function broadcast(type, payload) {
+    const data = JSON.stringify({
       type: type,
-      payload: payload
+      payload: payload,
     });
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    let _iteratorNormalCompletion = true;
+    let _didIteratorError = false;
+    let _iteratorError;
 
     try {
-      for (var _iterator = wss.clients[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var client = _step.value;
+      for (
+        var _iterator = wss.clients[Symbol.iterator](), _step;
+        !(_iteratorNormalCompletion = (_step = _iterator.next()).done);
+        _iteratorNormalCompletion = true
+      ) {
+        const client = _step.value;
 
         if (client.readyState === 1) {
           client.send(data);
@@ -74,8 +81,8 @@ var createServer = function createServer() {
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-          _iterator["return"]();
+        if (!_iteratorNormalCompletion && _iterator['return'] != null) {
+          _iterator['return']();
         }
       } finally {
         if (_didIteratorError) {
@@ -88,18 +95,22 @@ var createServer = function createServer() {
   emitter.on('message', function (m) {
     return broadcast('message', m);
   });
+
   emitter.on('room:created', function (r) {
     return broadcast('room:created', r);
   });
+
   emitter.on('room:updated', function (r) {
     return broadcast('room:updated', r);
   });
+
   emitter.on('room:deleted', function (r) {
     return broadcast('room:deleted', r);
   });
+
   return server;
 };
 
 module.exports = {
-  createServer: createServer
+  createServer: createServer,
 };
