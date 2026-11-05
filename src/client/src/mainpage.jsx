@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './App.css'
+import './App.css';
 
 function Mainpage() {
   const [name, setName] = useState('');
@@ -26,19 +26,24 @@ function Mainpage() {
 
         if (!response.ok) {
           setErrors(data.errors || data.message || 'Login failed');
+
           return;
         }
 
-
-        // беремо наший токен, він зберігається в браузері і потім його можна використати
+        // беремо наший токен, він зберігається в браузері
+        // і потім його можна використати
         // в файлі profile
         // navigate('/chat');
         localStorage.setItem('username', name);
-        // sessionStorage.setItem('username', name); логіка простого видалення коли виходиш
+        // sessionStorage.setItem('username', name);
+        // логіка простого видалення коли виходиш
         navigate('/MainChat');
       })
       .catch(() => setErrors('Server is not available'))
-      .finally(() => { setName(''); setIsLoading(false); });
+      .finally(() => {
+        setName('');
+        setIsLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -47,10 +52,9 @@ function Mainpage() {
     }
   }, [navigate]);
 
-
   return (
     <>
-      <div className='for_center page'>
+      <div className="for_center page">
         <form onSubmit={HandleSubmit}>
           <p className="Name Sign">write your name or username here</p>
           <input
@@ -61,17 +65,19 @@ function Mainpage() {
           />
           {/* errors.name && <p className="error">{errors.name}</p> */}
 
-
           {errors && <p className="error">{errors}</p>}
 
-          <button className="button_Sign page" type="submit" disabled={isLoading}>
+          <button
+            className="button_Sign page"
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading ? 'loading' : `Log in`}
           </button>
-
         </form>
       </div>
     </>
-  )
+  );
 }
 
 export default Mainpage;

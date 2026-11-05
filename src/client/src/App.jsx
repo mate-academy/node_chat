@@ -7,9 +7,7 @@ function App() {
   return (
     <>
       <header>
-        <div className='this__header'>
-
-        </div>
+        <div className="this__header"></div>
       </header>
       <main>
         <Routes>
@@ -17,9 +15,8 @@ function App() {
           <Route path="/MainChat" element={<MainChat />} />
         </Routes>
       </main>
-
     </>
-  )
+  );
 }
 
-export default App
+export default App;
