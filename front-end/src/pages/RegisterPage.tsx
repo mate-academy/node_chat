@@ -29,7 +29,7 @@ export const RegisterPage = () => {
       return;
     }
 
-    localStorage.setItem("user", user);
+    localStorage.setItem("user", userName);
     navigate("/");
   }
 

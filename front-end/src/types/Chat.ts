@@ -1,12 +1,8 @@
-export type Chat = {
+import type { Message } from "./Message";
+
+export interface Chat {
   id: string;
   name: string;
-  author: string;
   users: string[];
-  messages: [
-    {
-      messageId: string;
-      data: string;
-    },
-  ];
-};
+  messages: Message[];
+}
