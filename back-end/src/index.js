@@ -22,13 +22,27 @@ const server = app.listen(PORT);
 
 const wss = new WebSocketServer({ server });
 
+const clients = new Map();
+
+wss.on('connection', (socket) => {
+  socket.on('message', (data) => {
+    const { event, chatId } = JSON.parse(data.toString());
+
+    if (event === 'joinChat') {
+      clients.set(socket, chatId);
+    }
+  });
+
+  socket.on('close', () => {
+    clients.delete(socket);
+  });
+});
+
 emitter.on('message', (message) => {
   for (const client of wss.clients) {
-    client.send(JSON.stringify(message), (error) => {
-      if (error) {
-        throw new Error(error);
-      }
-    });
+    if (client.readyState === 1 && clients.get(client) === message.chatId) {
+      client.send(JSON.stringify(message));
+    }
   }
 });
 

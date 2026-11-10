@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import type { Message } from "../types/Message";
-import { socket } from "../soket";
+import { joinChat, onMessage, socket } from "../soket";
 import type { Chat } from "../types/Chat";
 
 export const ChatPage: React.FC = () => {
@@ -50,18 +50,33 @@ export const ChatPage: React.FC = () => {
   }, [chatId, user, navigate]);
 
   useEffect(() => {
-    function handleMessage(event: MessageEvent) {
-      const message: Message = JSON.parse(event.data);
+    if (!chatId) return;
 
+    const unsubscribe = onMessage((message) => {
       if (message.chatId !== chatId) return;
 
-      setMessages((prev) => [...prev, message]);
+      setMessages((prev) => {
+        if (prev.some((item) => item.id === message.id)) {
+          return prev;
+        }
+
+        return [...prev, message];
+      });
+    });
+
+    const handleOpen = () => {
+      joinChat(chatId);
+    };
+
+    if (socket.readyState === WebSocket.OPEN) {
+      joinChat(chatId);
+    } else {
+      socket.addEventListener("open", handleOpen);
     }
 
-    socket.addEventListener("message", handleMessage);
-
     return () => {
-      socket.removeEventListener("message", handleMessage);
+      unsubscribe();
+      socket.removeEventListener("open", handleOpen);
     };
   }, [chatId]);
 
