@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Node.js Chat App</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; height: 100vh; margin: 0; }
+    #login-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+    #chat-screen { display: none; width: 100%; display: flex; flex-direction: row; }
+    #sidebar { width: 250px; background: #2c3e50; color: white; padding: 20px; display: flex; flex-direction: column; }
+    #sidebar button { margin-top: 10px; cursor: pointer; }
+    .room-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #34495e; display: flex; justify-content: space-between; }
+    .room-item:hover { background: #34495e; }
+    .room-actions button { font-size: 10px; margin-left: 5px; }
+    #main-chat { flex-grow: 1; display: flex; flex-direction: column; }
+    #header { background: #ecf0f1; padding: 20px; border-bottom: 1px solid #bdc3c7; }
+    #messages { flex-grow: 1; padding: 20px; overflow-y: auto; background: #fff; }
+    .msg { margin-bottom: 15px; }
+    .msg-header { font-size: 0.85em; color: #7f8c8d; margin-bottom: 5px; }
+    .msg-text { background: #3498db; color: white; padding: 10px; border-radius: 5px; display: inline-block; }
+    #input-area { display: flex; padding: 20px; background: #ecf0f1; }
+    #msg-input { flex-grow: 1; padding: 10px; font-size: 16px; }
+    #send-btn { padding: 10px 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <!-- Екран логіну -->
+  <div id="login-screen">
+    <h2>Enter your username</h2>
+    <input type="text" id="username-input" placeholder="Username...">
+    <button onclick="saveUsername()" style="margin-top:10px; padding: 10px;">Start Chat</button>
+  </div>
+
+  <!-- Екран чату -->
+  <div id="chat-screen" style="display:none;">
+    <div id="sidebar">
+      <h3>Rooms</h3>
+      <div id="rooms-list"></div>
+      <button onclick="createRoom()">+ Create Room</button>
+      <button onclick="logout()" style="margin-top: auto; background: #e74c3c; color: white; border: none; padding: 10px;">Change Username</button>
+    </div>
+    <div id="main-chat">
+      <div id="header">
+        <h2 id="current-room-title">Select a room</h2>
+      </div>
+      <div id="messages"></div>
+      <div id="input-area">
+        <input type="text" id="msg-input" placeholder="Type a message..." disabled>
+        <button id="send-btn" onclick="sendMessage()" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Підключаємо Socket.io та наш скрипт -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/client.js"></script>
+</body>
+</html>
