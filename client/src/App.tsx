@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useState } from 'react';
 
 import Header from './components/Header/Header';
@@ -110,9 +109,7 @@ function App() {
       const updatedRoom = await renameRoom(room.id, name.trim());
 
       setRooms((prev) =>
-        prev.map((item) =>
-          item.id === updatedRoom.id ? updatedRoom : item,
-        ),
+        prev.map((item) => (item.id === updatedRoom.id ? updatedRoom : item)),
       );
 
       if (activeRoom?.id === updatedRoom.id) {
@@ -125,18 +122,14 @@ function App() {
 
   // Delete room
   const handleDeleteRoom = async (room: Room) => {
-    const confirmed = window.confirm(
-      `Delete room "${room.name}"?`,
-    );
+    const confirmed = window.confirm(`Delete room "${room.name}"?`);
 
     if (!confirmed) return;
 
     try {
       await deleteRoom(room.id);
 
-      const updatedRooms = rooms.filter(
-        (item) => item.id !== room.id,
-      );
+      const updatedRooms = rooms.filter((item) => item.id !== room.id);
 
       setRooms(updatedRooms);
 
@@ -179,9 +172,7 @@ function App() {
         </div>
       )}
 
-      {!username && (
-        <UsernameModal onSubmit={handleUsernameSubmit} />
-      )}
+      {!username && <UsernameModal onSubmit={handleUsernameSubmit} />}
     </div>
   );
 }

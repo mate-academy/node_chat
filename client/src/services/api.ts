@@ -1,4 +1,3 @@
-
 import type { Room, Message } from '../types';
 
 const API_URL = 'http://localhost:3000/api';
@@ -58,9 +57,7 @@ export const deleteRoom = async (roomId: number): Promise<void> => {
   }
 };
 
-export const getMessages = async (
-  roomId: number,
-): Promise<Message[]> => {
+export const getMessages = async (roomId: number): Promise<Message[]> => {
   const response = await fetch(`${API_URL}/rooms/${roomId}/messages`);
 
   if (!response.ok) {

@@ -7,9 +7,7 @@ import {
   deleteRoom,
 } from '../controllers/roomController.js';
 
-import {
-  getMessages,
-} from '../controllers/messageController.js';
+import { getMessages } from '../controllers/messageController.js';
 
 const router = express.Router();
 

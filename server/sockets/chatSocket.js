@@ -30,11 +30,15 @@ const chatSocket = (io) => {
       try {
         const username = socket.data.username;
 
-        if (!username || !text?.trim()) return;
+        if (!username || !text?.trim()) {
+          return;
+        }
 
         const room = await Room.findByPk(roomId);
 
-        if (!room) return;
+        if (!room) {
+          return;
+        }
 
         const message = await Message.create({
           roomId,
@@ -42,10 +46,7 @@ const chatSocket = (io) => {
           text: text.trim(),
         });
 
-        io.to(String(roomId)).emit(
-          'receive_message',
-          message
-        );
+        io.to(String(roomId)).emit('receive_message', message);
       } catch (error) {
         console.error('Message error:', error);
       }

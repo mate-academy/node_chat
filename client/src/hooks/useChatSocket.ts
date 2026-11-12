@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import type { Message } from '../types';
 import { socket } from '../services/socket';

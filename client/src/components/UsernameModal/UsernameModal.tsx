@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 
 interface UsernameModalProps {
@@ -24,9 +23,7 @@ const UsernameModal = ({ onSubmit }: UsernameModalProps) => {
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl"
       >
-        <h2 className="mb-2 text-xl font-semibold">
-          Welcome to Chat
-        </h2>
+        <h2 className="mb-2 text-xl font-semibold">Welcome to Chat</h2>
 
         <p className="mb-5 text-sm text-gray-500">
           Enter your username to continue.

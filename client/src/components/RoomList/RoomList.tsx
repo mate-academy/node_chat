@@ -1,4 +1,3 @@
-
 import type { Room } from '../../types';
 
 interface RoomListProps {
@@ -36,9 +35,7 @@ const RoomList = ({
           <li
             key={room.id}
             className={`flex items-center justify-between gap-2 rounded p-2 ${
-              activeRoomId === room.id
-                ? 'bg-blue-100'
-                : 'hover:bg-gray-100'
+              activeRoomId === room.id ? 'bg-blue-100' : 'hover:bg-gray-100'
             }`}
           >
             <button
