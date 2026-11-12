@@ -5,13 +5,7 @@ import RoomList from './components/RoomList/RoomList';
 import Chat from './components/Chat/Chat';
 import UsernameModal from './components/UsernameModal/UsernameModal';
 
-import {
-  getRooms,
-  createRoom,
-  renameRoom,
-  deleteRoom,
-  getMessages,
-} from './services/api';
+import { getRooms, createRoom, renameRoom, deleteRoom } from './services/api';
 
 import { sendMessage as emitMessage } from './services/socket';
 import { useChatSocket } from './hooks/useChatSocket';
@@ -52,23 +46,9 @@ function App() {
     setUsername(value);
   };
 
-  // Load messages when room changes
+  // Clear messages when room changes
   useEffect(() => {
-    if (!activeRoom) {
-      setMessages([]);
-      return;
-    }
-
-    const loadMessages = async () => {
-      try {
-        const data = await getMessages(activeRoom.id);
-        setMessages(data);
-      } catch (error) {
-        console.error('Failed to load messages:', error);
-      }
-    };
-
-    loadMessages();
+    setMessages([]);
   }, [activeRoom?.id]);
 
   // Handle incoming messages
@@ -76,11 +56,16 @@ function App() {
     setMessages((prev) => [...prev, message]);
   }, []);
 
+  const handleReceiveHistory = useCallback((history: Message[]) => {
+    setMessages(history);
+  }, []);
+
   // Socket connection
   useChatSocket({
     username,
     roomId: activeRoom?.id ?? null,
     onMessage: handleReceiveMessage,
+    onHistory: handleReceiveHistory,
   });
 
   // Create room

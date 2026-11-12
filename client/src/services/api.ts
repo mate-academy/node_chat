@@ -56,13 +56,3 @@ export const deleteRoom = async (roomId: number): Promise<void> => {
     throw new Error('Failed to delete room');
   }
 };
-
-export const getMessages = async (roomId: number): Promise<Message[]> => {
-  const response = await fetch(`${API_URL}/rooms/${roomId}/messages`);
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch messages');
-  }
-
-  return response.json();
-};

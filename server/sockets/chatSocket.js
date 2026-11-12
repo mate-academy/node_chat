@@ -9,14 +9,37 @@ const chatSocket = (io) => {
       socket.data.username = username;
     });
 
-    // Join room
-    socket.on('join_room', (roomId) => {
-      if (socket.data.currentRoom) {
-        socket.leave(String(socket.data.currentRoom));
-      }
+    // Join room and load message history
+    socket.on('join_room', async (roomId) => {
+      try {
+        const parsedRoomId = Number(roomId);
 
-      socket.join(String(roomId));
-      socket.data.currentRoom = roomId;
+        if (!Number.isInteger(parsedRoomId) || parsedRoomId <= 0) {
+          return;
+        }
+
+        const room = await Room.findByPk(parsedRoomId);
+
+        if (!room) {
+          return;
+        }
+
+        if (socket.data.currentRoom) {
+          socket.leave(String(socket.data.currentRoom));
+        }
+
+        socket.join(String(parsedRoomId));
+        socket.data.currentRoom = parsedRoomId;
+
+        const messages = await Message.findAll({
+          where: { roomId: parsedRoomId },
+          order: [['createdAt', 'ASC']],
+        });
+
+        socket.emit('room_history', messages);
+      } catch (error) {
+        console.error('Join room error:', error);
+      }
     });
 
     // Leave room
