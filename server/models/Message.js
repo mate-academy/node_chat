@@ -22,6 +22,7 @@ const Message = sequelize.define(
 
     createdAt: {
       type: DataTypes.DATE,
+      allowNull: false,
       field: 'created_at',
       defaultValue: DataTypes.NOW,
     },
