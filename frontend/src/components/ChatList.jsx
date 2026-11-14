@@ -115,7 +115,6 @@ export const ChatList = ({ userName }) => {
                   readOnly={!isEditing}
                   autoFocus={isEditing}
                   onChange={(e) => setEditingName(e.target.value)}
-                  onBlur={() => saveRoomName(chatRoom)}
                 />
               </div>
 
@@ -126,9 +125,17 @@ export const ChatList = ({ userName }) => {
                   </button>
                 )}
                 {isEditing && (
-                  <button className="app-button" onClick={cancelEdit}>
-                    Cancel
-                  </button>
+                  <>
+                    <button
+                      className="app-button app-button--primary"
+                      onClick={() => saveRoomName(chatRoom)}
+                    >
+                      Save
+                    </button>
+                    <button className="app-button" onClick={cancelEdit}>
+                      Cancel
+                    </button>
+                  </>
                 )}
 
                 {chatRoom.userName === userName && (

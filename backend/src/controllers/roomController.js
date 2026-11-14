@@ -17,7 +17,7 @@ export function getRoom(req, res) {
 }
 
 export function createRoom(req, res) {
-  const { userName, name } = req.body;
+  const { userName, name } = req.body || {};
 
   if (!userName || !name) {
     res.sendStatus(404);

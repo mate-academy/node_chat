@@ -13,17 +13,29 @@ export const ChatRoom = ({ userName }) => {
   const [roomName, setRoomName] = useState('');
   const { id: roomId } = useParams();
 
-  const saveData = useCallback((message) => {
-    setMessages((prevMessages) => {
-      if (prevMessages.some((item) => item.id === message.id)) {
-        return prevMessages;
+  const saveData = useCallback(
+    (message) => {
+      if (message.roomId !== roomId) {
+        return;
       }
 
-      return [message, ...prevMessages];
-    });
-  }, []);
+      setMessages((prevMessages) => {
+        if (prevMessages.some((item) => item.id === message.id)) {
+          return prevMessages;
+        }
+
+        return [message, ...prevMessages];
+      });
+    },
+    [roomId],
+  );
 
   useEffect(() => {
+    let ignoreResponse = false;
+
+    setMessages([]);
+    setRoomName('');
+
     const loadRoom = async () => {
       try {
         const [roomResponse, messagesResponse] = await Promise.all([
@@ -32,6 +44,10 @@ export const ChatRoom = ({ userName }) => {
             params: { roomId, userName },
           }),
         ]);
+
+        if (ignoreResponse) {
+          return;
+        }
 
         setRoomName(roomResponse.data.name);
         setMessages((currentMessages) => {
@@ -43,11 +59,17 @@ export const ChatRoom = ({ userName }) => {
           return [...currentMessages, ...history];
         });
       } catch (error) {
-        console.error(error);
+        if (!ignoreResponse) {
+          console.error(error);
+        }
       }
     };
 
     loadRoom();
+
+    return () => {
+      ignoreResponse = true;
+    };
   }, [roomId, userName]);
 
   return (
