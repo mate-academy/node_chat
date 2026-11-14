@@ -9,6 +9,10 @@ Implement a chat application (both client and server)
 
 **Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
 
+## Demo
+
+[Open the live chat demo](https://node-chat-e7qd.onrender.com).
+
 ## Local development
 
 The project has a React/Vite frontend, a Node.js/Express and Socket.IO backend,
