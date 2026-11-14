@@ -3,6 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
+import { fileURLToPath } from 'node:url';
 import { Server } from 'socket.io';
 
 import sequelize from './config/database.js';
@@ -13,6 +14,7 @@ import { Room } from './models/index.js';
 
 const app = express();
 const server = http.createServer(app);
+const clientDistPath = fileURLToPath(new URL('../client/dist', import.meta.url));
 
 const io = new Server(server, {
   cors: {
@@ -33,6 +35,11 @@ app.use('/api/rooms', roomRoutes);
 
 // Socket.IO
 chatSocket(io);
+
+app.use(express.static(clientDistPath));
+app.get('/', (_req, res) => {
+  res.sendFile(fileURLToPath(new URL('../client/dist/index.html', import.meta.url)));
+});
 
 // Start server
 const start = async () => {

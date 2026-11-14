@@ -1,0 +1,34 @@
+databases:
+  - name: node-chat-db
+    databaseName: node_chat
+    user: node_chat
+    plan: free
+
+services:
+  - type: web
+    name: node-chat
+    runtime: node
+    plan: free
+    buildCommand: npm ci --prefix client && npm run build --prefix client && npm ci --prefix server
+    startCommand: npm --prefix server start
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: node-chat-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: node-chat-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: node-chat-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: node-chat-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: node-chat-db
+          property: password
