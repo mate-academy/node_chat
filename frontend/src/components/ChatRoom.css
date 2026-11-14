@@ -1,0 +1,27 @@
+.chat-room {
+  display: flex;
+  height: calc(100dvh - 120px);
+  min-height: 0;
+  flex-direction: column;
+}
+
+.chat-room__back-link {
+  align-self: flex-start;
+  margin-bottom: 12px;
+}
+
+.chat-room__user {
+  margin: 0 0 20px;
+  color: #64748b;
+}
+
+.chat-room__title {
+  margin: 0 0 16px;
+  font-size: 24px;
+}
+
+@media (max-width: 600px) {
+  .chat-room {
+    height: calc(100dvh - 110px);
+  }
+}
