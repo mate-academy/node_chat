@@ -1,0 +1,73 @@
+.chat-list__header,
+.chat-list__room,
+.chat-list__room-name,
+.chat-list__actions {
+  display: flex;
+  align-items: center;
+}
+
+.chat-list__header,
+.chat-list__room {
+  justify-content: space-between;
+}
+
+.chat-list__header {
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.chat-list__title {
+  margin: 0;
+  font-size: 22px;
+}
+
+.chat-list__rooms {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-list__room {
+  gap: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 10%);
+}
+
+.chat-list__room-name {
+  min-width: 0;
+  gap: 10px;
+}
+
+.chat-list__room-input {
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+}
+
+.chat-list__room-input--editing {
+  border-color: #cbd5e1;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.chat-list__actions {
+  gap: 10px;
+}
+
+@media (max-width: 700px) {
+  .chat-list__room {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .chat-list__actions {
+    flex-wrap: wrap;
+  }
+}

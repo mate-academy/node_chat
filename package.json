@@ -1,23 +1,37 @@
 {
+  "type": "module",
   "name": "node_chat",
   "version": "1.0.0",
   "description": "Chat using Node.js",
   "main": "src/index.js",
   "scripts": {
     "init": "mate-scripts init",
+    "dev": "npm run start-backend & npm run start-frontend",
     "start": "node src/index.js",
+    "start-frontend": "npm --prefix frontend start",
+    "start-backend": "npm start",
+    "build": "npm --prefix frontend run build",
     "lint": "npm run format && mate-scripts lint",
     "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
     "test:only": "mate-scripts test",
+    "test": "npm run test-backend && npm run test-frontend",
+    "test-backend": "npm run lint && npm run test:only",
+    "test-frontend": "npm --prefix frontend test -- --watchAll=false --passWithNoTests",
     "update": "mate-scripts update",
     "postinstall": "npm run update",
-    "test": "npm run lint && npm run test:only"
+    "install-all": "npm install && npm --prefix frontend install"
   },
+  "keywords": [
+    "react",
+    "nodejs",
+    "chat",
+    "websocket"
+  ],
   "author": "Mate academy",
   "license": "GPL-3.0",
   "devDependencies": {
     "@mate-academy/eslint-config": "latest",
-    "@mate-academy/scripts": "^1.8.6",
+    "@mate-academy/scripts": "^2.1.2",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-node": "^11.1.0",
@@ -26,5 +40,10 @@
   },
   "mateAcademy": {
     "projectType": "javascript"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "ws": "^8.18.3"
   }
 }
