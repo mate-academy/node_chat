@@ -18,6 +18,10 @@ export function attachChatWebSocket(server) {
     socket.roomId = roomId;
     socket.on('error', () => socket.close());
 
+    for (const message of chatStore.getMessages(roomId)) {
+      socket.send(JSON.stringify(message));
+    }
+
     socket.on('message', (data) => {
       chatStore.addMessage(data.toString(), roomId, userName);
     });
