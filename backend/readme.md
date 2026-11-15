@@ -9,5 +9,3 @@ Implement a chat application (both client and server)
 - New user should see all prev messages in the room
 
 **Read [the guideline](https://github.com/mate-academy/js_task-guideline/blob/master/README.md) before start**
-
-<!-- reopened pull request -->
