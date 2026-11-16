@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 const messages = [];
 
 function getByRoom(roomId) {
@@ -7,7 +9,7 @@ function getByRoom(roomId) {
 
 function add({ roomId, author, text }) {
   const object = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     roomId: roomId,
     author: author,
     text: text,

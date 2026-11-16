@@ -5,7 +5,7 @@ const RECONNECT_DELAY = 1000;
 
 // Keeps one WebSocket connection to the chat server
 // and turns server events into React state.
-export function useChat() {
+export function useChat(username) {
   const [isConnected, setIsConnected] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [currentRoomId, setCurrentRoomId] = useState(null);
@@ -14,8 +14,10 @@ export function useChat() {
   const [notice, setNotice] = useState('');
 
   const socketRef = useRef(null);
-  // The socket handler is created once, so it reads the current room from a ref
+  // The socket handler is created once, so it reads the current room
+  // and the username from refs (they always hold the latest values)
   const currentRoomIdRef = useRef(null);
+  const usernameRef = useRef(username);
 
   const sendToServer = useCallback((data) => {
     const socket = socketRef.current;
@@ -90,6 +92,15 @@ export function useChat() {
         setIsConnected(true);
         setError('');
 
+        // The server keeps the username per connection,
+        // so tell it again after every (re)connect
+        if (usernameRef.current) {
+          socket.send(JSON.stringify({
+            type: 'setUsername',
+            username: usernameRef.current,
+          }));
+        }
+
         // After a reconnect the server does not remember our room - join again
         if (currentRoomIdRef.current) {
           socket.send(JSON.stringify({
@@ -119,6 +130,16 @@ export function useChat() {
     };
   }, []);
 
+  // Send the username to the server as soon as the user submits it
+  // (and again whenever it changes)
+  useEffect(() => {
+    usernameRef.current = username;
+
+    if (username) {
+      sendToServer({ type: 'setUsername', username });
+    }
+  }, [username, sendToServer]);
+
   // Enter the first room automatically, so the user sees a chat right away
   useEffect(() => {
     if (!currentRoomId && rooms.length > 0 && !notice) {
@@ -142,10 +163,7 @@ export function useChat() {
       name,
     }),
     deleteRoom: roomId => sendToServer({ type: 'deleteRoom', roomId }),
-    sendMessage: (author, text) => sendToServer({
-      type: 'message',
-      author,
-      text,
-    }),
+    // The server takes the author from the username it has received
+    sendMessage: text => sendToServer({ type: 'message', text }),
   };
 }

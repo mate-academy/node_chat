@@ -1,4 +1,6 @@
-const rooms = [{ id: crypto.randomUUID(), name: 'General' }];
+import { randomUUID } from 'node:crypto';
+
+const rooms = [{ id: randomUUID(), name: 'General' }];
 
 function getAll() {
   return rooms;
@@ -9,7 +11,7 @@ function getById(id) {
 }
 
 function create(name) {
-  const room = { id: crypto.randomUUID(), name: name };
+  const room = { id: randomUUID(), name: name };
 
   rooms.push(room);
 

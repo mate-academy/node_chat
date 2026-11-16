@@ -32,11 +32,18 @@ function sendMessage(wss, ws, data) {
     return;
   }
 
-  const author = data.author?.trim();
+  const author = ws.username;
   const text = data.text?.trim();
 
-  if (!author || !text) {
-    send(ws, { type: 'error', message: 'Author and text is required' });
+  if (!author) {
+    send(ws, { type: 'error', message: 'Set username first' });
+
+    // eslint-disable-next-line no-useless-return
+    return;
+  }
+
+  if (!text) {
+    send(ws, { type: 'error', message: 'Text is required' });
 
     // eslint-disable-next-line no-useless-return
     return;

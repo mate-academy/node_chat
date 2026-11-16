@@ -1,6 +1,7 @@
 import { send } from '../utils/send.js';
 import { chatHandler } from './chat.handler.js';
 import { roomHandler } from './room.handler.js';
+import { setUsername } from './user.handler.js';
 
 export function handleMessage(wss, ws, rawData) {
   let data;
@@ -32,6 +33,9 @@ export function handleMessage(wss, ws, rawData) {
       break;
     case 'message':
       chatHandler.sendMessage(wss, ws, data);
+      break;
+    case 'setUsername':
+      setUsername(ws, data);
       break;
 
     default:

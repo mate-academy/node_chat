@@ -13,7 +13,8 @@ export function App() {
     () => localStorage.getItem(USERNAME_KEY) || '',
   );
 
-  const chat = useChat();
+  // The hook sends the username to the server right after it is submitted
+  const chat = useChat(username);
 
   if (!username) {
     return (
@@ -84,7 +85,7 @@ export function App() {
 
               <MessageForm
                 disabled={!chat.isConnected}
-                onSend={text => chat.sendMessage(username, text)}
+                onSend={chat.sendMessage}
               />
             </>
           ) : (
