@@ -1,8 +1,10 @@
 import 'reflect-metadata';
 import 'dotenv/config';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import { AppDataSource } from './data-source';
+import { usersRouter } from './routes/users';
+import { roomsRouter } from './routes/rooms';
 
 const app = express();
 
@@ -12,6 +14,16 @@ app.use(express.json());
 app.get('/health', async (_req, res) => {
   const result = await AppDataSource.query('SELECT NOW() AS now');
   res.json({ status: 'ok', dbTime: result[0].now });
+});
+
+app.use('/users', usersRouter);
+
+app.use('/rooms', roomsRouter);
+
+// Catches anything thrown inside route handlers
+app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  console.error(error);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
 async function main() {
