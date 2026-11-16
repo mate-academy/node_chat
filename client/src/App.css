@@ -1,0 +1,130 @@
+.field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.username-form {
+  max-width: 420px;
+  margin: 10vh auto 0;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.chat-header .title {
+  margin-bottom: 0;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f14668;
+}
+
+.dot.is-online {
+  background: #48c78e;
+}
+
+.chat-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.chat-layout .box {
+  margin-bottom: 0;
+}
+
+.room-list {
+  margin-bottom: 1rem;
+}
+
+.room {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-radius: 4px;
+}
+
+.room.is-active {
+  background: #effaf5;
+}
+
+.room-name {
+  flex: 1;
+  padding: 6px 8px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.room.is-active .room-name {
+  font-weight: 600;
+}
+
+.room-edit {
+  margin: 4px 0;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.message-item {
+  max-width: 75%;
+  margin-bottom: 0.75rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f5f5f5;
+}
+
+.message-item.is-own {
+  margin-left: auto;
+  background: #effaf5;
+}
+
+.message-meta {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 0.85rem;
+}
+
+.message-meta time {
+  color: #7a7a7a;
+}
+
+.message-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 700px) {
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+}
