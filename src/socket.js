@@ -7,8 +7,11 @@ function initSocket(server) {
 
   wss.on('connection', (clients) => {
     clients.on('message', (data) => {
+      const { author, text } = JSON.parse(data.toString());
+      const message = { author, text, time: new Date() };
+
       for (const client of wss.clients) {
-        client.send(data.toString());
+        client.send(JSON.stringify(message));
       }
     });
   });
