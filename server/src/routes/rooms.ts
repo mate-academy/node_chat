@@ -3,6 +3,7 @@ import { AppDataSource } from '../data-source';
 import { Room } from '../entities/Room';
 import { asyncHandler, isUniqueViolation, isUuid } from '../utils/http';
 import { Message } from '../entities/Message';
+import { broadcast } from '../events';
 
 export const roomsRouter = Router();
 
@@ -38,6 +39,7 @@ roomsRouter.post(
     try {
       const room = await roomsRepo().save(roomsRepo().create({ name }));
 
+      broadcast('room_created', room);
       res.status(201).json(room);
     } catch (error) {
       if (isUniqueViolation(error)) {
@@ -71,7 +73,10 @@ roomsRouter.patch(
     room.name = name;
 
     try {
-      res.json(await roomsRepo().save(room));
+      const updated = await roomsRepo().save(room);
+
+      broadcast('room_renamed', updated);
+      res.json(updated);
     } catch (error) {
       if (isUniqueViolation(error)) {
         res.status(409).json({ error: 'Room name is already taken' });
@@ -94,6 +99,7 @@ roomsRouter.delete(
       return;
     }
 
+    broadcast('room_deleted', { id });
     res.status(204).send();
   }),
 );

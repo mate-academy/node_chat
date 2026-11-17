@@ -1,10 +1,12 @@
 import 'reflect-metadata';
 import 'dotenv/config';
-import express, { NextFunction, Request, Response } from 'express';
+import http from 'http';
 import cors from 'cors';
+import express, { NextFunction, Request, Response } from 'express';
 import { AppDataSource } from './data-source';
 import { usersRouter } from './routes/users';
 import { roomsRouter } from './routes/rooms';
+import { initSocket } from './socket';
 
 const app = express();
 
@@ -30,8 +32,12 @@ async function main() {
   await AppDataSource.initialize();
   console.log('Database connected');
 
+  const httpServer = http.createServer(app);
+
+  initSocket(httpServer);
+
   const port = Number(process.env.PORT) || 3001;
-  app.listen(port, () => {
+  httpServer.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
   });
 }
