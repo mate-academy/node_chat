@@ -30,10 +30,12 @@ export const RoomList = ({
               disabled={room.id === currentId}
               onClick={() => onSelect(room.id)}
             >
-              {room.name}
+              Join
             </button>
             <button onClick={() => onRename(room.id)}>Rename</button>
-            <button onClick={() => onRemove(room.id)}>X</button>
+            {room.id !== 'general' && (
+              <button onClick={() => onRemove(room.id)}>X</button>
+            )}
           </li>
         ))}
       </ul>
