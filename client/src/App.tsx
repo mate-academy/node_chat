@@ -61,6 +61,9 @@ export const App = () => {
   }
 
   function handleSend(text: string) {
+    if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+      return;
+    }
     socketRef.current?.send(JSON.stringify({ type: 'message', text }));
   }
 

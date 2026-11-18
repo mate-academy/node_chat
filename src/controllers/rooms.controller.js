@@ -46,6 +46,13 @@ async function rename(req, res) {
 
 function remove(req, res) {
   const { id } = req.params;
+
+  if (id === 'general') {
+    res.sendStatus(400);
+
+    return;
+  }
+
   const deleteRoom = roomsService.remove(id);
 
   if (!deleteRoom) {

@@ -22,6 +22,7 @@ function initSocket(server) {
 
       if (event.type === 'join') {
         socket.roomId = event.roomId;
+        socket.username = event.username;
 
         socket.send(
           JSON.stringify({
@@ -34,8 +35,12 @@ function initSocket(server) {
       }
 
       if (event.type === 'message') {
+        if (!socket.username) {
+          return;
+        }
+
         const message = {
-          author: event.author,
+          author: socket.username,
           text: event.text,
           time: new Date(),
         };
