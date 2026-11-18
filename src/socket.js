@@ -1,10 +1,20 @@
 'use strict';
 
 const ws = require('ws');
+const emitter = require('./emitter');
+const roomsService = require('./services/rooms.service');
 
 function initSocket(server) {
   const wss = new ws.WebSocketServer({ server });
   const messages = {};
+
+  emitter.on('rooms', () => {
+    const rooms = roomsService.getAll();
+
+    for (const client of wss.clients) {
+      client.send(JSON.stringify({ type: 'rooms', rooms }));
+    }
+  });
 
   wss.on('connection', (socket) => {
     socket.on('message', (data) => {

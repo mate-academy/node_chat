@@ -1,6 +1,7 @@
 'use strict';
 
 const roomsService = require('../services/rooms.service');
+const emitter = require('../emitter');
 
 function getAll(req, res) {
   return res.json(roomsService.getAll());
@@ -17,6 +18,7 @@ async function create(req, res) {
 
   const newRoom = await roomsService.create(name);
 
+  emitter.emit('rooms');
   res.status(201).json(newRoom);
 }
 
@@ -38,6 +40,7 @@ async function rename(req, res) {
     return;
   }
 
+  emitter.emit('rooms');
   res.json(updateRoom);
 }
 
@@ -51,6 +54,7 @@ function remove(req, res) {
     return;
   }
 
+  emitter.emit('rooms');
   res.sendStatus(204);
 }
 
