@@ -1,0 +1,156 @@
+@use '../../styles/variables' as *;
+
+.rooms {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  padding: 16px 12px;
+  background: $color-surface-alt;
+  border-right: 1px solid $color-border;
+
+  &__title {
+    margin: 0;
+    padding: 0 8px;
+    color: $color-text-secondary;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    border-radius: $radius-sm;
+    transition: background $transition;
+
+    &:hover {
+      background: rgba($color-text, 0.05);
+    }
+
+    &--active,
+    &--active:hover {
+      background: $color-accent-soft;
+    }
+  }
+
+  &__select {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 8px;
+    border: none;
+    background: none;
+    color: $color-text;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &::before {
+      content: '# ';
+      color: $color-text-muted;
+    }
+
+    .rooms__item--active & {
+      color: $color-accent-text;
+      font-weight: 500;
+      cursor: default;
+
+      &::before {
+        color: inherit;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 2px;
+    padding-right: 4px;
+    opacity: 0;
+    transition: opacity $transition;
+
+    .rooms__item:hover &,
+    .rooms__item:focus-within & {
+      opacity: 1;
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: $radius-sm;
+    background: none;
+    color: $color-text-muted;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($color-text, 0.08);
+      color: $color-text;
+    }
+
+    &--danger:hover {
+      color: $color-danger;
+    }
+  }
+
+  &__form {
+    display: flex;
+    gap: 6px;
+    margin-top: auto;
+  }
+
+  &__input {
+    @include input-base;
+
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    border-style: dashed;
+    background: transparent;
+    font-size: 13px;
+
+    &:focus {
+      border-style: solid;
+      background: $color-surface;
+    }
+  }
+
+  &__add {
+    @include button-primary;
+
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  @media (max-width: 640px) {
+    border-right: none;
+    border-bottom: 1px solid $color-border;
+
+    &__list {
+      flex-direction: row;
+      overflow-x: auto;
+    }
+
+    &__actions {
+      opacity: 1;
+    }
+  }
+}
