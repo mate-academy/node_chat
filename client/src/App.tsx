@@ -16,10 +16,16 @@ export const App = () => {
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
+    if (!username) {
+      return;
+    }
+
     const socket = new WebSocket('ws://localhost:3005');
     socketRef.current = socket;
     socket.onopen = () => {
-      socket.send(JSON.stringify({ type: 'join', roomId: currentId }));
+      socket.send(
+        JSON.stringify({ type: 'join', roomId: currentId, username }),
+      );
     };
 
     socket.onmessage = (e) => {
@@ -42,7 +48,7 @@ export const App = () => {
     };
 
     return () => socket.close();
-  }, [currentId]);
+  }, [currentId, username]);
 
   useEffect(() => {
     getRooms().then(setRooms);
@@ -55,9 +61,7 @@ export const App = () => {
   }
 
   function handleSend(text: string) {
-    socketRef.current?.send(
-      JSON.stringify({ type: 'message', author: username, text }),
-    );
+    socketRef.current?.send(JSON.stringify({ type: 'message', text }));
   }
 
   function handleCreate(name: string) {
