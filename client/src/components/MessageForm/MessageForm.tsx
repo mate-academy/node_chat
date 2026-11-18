@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './MessageForm.scss';
 
 type Props = {
   onSend: (text: string) => void;
@@ -9,6 +10,7 @@ export const MessageForm = ({ onSend }: Props) => {
 
   return (
     <form
+      className="message-form"
       onSubmit={(event) => {
         event.preventDefault();
         if (!text.trim()) return;
@@ -17,11 +19,13 @@ export const MessageForm = ({ onSend }: Props) => {
       }}
     >
       <input
+        className="message-form__input"
         value={text}
         onChange={(event) => setText(event.target.value)}
-        placeholder="Write a message"
+        placeholder="Напиши повідомлення"
+        aria-label="Повідомлення"
       />
-      <button>Send</button>
+      <button className="message-form__button">Надіслати</button>
     </form>
   );
 };

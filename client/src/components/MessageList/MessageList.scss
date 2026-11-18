@@ -1,0 +1,58 @@
+@use '../../styles/variables' as *;
+
+.messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  overflow-y: auto;
+
+  &__empty {
+    margin: auto;
+    color: $color-text-muted;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 70%;
+
+    &--own {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 3px;
+    font-size: 12px;
+  }
+
+  &__author {
+    color: $color-text;
+    font-weight: 600;
+  }
+
+  &__time {
+    color: $color-text-muted;
+  }
+
+  &__text {
+    padding: 8px 12px;
+    border-radius: 4px 12px 12px 12px;
+    background: $color-bubble-other;
+    color: $color-text;
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    .messages__item--own & {
+      border-radius: 12px 4px 12px 12px;
+      background: $color-accent;
+      color: #fff;
+    }
+  }
+}

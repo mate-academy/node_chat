@@ -5,6 +5,7 @@ import { UsernameForm } from './components/UsernameForm';
 import { MessageList } from './components/MessageList';
 import { MessageForm } from './components/MessageForm';
 import { RoomList } from './components/RoomList';
+import './App.scss';
 
 export const App = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -90,9 +91,10 @@ export const App = () => {
     return <UsernameForm onSubmit={handleLogin} />;
   }
 
+  const currentRoom = rooms.find((room) => room.id === currentId);
+
   return (
-    <section>
-      <h1>Chat * {username}</h1>
+    <section className="chat">
       <RoomList
         rooms={rooms}
         currentId={currentId}
@@ -101,8 +103,21 @@ export const App = () => {
         onRemove={handleDelete}
         onRename={handleRename}
       />
-      <MessageList messages={messages} />
-      <MessageForm onSend={handleSend} />
+
+      <div className="chat__main">
+        <header className="chat__header">
+          <h1 className="chat__room-name"># {currentRoom?.name ?? currentId}</h1>
+          <div className="chat__user">
+            <span>{username}</span>
+            <span className="chat__avatar" aria-hidden="true">
+              {username.charAt(0)}
+            </span>
+          </div>
+        </header>
+
+        <MessageList messages={messages} currentUser={username} />
+        <MessageForm onSend={handleSend} />
+      </div>
     </section>
   );
 };

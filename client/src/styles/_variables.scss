@@ -1,0 +1,79 @@
+// Theme: variant 1 (light, minimal)
+
+$color-bg: #f4f6fb;
+$color-surface: #ffffff;
+$color-surface-alt: #f7f9fc;
+$color-border: #e3e7f0;
+$color-border-strong: #d5dbe7;
+
+$color-text: #1b2230;
+$color-text-secondary: #6b7385;
+$color-text-muted: #9aa2b1;
+
+$color-accent: #378add;
+$color-accent-hover: #2a74c0;
+$color-accent-soft: #e6f1fb;
+$color-accent-text: #0c447c;
+
+$color-bubble-other: #f1f3f8;
+$color-danger: #e24b4a;
+
+$radius-sm: 6px;
+$radius: 8px;
+$radius-lg: 14px;
+
+$font-family:
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  Roboto,
+  sans-serif;
+
+$transition: 0.15s ease;
+
+@mixin input-base {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid $color-border-strong;
+  border-radius: $radius;
+  background: $color-surface;
+  color: $color-text;
+  font: inherit;
+  font-size: 14px;
+  transition:
+    border-color $transition,
+    box-shadow $transition;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-accent;
+    box-shadow: 0 0 0 3px rgba($color-accent, 0.15);
+  }
+}
+
+@mixin button-primary {
+  height: 38px;
+  padding: 0 16px;
+  border: none;
+  border-radius: $radius;
+  background: $color-accent;
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background $transition;
+
+  &:hover {
+    background: $color-accent-hover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+}

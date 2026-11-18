@@ -1,0 +1,19 @@
+@use '../../styles/variables' as *;
+
+.message-form {
+  display: flex;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid $color-border;
+
+  &__input {
+    @include input-base;
+
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__button {
+    @include button-primary;
+  }
+}
