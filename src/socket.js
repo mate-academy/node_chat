@@ -4,19 +4,45 @@ const ws = require('ws');
 
 function initSocket(server) {
   const wss = new ws.WebSocketServer({ server });
-  const messages = [];
+  const messages = {};
 
   wss.on('connection', (socket) => {
-    socket.send(JSON.stringify({ type: 'history', messages: messages }));
-
     socket.on('message', (data) => {
-      const { author, text } = JSON.parse(data.toString());
-      const message = { author, text, time: new Date() };
+      const event = JSON.parse(data.toString());
 
-      messages.push(message);
+      if (event.type === 'join') {
+        socket.roomId = event.roomId;
 
-      for (const client of wss.clients) {
-        client.send(JSON.stringify({ type: 'message', message: message }));
+        socket.send(
+          JSON.stringify({
+            type: 'history',
+            messages: messages[event.roomId] || [],
+          }),
+        );
+
+        return;
+      }
+
+      if (event.type === 'message') {
+        const message = {
+          author: event.author,
+          text: event.text,
+          time: new Date(),
+        };
+
+        if (!messages[socket.roomId]) {
+          messages[socket.roomId] = [];
+        }
+
+        messages[socket.roomId].push(message);
+
+        for (const client of wss.clients) {
+          if (client.roomId !== socket.roomId) {
+            continue;
+          }
+
+          client.send(JSON.stringify({ type: 'message', message: message }));
+        }
       }
     });
   });
