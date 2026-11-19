@@ -25,12 +25,18 @@ export function ChatWindow({ room, username }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     const join = () => {
       socket.emit('join_room', room.id);
 
       api
         .getMessages(room.id)
         .then((history) => {
+          if (cancelled) {
+            return;
+          }
+
           setLoadError('');
           // Keep live messages that arrived while the history was loading
           setMessages((prev) => {
@@ -39,7 +45,11 @@ export function ChatWindow({ room, username }: Props) {
             return [...history, ...prev.filter((m) => !ids.has(m.id))];
           });
         })
-        .catch(() => setLoadError('Could not load messages'));
+        .catch(() => {
+          if (!cancelled) {
+            setLoadError('Could not load messages');
+          }
+        });
     };
 
     const handleNewMessage = (message: LiveMessage) => {
@@ -57,6 +67,7 @@ export function ChatWindow({ room, username }: Props) {
     socket.on('new_message', handleNewMessage);
 
     return () => {
+      cancelled = true;
       socket.off('connect', join);
       socket.off('new_message', handleNewMessage);
       socket.emit('leave_room', room.id);
