@@ -1,109 +1,118 @@
 /* eslint-disable no-console */
-'use strict';
+import http from 'http';
 import { WebSocketServer } from 'ws';
 
 const PORT = 5001;
-const wss = new WebSocketServer({ port: PORT });
-
 const DEFAULT_ROOM = 'general';
 let nextId = 1;
 
-// roomId -> { id, name, messages: [] }
 const rooms = new Map([
   [DEFAULT_ROOM, { id: DEFAULT_ROOM, name: 'General', messages: [] }],
 ]);
-// ws -> { username, roomId }
 const clients = new Map();
+const sseConns = new Map();
 
-const send = (ws, data) => ws.readyState === 1 && ws.send(JSON.stringify(data));
-
-const roomList = () =>
-  [...rooms.values()].map(({ id, name }) => ({ id, name }));
-
-const broadcastRooms = () => {
-  for (const ws of clients.keys()) {
-    send(ws, { type: 'rooms', rooms: roomList() });
-  }
+const roomList = () => {
+  return [...rooms.values()].map(({ id, name }) => ({
+    id,
+    name,
+  }));
 };
 
-const broadcastToRoom = (roomId, data) => {
-  for (const [ws, client] of clients) {
+function broadcastRooms() {
+  clients.forEach((client, conn) => {
+    conn.send({ type: 'rooms', rooms: roomList() });
+  });
+}
+
+function broadcastToRoom(roomId, data) {
+  clients.forEach((client, conn) => {
     if (client.roomId === roomId) {
-      send(ws, data);
+      conn.send(data);
     }
-  }
-};
+  });
+}
 
-function joinRoom(ws, roomId) {
+function enterRoom(conn, roomId) {
   const room = rooms.get(roomId);
-  const client = clients.get(ws);
+  const client = clients.get(conn);
 
   if (!room || !client) {
     return;
   }
 
   client.roomId = roomId;
-  // новий користувач бачить всю історію кімнати
-  send(ws, { type: 'joined', roomId, messages: room.messages });
+
+  conn.send({
+    type: 'joined',
+    roomId,
+    messages: room.messages,
+    rooms: roomList(),
+  });
 }
 
 const handlers = {
-  login(ws, { username }) {
+  login(conn, { username }) {
     const name = String(username || '').trim();
 
     if (!name) {
       return;
     }
-    clients.set(ws, { username: name, roomId: null });
-    send(ws, { type: 'rooms', rooms: roomList() });
-    joinRoom(ws, DEFAULT_ROOM);
+
+    clients.set(conn, { username: name, roomId: null });
+    conn.send({ type: 'rooms', rooms: roomList() });
+    enterRoom(conn, DEFAULT_ROOM);
   },
 
-  joinRoom(ws, { roomId }) {
-    joinRoom(ws, roomId);
+  joinRoom(conn, { roomId }) {
+    enterRoom(conn, roomId);
   },
 
-  createRoom(ws, { name }) {
+  createRoom(conn, { name }) {
     const roomName = String(name || '').trim();
 
     if (!roomName) {
       return;
     }
 
-    const id = String(nextId++);
+    const id = String(nextId);
 
+    nextId += 1;
     rooms.set(id, { id, name: roomName, messages: [] });
     broadcastRooms();
-    joinRoom(ws, id);
+    enterRoom(conn, id);
   },
 
-  renameRoom(ws, { roomId, name }) {
+  renameRoom(conn, { roomId, name }) {
     const room = rooms.get(roomId);
     const roomName = String(name || '').trim();
 
     if (!room || !roomName) {
       return;
     }
+
     room.name = roomName;
     broadcastRooms();
   },
 
-  deleteRoom(ws, { roomId }) {
+  deleteRoom(conn, { roomId }) {
     if (roomId === DEFAULT_ROOM || !rooms.has(roomId)) {
       return;
     }
+
     rooms.delete(roomId);
 
-    for (const [clientWs, client] of clients) {
+    clients.forEach((client, clientConn) => {
       if (client.roomId === roomId) {
-        joinRoom(clientWs, DEFAULT_ROOM);
+        enterRoom(clientConn, DEFAULT_ROOM);
       }
-    }
+    });
+
     broadcastRooms();
   },
 
-  message(ws, { text }) {
-    const client = clients.get(ws);
+  message(conn, { text }) {
+    const client = clients.get(conn);
     const room = client && rooms.get(client.roomId);
     const body = String(text || '').trim();
 
@@ -123,17 +132,104 @@ const handlers = {
   },
 };
 
-wss.on('connection', (ws) => {
-  ws.on('message', (raw) => {
-    try {
-      const data = JSON.parse(raw);
+function dispatch(conn, raw) {
+  try {
+    const data = JSON.parse(raw);
+    const handler = handlers[data.type];
 
-      handlers[data.type]?.(ws, data);
-    } catch (e) {
-      console.error('Bad message', e);
+    if (handler) {
+      handler(conn, data);
     }
-  });
-  ws.on('close', () => clients.delete(ws));
+  } catch (error) {
+    console.error('Bad message', error);
+  }
+}
+
+// ---------- HTTP (SSE + POST /send) ----------
+function handleHttp(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+
+    return;
+  }
+
+  const url = new URL(req.url, 'http://localhost');
+  const id = url.searchParams.get('id');
+
+  if (req.method === 'GET' && url.pathname === '/events' && id) {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    });
+
+    const conn = {
+      send: (data) => {
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+      },
+    };
+
+    sseConns.set(id, conn);
+    res.write(': connected\n\n');
+
+    req.on('close', () => {
+      sseConns.delete(id);
+      clients.delete(conn);
+    });
+
+    return;
+  }
+
+  if (req.method === 'POST' && url.pathname === '/send' && id) {
+    const conn = sseConns.get(id);
+
+    if (!conn) {
+      res.writeHead(404);
+      res.end();
+
+      return;
+    }
+
+    let body = '';
+
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+
+    req.on('end', () => {
+      dispatch(conn, body);
+      res.writeHead(204);
+      res.end();
+    });
+
+    return;
+  }
+
+  res.writeHead(404);
+  res.end();
+}
+
+const server = http.createServer(handleHttp);
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', (ws) => {
+  const conn = {
+    send: (data) => {
+      if (ws.readyState === 1) {
+        ws.send(JSON.stringify(data));
+      }
+    },
+  };
+
+  ws.on('message', (raw) => dispatch(conn, raw.toString()));
+  ws.on('close', () => clients.delete(conn));
 });
 
-console.log(`WebSocket server on ws://127.0.0.1:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server on http://127.0.0.1:${PORT}`);
+});

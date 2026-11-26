@@ -1,48 +1,50 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from "react";
 
-const WS_URL = 'ws://127.0.0.1:5001';
-
-export function useChat(username) {
-  const wsRef = useRef(null);
+export function useChat() {
+  const sendRef = useRef(null);
   const [rooms, setRooms] = useState([]);
   const [roomId, setRoomId] = useState(null);
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    const ws = new WebSocket(WS_URL);
-    wsRef.current = ws;
+  const onData = useCallback((data) => {  
+    if (data.type === "rooms") {
+      setRooms(data.rooms || []);
+    }
 
-    ws.onopen = () => ws.send(JSON.stringify({ type: 'login', username }));
+    if (data.type === "joined") {
+      setRoomId(data.roomId);
+      setMessages(data.messages);
 
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type === 'rooms') setRooms(data.rooms);
-      if (data.type === 'joined') {
-        setRoomId(data.roomId);
-        setMessages(data.messages); // повна історія кімнати
+      if (data.rooms) {
+        setRooms(data.rooms);
       }
-      if (data.type === 'message') {
-        setMessages((prev) => [...prev, data.message]);
-      }
-    };
+    }
 
-    return () => ws.close();
-  }, [username]);
+    if (data.type === "message") {
+      setMessages((prev) => [...prev, data.message]);
+    }
+  }, []);
+
+  const onSender = useCallback((fn) => {
+    sendRef.current = fn;
+  }, []);
 
   const send = useCallback((payload) => {
-    const ws = wsRef.current;
-    if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify(payload));
+    if (sendRef.current) {
+      sendRef.current(payload);
+    }
   }, []);
 
   return {
     rooms,
     roomId,
     messages,
-    sendMessage: (text) => send({ type: 'message', text }),
-    joinRoom: (id) => send({ type: 'joinRoom', roomId: id }),
-    createRoom: (name) => send({ type: 'createRoom', name }),
-    renameRoom: (id, name) => send({ type: 'renameRoom', roomId: id, name }),
-    deleteRoom: (id) => send({ type: 'deleteRoom', roomId: id }),
+    onData,
+    onSender,
+    sendMessage: (text) => send({ type: "message", text }),
+    joinRoom: (id) => send({ type: "joinRoom", roomId: id }),
+    createRoom: (name) => send({ type: "createRoom", name }),
+    renameRoom: (id, name) => send({ type: "renameRoom", roomId: id, name }),
+    deleteRoom: (id) => send({ type: "deleteRoom", roomId: id }),
   };
 }

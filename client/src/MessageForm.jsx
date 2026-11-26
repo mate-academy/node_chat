@@ -8,7 +8,11 @@ export const MessageForm = ({ onSend }) => {
       className="field is-horizontal"
       onSubmit={(event) => {
         event.preventDefault();
-        if (!text.trim()) return;
+
+        if (!text.trim()) {
+          return;
+        }
+
         onSend(text);
         setText('');
       }}
@@ -16,11 +20,14 @@ export const MessageForm = ({ onSend }) => {
       <input
         type="text"
         className="input"
+        aria-label="Message"
         placeholder="Enter a message"
         value={text}
         onChange={(event) => setText(event.target.value)}
       />
-      <button className="button">Send</button>
+      <button type="submit" className="button">
+        Send
+      </button>
     </form>
   );
 };
