@@ -177,10 +177,24 @@ function handleHttp(req, res) {
     sseConns.set(id, conn);
     res.write(': connected\n\n');
 
-    req.on('close', () => {
-      sseConns.delete(id);
+    let cleaned = false;
+
+    const cleanup = () => {
+      if (cleaned) {
+        return;
+      }
+
+      cleaned = true;
+
+      if (sseConns.get(id) === conn) {
+        sseConns.delete(id);
+      }
+
       clients.delete(conn);
-    });
+    };
+
+    res.on('close', cleanup);
+    req.socket.on('close', cleanup);
 
     return;
   }
