@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const WS_URL = 'ws://127.0.0.1:5000';
+const WS_URL = 'ws://127.0.0.1:5001';
 
 export function useChat(username) {
   const wsRef = useRef(null);
