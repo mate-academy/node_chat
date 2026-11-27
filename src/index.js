@@ -29,6 +29,8 @@ wss.on('connection', (ws) => {
     }
 
     if (message.type === 'message') {
+      message.username = ws.username;
+
       const room = rooms.get(ws.room);
 
       if (room) {
@@ -78,11 +80,9 @@ wss.on('connection', (ws) => {
         rooms.delete(oldName);
         rooms.set(newName, room);
 
-        const roomList = Array.from(rooms.keys());
-
         wss.clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: 'rooms', rooms: roomList }));
+          if (client.room === oldName) {
+            client.room = newName;
           }
         });
       }
@@ -91,11 +91,9 @@ wss.on('connection', (ws) => {
     if (message.type === 'deleteRoom') {
       rooms.delete(message.room);
 
-      const roomList = Array.from(rooms.keys());
-
       wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ type: 'rooms', rooms: roomList }));
+        if (client.room === message.room) {
+          client.room = null;
         }
       });
     }
