@@ -29,7 +29,7 @@ wss.on('connection', (ws) => {
     }
 
     if (message.type === 'message') {
-      message.username = ws.username;
+      message.author = ws.username;
 
       const room = rooms.get(ws.room);
 
@@ -85,6 +85,13 @@ wss.on('connection', (ws) => {
             client.room = newName;
           }
         });
+
+        const roomList = Array.from(rooms.keys());
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({ type: 'rooms', rooms: roomList }));
+          }
+        });
       }
     }
 
@@ -94,6 +101,13 @@ wss.on('connection', (ws) => {
       wss.clients.forEach((client) => {
         if (client.room === message.room) {
           client.room = null;
+        }
+      });
+
+      const roomList = Array.from(rooms.keys());
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ type: 'rooms', rooms: roomList }));
         }
       });
     }

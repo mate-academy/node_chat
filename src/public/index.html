@@ -59,7 +59,7 @@
 
       if (msg.type === 'message') {
         const li = document.createElement('li');
-        li.textContent = `${msg.username} (${new Date(msg.time).toLocaleTimeString()}): ${msg.text}`;
+        li.textContent = `${msg.author} (${new Date(msg.time).toLocaleTimeString()}): ${msg.text}`;
         document.getElementById('messages').appendChild(li);
       }
 
@@ -106,7 +106,7 @@
         msg.messages.forEach(message => {
           const li = document.createElement('li');
 
-          li.textContent = `${msg.username} (${new Date(msg.time).toLocaleTimeString()}): ${msg.text}`;
+          li.textContent = `${message.author} (${new Date(message.time).toLocaleTimeString()}): ${message.text}`;
           list.appendChild(li);
         })
       }
