@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+</head>
+
+<body>
+  <h1>Chat</h1>
+
+  <input id="username" placeholder="Your name" />
+  <button id="setName">Set name</button>
+  <input id="message" placeholder="Message" />
+  <button id="send">Send</button>
+  <ul id="messages"></ul>
+  <input id="roomName" placeholder="Room name" />
+  <button id="createRoom">Create room</button>
+  <ul id="rooms"></ul>
+
+  <script>
+    const socket = new WebSocket('ws://localhost:3000');
+
+    document.getElementById('setName').onclick = () => {
+      const name = document.getElementById('username').value;
+      localStorage.setItem('username', name);
+      socket.send(JSON.stringify({ type: 'setName', username: name }));
+    };
+
+    const saved = localStorage.getItem('username');
+    if (saved) {
+      document.getElementById('username').value = saved;
+    }
+
+    document.getElementById('send').onclick = () => {
+      const text = document.getElementById('message').value;
+      const username = localStorage.getItem('username');
+
+      socket.send(JSON.stringify({
+        type: 'message',
+        username,
+        text,
+        time: new Date().toISOString()
+      }))
+
+      document.getElementById('message').value = '';
+    };
+
+
+    document.getElementById('createRoom').onclick = () => {
+      const room = document.getElementById('roomName').value;
+      socket.send(JSON.stringify({ type: 'createRoom', room }));
+      document.getElementById('roomName').value = '';
+    }
+
+    socket.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+
+      if (msg.type === 'message') {
+        const li = document.createElement('li');
+        li.textContent = `${msg.author} (${new Date(msg.time).toLocaleTimeString()}): ${msg.text}`;
+        document.getElementById('messages').appendChild(li);
+      }
+
+      if (msg.type === 'rooms') {
+        const list = document.getElementById('rooms');
+        list.innerHTML = '';
+
+        msg.rooms.forEach(room => {
+          const li = document.createElement('li');
+          li.textContent = room + ' ';
+
+          const delBtn = document.createElement('button');
+          delBtn.textContent = 'Delete';
+          delBtn.onclick = (e) => {
+            e.stopPropagation();
+            socket.send(JSON.stringify({ type: 'deleteRoom', room }));
+          };
+
+          const renBtn = document.createElement('button');
+          renBtn.textContent = 'Rename';
+          renBtn.onclick = (e) => {
+            e.stopPropagation();
+            const newName = prompt('New name:', room);
+            if (newName) {
+              socket.send(JSON.stringify({ type: 'renameRoom', oldName: room, newName }));
+            }
+          };
+
+          li.appendChild(renBtn);
+          li.appendChild(delBtn);
+
+          li.onclick = () => {
+            socket.send(JSON.stringify({ type: 'joinRoom', room }));
+          };
+
+          list.appendChild(li);
+        });
+      }
+
+      if (msg.type === 'history') {
+        const list = document.getElementById('messages');
+
+        list.innerHTML = '';
+        msg.messages.forEach(message => {
+          const li = document.createElement('li');
+
+          li.textContent = `${message.author} (${new Date(message.time).toLocaleTimeString()}): ${message.text}`;
+          list.appendChild(li);
+        })
+      }
+    }
+  </script>
+</body>
+
+</html>
